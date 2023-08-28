@@ -33,10 +33,10 @@ export const Colors = {
 const theme = createTheme({
   palette: {
     primary: {
-      main: Colors.primary,
+      main: '#0052cc'//Colors.primary,
     },
     secondary: {
-      main: Colors.secondary,
+      main: '#0052cc'//Colors.secondary,
     },
   },
 
@@ -47,7 +47,7 @@ const theme = createTheme({
         disableElevation: true,
       },
     },
-    MuiTooltip: {
+   /*  MuiTooltip: {
       defaultProps: {
         arrow: true,
       },
@@ -59,8 +59,8 @@ const theme = createTheme({
           color: Colors.primary,
         },
       },
-    },
-    MuiDrawer: {
+    }, */
+    /* MuiDrawer: {
       styleOverrides: {
         paper: {
           width: DrawerWidth,          
@@ -77,8 +77,8 @@ const theme = createTheme({
           borderColor: lighten(0.2, Colors.primary)
         }
       }
-    },
-    MyShopButton: {
+    }, */
+  /*   MyShopButton: {
       styleOverrides: {
         root: {
           color: Colors.white,
@@ -96,7 +96,7 @@ const theme = createTheme({
           },
         },
       },
-    },
+    }, */
   },
 });
 
