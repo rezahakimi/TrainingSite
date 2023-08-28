@@ -7,11 +7,11 @@ import { Colors } from "../theme";
 
 export const LoginTextField = styled(TextField)(() => ({
   ".MuiInputLabel-root": {
-    color: Colors.secondary,
+    color: Colors.primary,
   },
 
   ".MuiInput-root::before": {
-    borderBottom: `1px solid ${Colors.secondary}`,
+    borderBottom: `1px solid ${Colors.primary}`,
   },
 }));
 
@@ -26,6 +26,6 @@ export const LoginButton = styled(Button, {
       width: "300px",
       //padding: "10px 5px",
     },
-    background: Colors.secondary,
+    background: Colors.primary,
     opacity: 0.9,
   }));

@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
@@ -64,26 +64,33 @@ const LoginPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container
-        disableGutters
-        maxWidth="xl"
+      <Container component="main" maxWidth="sm">
+      <Box
         sx={{
-          background: "#fff",
+          boxShadow: 3,
+          borderRadius: 2,
+          px: 4,
+          py: 6,
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          background: Colors.white,
+          color: Colors.primary,
         }}
       >
-        <ProductDetailWrapper
-          display={"flex"}
-          flexDirection={matches ? "column" : "row"}
-        >
+        <Typography component="h1" variant="h5">
+          ورود
+        </Typography>
           <Box
             component="form"
             sx={{
-              background: Colors.shaft,
-              color: Colors.white,
+
               p: { xs: 4, md: 10 },
               pt: 12,
               pb: 12,
               fontSize: { xs: "12px", md: "14px" },
+              
             }}
             onSubmit={loginHandler}
           >
@@ -115,6 +122,7 @@ const LoginPage = () => {
               label="Remember me"
             />
             <LoginButton
+            sx={{ mt: 3, mb: 2 }}
               type="submit"
               startIcon={<LoginIcon sx={{ color: Colors.white }} />}
               variant="contained"
@@ -122,8 +130,20 @@ const LoginPage = () => {
             >
               ورود
             </LoginButton>
+            <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
           </Box>
-        </ProductDetailWrapper>
       </Container>
     </ThemeProvider>
   );
