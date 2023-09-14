@@ -6,6 +6,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import bodyParser from 'body-parser';
 
 const port = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
