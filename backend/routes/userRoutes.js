@@ -5,13 +5,15 @@ import {
   logoutUser,
   getUserProfile,
   updateUserProfile,
+  authUserWithTokenHeader
 } from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authWithCookieMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', registerUser);
+router.post('/signup', registerUser);
 router.post('/auth', authUser);
+router.post('/login', authUserWithTokenHeader);
 router.post('/logout', logoutUser);
 router
   .route('/profile')

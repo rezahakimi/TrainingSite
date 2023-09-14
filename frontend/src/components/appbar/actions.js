@@ -1,5 +1,21 @@
-import { Button, Divider, ListItemButton, ListItemIcon } from "@mui/material";
-import { ActionIconsContainerDesktop, ActionIconsContainerMobile, MyList } from "../../styles/appbar";
+import {
+  MenuItem,
+  Typography,
+  Button,
+  Divider,
+  ListItemButton,
+  ListItemIcon,
+  Box,
+  Tooltip,
+  IconButton,
+  Avatar,
+  Menu,
+} from "@mui/material";
+import {
+  ActionIconsContainerDesktop,
+  ActionIconsContainerMobile,
+  MyList,
+} from "../../styles/appbar";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -7,13 +23,17 @@ import { Colors } from "../../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../slices/usersApiSlice";
-import { logout } from '../../slices/authSlice';
+import { logout } from "../../slices/authSlice";
+import { useState } from "react";
+import avator from "../../assets/images/avatar/2.jpg";
 
 export default function Actions({ matches }) {
-
-  const Component = matches ? ActionIconsContainerMobile : ActionIconsContainerDesktop;
-
+  const Component = matches
+    ? ActionIconsContainerMobile
+    : ActionIconsContainerDesktop;
+console.log(matches)
   const { userInfo } = useSelector((state) => state.auth);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,23 +43,25 @@ export default function Actions({ matches }) {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
-      navigate('/login');
+      navigate("/login");
     } catch (err) {
       console.error(err);
     }
   };
 
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseMenu = (menuType, event) => {
+    if (menuType === "profile") {
+    } else if (menuType === "logout") {
+    }
+    setAnchorElUser(null);
+  };
+
   return (
     <Component>
-       <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={logoutHandler}
-          >
-            Logout
-          </Button>
       <MyList type="row">
         <ListItemButton
           sx={{
@@ -85,12 +107,54 @@ export default function Actions({ matches }) {
               color: matches && Colors.secondary,
             }}
           >
-            <PersonIcon />
+            {/* <PersonIcon /> */}
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src={avator} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+
+                anchorEl={anchorElUser}
+                anchorOrigin={/* {
+                  vertical: "top",
+                  horizontal: "right",
+                } */
+                matches ? {
+                  vertical: "top",
+                  horizontal: "right",
+                }:{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+              >
+                <MenuItem
+                  key="profile"
+                  onClick={(event) => handleCloseMenu("profile")}
+                >
+                  <Typography textAlign="center">پروفایل</Typography>
+                </MenuItem>
+                <MenuItem
+                  key="logout"
+                  onClick={logoutHandler}
+                >
+                  <Typography textAlign="center">خروج</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
           </ListItemIcon>
         </ListItemButton>
         <Divider orientation="vertical" flexItem />
       </MyList>
-
     </Component>
   );
 }

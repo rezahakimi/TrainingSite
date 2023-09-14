@@ -1,6 +1,11 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
-import generateToken from "../utils/generateToken.js";
+//import User from "../models/userModel.js";
+import {generateToken, generateTokenWithoutCookie} from "../utils/generateToken.js";
+//import Role from "../models/roleModel.js";
+import db from "../models/index.js";
+
+const User = db.user;
+const Role = db.role;
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -24,11 +29,54 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+//////////////////////////////////////////////////////////
+const authUserWithTokenHeader = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({
+    email: email,
+  })
+    .populate("roles", "-__v")
+    .exec()
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      //var passwordIsValid = bcrypt.compareSync(password, user.password);
+      if (user && (user.matchPassword(password))) {
+        
+       const token = generateTokenWithoutCookie(res, user._id);
+
+      var authorities = [];
+
+      for (let i = 0; i < user.roles.length; i++) {
+        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+      }
+      res.status(200).send({
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        accessToken: token,
+      });
+    }
+    else{
+      return res.status(401).send({
+        accessToken: null,
+        message: "Invalid Password!",
+      });
+    }
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err });
+    });
+});
+//////////////////////////////////////////////////////////////
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, roles } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -37,13 +85,37 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({
+  const user = new User({
     name,
     email,
     password,
   });
 
-  if (user) {
+  user.save().then((user) => {
+    if (roles) {
+      Role.find({
+        name: { $in: roles },
+      })
+        .then((mroles) => {
+          user.roles = mroles.map((role) => role._id);
+          user
+            .save()
+            .then(res.send({ message: "User was registered successfully!" }));
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err });
+        });
+    } else {
+      Role.findOne({ name: "user" }).then((mrole) => {
+        user.roles = [mrole._id];
+        user
+          .save()
+          .then(res.send({ message: "User was registered successfully!" }));
+      });
+    }
+  });
+  ////////////////////
+  /*   if (user) {
     generateToken(res, user._id);
 
     res.status(201).json({
@@ -54,7 +126,7 @@ const registerUser = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw new Error("Invalid user data");
-  }
+  } */
 });
 
 // @desc    Logout user / clear cookie
@@ -112,10 +184,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
 export {
   authUser,
   registerUser,
   logoutUser,
   getUserProfile,
   updateUserProfile,
+  authUserWithTokenHeader,
 };

@@ -13,4 +13,13 @@ const generateToken = (res, userId) => {
   });
 };
 
-export default generateToken;
+const generateTokenWithoutCookie = (res, userId) =>{
+
+  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    algorithm: "HS256",
+    allowInsecureKeySizes: true,
+    expiresIn: 120, // 24 hours
+  });
+  return token;
+}
+export {generateToken, generateTokenWithoutCookie};

@@ -26,7 +26,7 @@ import { setShowSearchBox } from '../../slices/uiSlice';
   export default function AppbarDesktop({ matches }) {
     
     const {showSearchBox} = useSelector((state) => state.ui)
-    console.log(showSearchBox)
+    //console.log(showSearchBox)
 
     const dispatch = useDispatch()
 
