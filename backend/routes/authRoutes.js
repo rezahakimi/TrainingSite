@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/signup', signup);
 router.post('/signincookie', signinCookie);
 router.post('/signin', signin);
-router.post('/logout', logoutUser);
+router.post('/logout', revokeToken);
 router.post("/refreshtoken", refreshToken);
 router.post("/revoketoken", revokeToken);
 

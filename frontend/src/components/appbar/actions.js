@@ -31,7 +31,7 @@ export default function Actions({ matches }) {
   const Component = matches
     ? ActionIconsContainerMobile
     : ActionIconsContainerDesktop;
-console.log(matches)
+//console.log(matches)
   const { userInfo } = useSelector((state) => state.auth);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -41,7 +41,8 @@ console.log(matches)
   const [logoutApiCall] = useLogoutMutation();
   const logoutHandler = async () => {
     try {
-      await logoutApiCall().unwrap();
+      const refreshToken=userInfo.refreshToken;
+      await logoutApiCall({ refreshToken }).unwrap();
       dispatch(logout());
       navigate("/login");
     } catch (err) {
