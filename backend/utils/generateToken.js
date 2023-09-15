@@ -15,10 +15,10 @@ const generateTokenWithCookie = (res, userId) => {
 
 const generateToken = (res, userId) =>{
 
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     algorithm: "HS256",
     allowInsecureKeySizes: true,
-    expiresIn: 120, // 24 hours
+    expiresIn: process.env.JWT_EXPIRATION,
   });
   return token;
 }

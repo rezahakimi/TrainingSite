@@ -21,7 +21,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../slices/usersApiSlice";
+import { useLoginMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
 const ProductDetailWrapper = styled(Box)(({ theme }) => ({
@@ -53,7 +53,7 @@ const LoginPage = () => {
       const data = new FormData(event.currentTarget);
       const email = data.get("email");
       const password = data.get("password");
-      console.log(email);
+      //console.log(email);
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate("/");

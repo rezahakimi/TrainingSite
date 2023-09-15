@@ -22,7 +22,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Colors } from "../../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useLogoutMutation } from "../../slices/usersApiSlice";
+import { useLogoutMutation } from "../../slices/authApiSlice";
 import { logout } from "../../slices/authSlice";
 import { useState } from "react";
 import avator from "../../assets/images/avatar/2.jpg";

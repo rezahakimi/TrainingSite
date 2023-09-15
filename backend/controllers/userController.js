@@ -7,6 +7,25 @@ const User = db.user;
 const Role = db.role;
 const ROLES = db.ROLES;
 
+
+
+const allAccess = (req, res) => {
+  res.status(200).send("Public Content.");
+};
+
+const userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+};
+
+const adminBoard = (req, res) => {
+  res.status(200).send("Admin Content.");
+};
+
+const moderatorBoard = (req, res) => {
+  res.status(200).send("Moderator Content.");
+};
+
+
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
@@ -54,5 +73,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 export {
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  allAccess,
+  userBoard,
+  moderatorBoard,
+  adminBoard
 };

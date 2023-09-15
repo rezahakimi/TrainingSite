@@ -17,7 +17,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegisterMutation } from "../slices/usersApiSlice";
+import { useRegisterMutation } from "../slices/authApiSlice";
 
 const ProductDetailWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
