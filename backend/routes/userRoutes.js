@@ -6,6 +6,7 @@ import {
   userBoard,
   moderatorBoard,
   adminBoard,
+  getAllUsers,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authWithCookieMiddleware.js";
 import {
@@ -20,6 +21,7 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .patch(protect, updateUserProfile);
+  router.route("/users").get(getAllUsers);
 
 router.route("/all").get(allAccess);
 

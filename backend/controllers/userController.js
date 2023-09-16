@@ -7,8 +7,6 @@ const User = db.user;
 const Role = db.role;
 const ROLES = db.ROLES;
 
-
-
 const allAccess = (req, res) => {
   res.status(200).send("Public Content.");
 };
@@ -25,6 +23,26 @@ const moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
 };
 
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().populate({
+    path: "roles", match: {}, select: "name -_id"}).exec();
+  if (users) {
+    const myUsers = users.map((user) => {
+      return {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        phone: user.phone,
+        roles: user.roles.map((role)=>role.name),
+      };
+    });
+
+    res.status(200).json(myUsers);
+  } else {
+    res.status(404);
+    throw new Error("Users not found");
+  }
+});
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
@@ -73,9 +91,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 export {
   getUserProfile,
+  getAllUsers,
   updateUserProfile,
   allAccess,
   userBoard,
   moderatorBoard,
-  adminBoard
+  adminBoard,
 };
