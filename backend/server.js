@@ -11,10 +11,11 @@ import bodyParser from 'body-parser';
 
 const port = process.env.PORT || 5000;
 
+
 connectDB();
 
 const app = express();
-
+process.env.TZ = "Asia/Tehran";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
