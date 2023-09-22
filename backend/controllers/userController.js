@@ -24,8 +24,13 @@ const moderatorBoard = (req, res) => {
 };
 
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().populate({
-    path: "roles", match: {}, select: "name -_id"}).exec();
+  const users = await User.find()
+    .populate({
+      path: "roles",
+      match: {},
+      select: "name -_id",
+    })
+    .exec();
   if (users) {
     const myUsers = users.map((user) => {
       return {
@@ -33,7 +38,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
         lastname: user.lastname,
         email: user.email,
         phone: user.phone,
-        roles: user.roles.map((role)=>role.name),
+        roles: user.roles.map((role) => role.name),
       };
     });
 
@@ -60,6 +65,80 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+});
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { firstname, lastname, email, phone, password, roles } = req.body;
+
+  const userExistsEmail = await User.findOne({ email });
+
+  if (userExistsEmail) {
+    res.status(400);
+    throw new Error("User Email already exists");
+  }
+
+  const userExistsPhone = await User.findOne({ phone });
+
+  if (userExistsPhone) {
+    res.status(400);
+    throw new Error("User Phone already exists");
+  }
+
+  if (roles) {
+    for (let i = 0; i < roles.length; i++) {
+      if (!ROLES.includes(roles[i])) {
+        res.status(400).send({
+          message: `Failed! Role ${roles[i]} does not exist!`,
+        });
+        return;
+      }
+    }
+  }
+
+  const user = new User({
+    firstname,
+    lastname,
+    email,
+    phone,
+    password,
+  });
+
+  user.save().then((user) => {
+    if (roles) {
+      Role.find({
+        name: { $in: roles },
+      })
+        .then((mroles) => {
+          user.roles = mroles.map((role) => role._id);
+          user
+            .save()
+            .then(res.send({ message: "User was registered successfully!" }));
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err });
+        });
+    } else {
+      Role.findOne({ name: "user" }).then((mrole) => {
+        user.roles = [mrole._id];
+        user
+          .save()
+          .then(res.send({ message: "User was registered successfully!" }));
+      });
+    }
+  });
+  ////////////////////
+  /*   if (user) {
+      generateToken(res, user._id);
+  
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    } */
 });
 
 // @desc    Update user profile
@@ -90,6 +169,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 export {
+  registerUser,
   getUserProfile,
   getAllUsers,
   updateUserProfile,

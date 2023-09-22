@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  registerUser,
   getUserProfile,
   updateUserProfile,
   allAccess,
@@ -21,7 +22,8 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .patch(protect, updateUserProfile);
-  router.route("/users").get(getAllUsers);
+  router.route("/").get(getAllUsers);
+  router.route("/").post(registerUser);
 
 router.route("/all").get(allAccess);
 
