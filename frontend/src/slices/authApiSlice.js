@@ -24,13 +24,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    updateUser: builder.mutation({
+/*     updateUser: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/profile`,
         method: 'PUT',
         body: data,
       }),
-    }),
+    }), */
   }),
 });
 

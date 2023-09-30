@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGetAllUsersQuery } from "../../slices/userApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -19,10 +19,11 @@ import AddIcon from "@mui/icons-material/Add";
 import UsermanagerDialog from "./usermanagerDialog";
 
 const UserManager = () => {
-  const childRef = useRef(null);
+ // const childRef = useRef(null);
   const { data: users = [] } = useGetAllUsersQuery();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("add");
+  const [id, setId] = useState("");
 
   //console.log(user)
 
@@ -83,7 +84,7 @@ const UserManager = () => {
           <Tooltip title="jbjb" arrow>
             <IconButton
               color="primary"
-              /* onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)} */
+               onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)} 
             >
               <EditIcon />
             </IconButton>
@@ -99,9 +100,40 @@ const UserManager = () => {
     },
   ];
 
+  useEffect(() => {
+    }, [id]);
+
+  const onDisplayUpdateModalButtonClick = async (e, row) => {
+    e.stopPropagation();
+    setModalMode("update");
+     setId(row.id);
+    //console.log(id)
+    /* userService
+      .get(row._id)
+      .then((response) => {
+        let user = response.data.userData;
+        setDisplayUserModal({
+          id: user._id,
+          nationalId: user.nationalId,
+          password: user.password,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          mobile: user.mobile,
+          email: user.email,
+          age: user.age,
+          gender: user.gender,
+        }); */
+
+        setOpenModal(true);
+     /*  })
+      .catch(function (error) {
+        console.log(error);
+      }); */
+  };
+
   const onDisplayAddModalButtonClick = (e) => {
     setModalMode("add");
-    childRef.current.handleSetDisplayUserModal({});
+    //childRef.current.handleSetDisplayUserModal({});
     setOpenModal(true);
   };
 
@@ -142,7 +174,7 @@ const UserManager = () => {
             columns={columns}
             pageSize={4}
             rowsPerPageOptions={[4]}
-            getRowId={(row) => row.email}
+            getRowId={(row) => row.id}
             /* loading         
           {...users} */
             initialState={{
@@ -156,7 +188,8 @@ const UserManager = () => {
         openModalProp={openModal}
         modalModeProp={modalMode}
         handleCloseModalProp={handleCloseModal}
-        ref={childRef}
+        idProp={id}
+        /* ref={childRef} */
       ></UsermanagerDialog>
     </>
   );

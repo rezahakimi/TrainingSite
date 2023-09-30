@@ -34,6 +34,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
   if (users) {
     const myUsers = users.map((user) => {
       return {
+        id: user._id,
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
@@ -41,6 +42,31 @@ const getAllUsers = asyncHandler(async (req, res) => {
         roles: user.roles.map((role) => role.name),
       };
     });
+
+    res.status(200).json(myUsers);
+  } else {
+    res.status(404);
+    throw new Error("Users not found");
+  }
+});
+const getUserById = asyncHandler(async (req, res) => {
+  //console.log(req.params.id);
+  const user = await User.findById(req.params.id)
+    .populate({
+      path: "roles",
+      match: {},
+      select: "name -_id",
+    })
+    .exec();
+  if (user) {
+    const myUsers = {
+      id: user._id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phone: user.phone,
+      roles: user.roles.map((role) => role.name),
+    };
 
     res.status(200).json(myUsers);
   } else {
@@ -144,27 +170,91 @@ const registerUser = asyncHandler(async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+const updateUser = asyncHandler(async (req, res) => {
+  const { id, firstname, lastname, phone, roles } = req.body;
+  const user = await User.findById(id);
 
-  if (user) {
-    user.name = req.body.name || user.name;
-    //user.email = req.body.email || user.email;
-
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-    });
-  } else {
+  if (!user) {
     res.status(404);
     throw new Error("User not found");
+  }
+
+  if (roles) {
+    for (let i = 0; i < roles.length; i++) {
+      if (!ROLES.includes(roles[i])) {
+        res.status(400).send({
+          message: `Failed! Role ${roles[i]} does not exist!`,
+        });
+        return;
+      }
+    }
+  }
+
+  if (user) {
+    user.lastname = lastname;
+    user.firstname = firstname;
+    user.phone = phone;
+    user.save().then((user) => {
+console.log(user)
+      if (roles) {
+        /* var rolesIsInBodyNotInDb = user.roles.filter(function(item) {
+          return !roles.includes(item);
+        }) */
+
+      /*   User.findByIdAndUpdate(
+          id,
+          {
+            $push: {
+              roles: {
+                url: image.url,
+                caption: image.caption
+              }
+            }
+          },
+          { new: true, useFindAndModify: false }
+        ); */
+        
+        Role.find({
+          name: { $in: roles },
+        })
+          .then((mroles) => {
+            user.roles = mroles.map((role) => role._id);
+            user
+              .save()
+              .then(res.send({ message: "User was registered successfully!" }));
+          })
+          .catch((err) => {
+            res.status(500).send({ message: err });
+          });
+        
+        /* Role.find({
+          name: { $in: rolesIsInBodyNotInDb },
+        })
+          .then((mroles) => {
+            user.roles = mroles.map((role) => role._id);
+            user
+              .save()
+              .then(res.send({ message: "User was registered successfully!" }));
+          })
+          .catch((err) => {
+            res.status(500).send({ message: err });
+          }); */
+      } else {
+         Role.findOne({ name: "user" }).then((mrole) => {
+          user.roles = [mrole._id];
+          user
+            .save()
+            .then(res.send({ message: "User was registered successfully!" }));
+        }); 
+      }
+    });
+
+    /* res.json({
+      id: user._id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      phone: user.phone,
+    }); */
   }
 });
 
@@ -172,7 +262,8 @@ export {
   registerUser,
   getUserProfile,
   getAllUsers,
-  updateUserProfile,
+  getUserById,
+  updateUser,
   allAccess,
   userBoard,
   moderatorBoard,

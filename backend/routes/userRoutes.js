@@ -1,13 +1,13 @@
 import express from "express";
 import {
   registerUser,
-  getUserProfile,
-  updateUserProfile,
+  updateUser,
   allAccess,
   userBoard,
   moderatorBoard,
   adminBoard,
   getAllUsers,
+  getUserById,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authWithCookieMiddleware.js";
 import {
@@ -18,12 +18,14 @@ import {
 
 const router = express.Router();
 
-router
+/* router
   .route("/profile")
   .get(protect, getUserProfile)
-  .patch(protect, updateUserProfile);
+  .patch(protect, updateUserProfile); */
+  router.route("/:id").get(getUserById);
   router.route("/").get(getAllUsers);
   router.route("/").post(registerUser);
+  router.route("/").patch(updateUser);
 
 router.route("/all").get(allAccess);
 

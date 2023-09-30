@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import {
   Button,
   Dialog,
@@ -14,27 +19,65 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useRegisterUserMutation } from "../../slices/userApiSlice";
+import {
+  useRegisterUserMutation,
+  useGetUserByIdQuery,
+  useUpdateUserMutation
+} from "../../slices/userApiSlice";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
-const UsermanagerDialog = forwardRef(
-  ({ openModalProp, modalModeProp, handleCloseModalProp }, ref) => {
-    const [registerUser, { isLoading }] = useRegisterUserMutation();
-    const [userDisplayModal, setDisplayUserModal] = useState({
-      nationalId: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      age: "",
-      gender: "",
-    });
+const initialFormState = {
+  id:  "",
+  password: "",
+  firstName:  "",
+  lastName:  "",
+  phone: "",
+  email: "",
+}
 
-    useImperativeHandle(ref, () => ({
-      handleSetDisplayUserModal() {
-        setDisplayUserModal({});
-      },
-    }));
+const UsermanagerDialog = 
+//forwardRef(
+  ({ openModalProp, modalModeProp, handleCloseModalProp, idProp }
+    //, ref
+    ) => {
+    const [registerUser] = useRegisterUserMutation();
+    const [updateUser] = useUpdateUserMutation();
+    const {
+      data: user,
+      isLoading: isGetLoading,
+      isSuccess: isGetSuccess,
+      isError: isGetError,
+      error: getError,
+      isFetching: isGetFetching,
+    } = useGetUserByIdQuery(idProp);// ?? skipToken);
+
+    const [userDisplayModal, setDisplayUserModal] = useState(initialFormState);
+
+    useEffect(() => {
+      //console.log(idProp);
+      if (modalModeProp === "update" && user) {
+        setDisplayUserModal({
+          id: user.id,
+          password: user.password,
+          firstName: user.firstname,
+          lastName: user.lastname,
+          phone: user.phone,
+          email: user.email,
+        });
+      }
+      else
+      {
+        setDisplayUserModal(initialFormState);
+      }
+      console.log(user);
+    }, [user, modalModeProp]);
+
+    //useImperativeHandle(ref, () => ({
+   //   handleSetDisplayUserModal() {
+        //setDisplayUserModal({});
+       
+    //  },
+    //}));
 
     const handleSubmmit = async () => {
       if (modalModeProp === "update") {
@@ -72,8 +115,18 @@ const UsermanagerDialog = forwardRef(
             .catch(function (error) {
               console.log(error);
             }); */
+            const res = await updateUser({
+              id: user.id,
+              firstname: userDisplayModal.firstName,
+              lastname: userDisplayModal.lastName,
+              phone: userDisplayModal.phone,
+            }).unwrap();
+    
+            if (res) {
+              handleCloseModalProp();
+            }
       } else if (modalModeProp === "add") {
-        console.log(userDisplayModal);
+        //console.log(userDisplayModal);
         const res = await registerUser({
           firstname: userDisplayModal.firstName,
           lastname: userDisplayModal.lastName,
@@ -110,7 +163,9 @@ const UsermanagerDialog = forwardRef(
           <DialogContentText>
             To subscribe to this website, please enter your email address here.
           </DialogContentText>
-          {modalModeProp === "add" && (
+          {
+          modalModeProp === "add" && 
+          (
             <>
               {/*  <TextField
                 label="کد ملی"
@@ -150,7 +205,7 @@ const UsermanagerDialog = forwardRef(
             type="firstName"
             fullWidth
             variant="standard"
-            defaultValue={userDisplayModal.firstName || ""}
+            value={userDisplayModal.firstName || ""}
             onChange={(e) =>
               setDisplayUserModal({
                 ...userDisplayModal,
@@ -165,7 +220,7 @@ const UsermanagerDialog = forwardRef(
             type="lastName"
             fullWidth
             variant="standard"
-            defaultValue={userDisplayModal.lastName || ""}
+            value={userDisplayModal.lastName || ""}
             onChange={(e) =>
               setDisplayUserModal({
                 ...userDisplayModal,
@@ -180,7 +235,7 @@ const UsermanagerDialog = forwardRef(
             type="phone"
             fullWidth
             variant="standard"
-            defaultValue={userDisplayModal.phone || ""}
+            value={userDisplayModal.phone || ""}
             onChange={(e) =>
               setDisplayUserModal({
                 ...userDisplayModal,
@@ -195,7 +250,7 @@ const UsermanagerDialog = forwardRef(
             type="email"
             fullWidth
             variant="standard"
-            defaultValue={userDisplayModal.email || ""}
+            value={userDisplayModal.email || ""}
             onChange={(e) =>
               setDisplayUserModal({
                 ...userDisplayModal,
@@ -242,6 +297,6 @@ const UsermanagerDialog = forwardRef(
       </Dialog>
     );
   }
-);
+//);
 
 export default UsermanagerDialog;
