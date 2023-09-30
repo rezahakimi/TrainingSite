@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useGetAllUsersQuery } from "../../slices/userApiSlice";
+import { useGetAllUsersQuery, useDeleteUserMutation } from "../../slices/userApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -21,6 +21,7 @@ import UsermanagerDialog from "./usermanagerDialog";
 const UserManager = () => {
  // const childRef = useRef(null);
   const { data: users = [] } = useGetAllUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("add");
   const [id, setId] = useState("");
@@ -91,7 +92,7 @@ const UserManager = () => {
           </Tooltip>
           <IconButton
             color="primary"
-            /* onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)} */
+            onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)} 
           >
             <DeleteIcon />
           </IconButton>
@@ -135,6 +136,10 @@ const UserManager = () => {
     setModalMode("add");
     //childRef.current.handleSetDisplayUserModal({});
     setOpenModal(true);
+  };
+
+  const onDisplayDeleteModalButtonClick = async (e, row) => {
+    deleteUser(row.id);
   };
 
   const handleCloseModal = () => {

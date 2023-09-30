@@ -78,7 +78,7 @@ const getUserById = asyncHandler(async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
+/* const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
@@ -91,7 +91,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
-});
+}); */
 
 const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, phone, password, roles } = req.body;
@@ -167,9 +167,6 @@ const registerUser = asyncHandler(async (req, res) => {
     } */
 });
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
 const updateUser = asyncHandler(async (req, res) => {
   const { id, firstname, lastname, phone, roles } = req.body;
   const user = await User.findById(id);
@@ -195,25 +192,8 @@ const updateUser = asyncHandler(async (req, res) => {
     user.firstname = firstname;
     user.phone = phone;
     user.save().then((user) => {
-console.log(user)
+      //console.log(user)
       if (roles) {
-        /* var rolesIsInBodyNotInDb = user.roles.filter(function(item) {
-          return !roles.includes(item);
-        }) */
-
-      /*   User.findByIdAndUpdate(
-          id,
-          {
-            $push: {
-              roles: {
-                url: image.url,
-                caption: image.caption
-              }
-            }
-          },
-          { new: true, useFindAndModify: false }
-        ); */
-        
         Role.find({
           name: { $in: roles },
         })
@@ -221,46 +201,39 @@ console.log(user)
             user.roles = mroles.map((role) => role._id);
             user
               .save()
-              .then(res.send({ message: "User was registered successfully!" }));
+              .then(res.send({ message: "User was updated successfully!" }));
           })
           .catch((err) => {
             res.status(500).send({ message: err });
           });
-        
-        /* Role.find({
-          name: { $in: rolesIsInBodyNotInDb },
-        })
-          .then((mroles) => {
-            user.roles = mroles.map((role) => role._id);
-            user
-              .save()
-              .then(res.send({ message: "User was registered successfully!" }));
-          })
-          .catch((err) => {
-            res.status(500).send({ message: err });
-          }); */
       } else {
-         Role.findOne({ name: "user" }).then((mrole) => {
+        Role.findOne({ name: "user" }).then((mrole) => {
           user.roles = [mrole._id];
           user
             .save()
-            .then(res.send({ message: "User was registered successfully!" }));
-        }); 
+            .then(res.send({ message: "User was updated successfully!" }));
+        });
       }
     });
-
-    /* res.json({
-      id: user._id,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      phone: user.phone,
-    }); */
   }
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+
+  User.findByIdAndDelete(req.params.id).then((user) => {
+    if (!user) {
+        return res.status(404).send({message: "User not found"});
+    }
+    res.send({ message: "User was deleted successfully!" });
+}).catch((error) => {
+    res.status(500).send(error);
+})
+
 });
 
 export {
   registerUser,
-  getUserProfile,
+  deleteUser,
   getAllUsers,
   getUserById,
   updateUser,

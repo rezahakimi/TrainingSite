@@ -8,6 +8,7 @@ import {
   adminBoard,
   getAllUsers,
   getUserById,
+  deleteUser
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authWithCookieMiddleware.js";
 import {
@@ -26,6 +27,7 @@ const router = express.Router();
   router.route("/").get(getAllUsers);
   router.route("/").post(registerUser);
   router.route("/").patch(updateUser);
+  router.route("/:id").delete(deleteUser);
 
 router.route("/all").get(allAccess);
 
