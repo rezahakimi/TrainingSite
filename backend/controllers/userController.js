@@ -55,7 +55,7 @@ const getUserById = asyncHandler(async (req, res) => {
     .populate({
       path: "roles",
       match: {},
-      select: "name -_id",
+      select: "name _id",//"name -_id",
     })
     .exec();
   if (user) {
@@ -65,7 +65,13 @@ const getUserById = asyncHandler(async (req, res) => {
       lastname: user.lastname,
       email: user.email,
       phone: user.phone,
-      roles: user.roles.map((role) => role.name),
+      roles: user.roles.map((role) => {
+        const container = {};
+        container.id= role._id;
+        container.name= role.name;
+        //console.log(container);
+        return container;
+      }),
     };
 
     res.status(200).json(myUsers);
@@ -168,6 +174,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
+  console.log(req.body)
   const { id, firstname, lastname, phone, roles } = req.body;
   const user = await User.findById(id);
 
@@ -219,16 +226,33 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
+  User.findByIdAndDelete(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      res.send({ message: "User was deleted successfully!" });
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
 
-  User.findByIdAndDelete(req.params.id).then((user) => {
-    if (!user) {
-        return res.status(404).send({message: "User not found"});
-    }
-    res.send({ message: "User was deleted successfully!" });
-}).catch((error) => {
-    res.status(500).send(error);
-})
+const getAllRoles = asyncHandler(async (req, res) => {
+  const roles = await Role.find().exec();
+  if (roles) {
+    const myRoless = roles.map((role) => {
+      return {
+        id: role._id,
+        name: role.name,
+      };
+    });
 
+    res.status(200).json(myRoless);
+  } else {
+    res.status(404);
+    throw new Error("Roless not found");
+  }
 });
 
 export {
@@ -237,6 +261,7 @@ export {
   getAllUsers,
   getUserById,
   updateUser,
+  getAllRoles,
   allAccess,
   userBoard,
   moderatorBoard,

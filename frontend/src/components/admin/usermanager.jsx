@@ -51,6 +51,10 @@ const UserManager = () => {
       field: "email",
       headerName: "پست الکترونیکی",
     },
+    {
+      field: "roles",
+      headerName: "نقش",
+    },
     /* {
       field: "age",
       headerName: "سن",

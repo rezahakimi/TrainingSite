@@ -5,6 +5,7 @@ import React, {
   useState,
 } from "react";
 import {
+  Checkbox,
   Button,
   Dialog,
   DialogActions,
@@ -18,11 +19,13 @@ import {
   DialogContentText,
   DialogContent,
   DialogTitle,
+  FormGroup,
 } from "@mui/material";
 import {
   useRegisterUserMutation,
   useGetUserByIdQuery,
   useUpdateUserMutation,
+  useGetAllRolesQuery,
 } from "../../slices/userApiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 
@@ -33,6 +36,13 @@ const initialFormState = {
   lastName: "",
   phone: "",
   email: "",
+  roles: [
+    {
+      id: "",
+      name: "",
+      selected: false,
+    },
+  ],
 };
 
 const UsermanagerDialog =
@@ -42,6 +52,8 @@ const UsermanagerDialog =
     {
       const [registerUser] = useRegisterUserMutation();
       const [updateUser] = useUpdateUserMutation();
+      const { data: qroles = [] } = useGetAllRolesQuery();
+
       const {
         data: user,
         isLoading: isGetLoading,
@@ -56,7 +68,7 @@ const UsermanagerDialog =
 
       useEffect(() => {
         //console.log(idProp);
-        if (modalModeProp === "update" && user) {
+        if (modalModeProp === "update" && user && user.roles) {
           setDisplayUserModal({
             id: user.id,
             password: user.password,
@@ -64,12 +76,17 @@ const UsermanagerDialog =
             lastName: user.lastname,
             phone: user.phone,
             email: user.email,
+            roles: qroles.map((role) => ({
+              id: role.id,
+              name: role.name,
+              selected: user.roles.some((r) => r.id === role.id),
+            })),
           });
         } else {
           setDisplayUserModal(initialFormState);
         }
-        console.log(user);
-      }, [user, modalModeProp]);
+        //if (user) console.log(user.roles[0].id);
+      }, [user, modalModeProp, qroles]);
 
       //useImperativeHandle(ref, () => ({
       //   handleSetDisplayUserModal() {
@@ -119,6 +136,7 @@ const UsermanagerDialog =
             firstname: userDisplayModal.firstName,
             lastname: userDisplayModal.lastName,
             phone: userDisplayModal.phone,
+            roles: userDisplayModal.roles.filter(i=>i.selected).map(i=>i.name),
           }).unwrap();
 
           if (res) {
@@ -155,6 +173,63 @@ const UsermanagerDialog =
             }); */
         }
       };
+
+      const handleChange = (event) => {
+        console.log(event.target.checked);
+        console.log(event.target.value);
+        setDisplayUserModal((prevUser) => {
+          // return { ...prevUser, roles: [...prevUser.roles, {selected: event.target.checked}] };
+          return {
+            ...prevUser,
+            roles: prevUser.roles.map((element) => {
+              return element.id === event.target.value
+                ? { ...element, selected: event.target.checked }
+                : element;
+            }),
+          };
+
+          /* roles: qroles.map((role) => ({
+            id: role.id,
+            name: role.name,
+            selected: user.roles.some((r) => r.id === role.id),
+          })), */
+
+          /* if(name === "state" || name === "zip"){
+             newPerson.address.stateZip[name] = value
+          } */
+          //return newUser;
+        });
+      };
+
+      let xxx = "";
+      if (modalModeProp === "update" && userDisplayModal) {
+        xxx = userDisplayModal.roles.map((role) => {
+          // if (user && user.roles) {
+          //const even = user.roles.find((r) => r.id === role.id);
+          // console.log(userDisplayModal);
+
+          //console.log(user);
+          // if (even)
+          return (
+            <FormControlLabel
+              key={role.id}
+              control={
+                <Checkbox checked={role.selected} onChange={handleChange} />
+              }
+              label={role.name}
+              value={role.id}
+            />
+          );
+          /*  else
+              return <FormControlLabel
+              key={role.id}
+              control={<Checkbox />}
+              label={role.name}
+            />; */
+          // }
+        });
+      }
+      //xxx = (<div>{user.roles}</div>);
       return (
         <Dialog open={openModalProp} onClose={handleCloseModalProp}>
           <DialogTitle>Subscribe</DialogTitle>
@@ -163,6 +238,8 @@ const UsermanagerDialog =
               To subscribe to this website, please enter your email address
               here.
             </DialogContentText>
+            <FormGroup>{xxx}</FormGroup>
+
             {modalModeProp === "add" && (
               <>
                 {/*  <TextField

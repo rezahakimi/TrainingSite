@@ -45,6 +45,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getAllRoles: builder.query({
+      query: () => ({
+        url: `${USER_URL}/roles`,
+        method: 'GET',
+      }),
+      transformResponse: (response) => response,
+    }),
     /* logout: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/logout`,
@@ -68,5 +75,6 @@ export const {
   useRegisterUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-  useGetUserByIdQuery
+  useGetUserByIdQuery,
+  useGetAllRolesQuery,
 } = userApiSlice;
