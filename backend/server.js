@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import articleRoutes from './routes/articleRoutes.js';
 import bodyParser from 'body-parser';
 
 const port = process.env.PORT || 5000;
@@ -36,6 +37,7 @@ app.use('/api/users', userRoutes
   next();
 } */
 );
+app.use('/api/articles', articleRoutes);
 app.use('/api/auth', authRoutes);
 
 if (process.env.NODE_ENV === 'production') {

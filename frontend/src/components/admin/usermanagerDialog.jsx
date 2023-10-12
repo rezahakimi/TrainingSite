@@ -50,6 +50,8 @@ const UsermanagerDialog =
   ({ openModalProp, modalModeProp, handleCloseModalProp, idProp }) =>
     //, ref
     {
+      //const [isUser, setIsUser] = useState(true);
+
       const [registerUser] = useRegisterUserMutation();
       const [updateUser] = useUpdateUserMutation();
       const { data: qroles = [] } = useGetAllRolesQuery();
@@ -61,13 +63,17 @@ const UsermanagerDialog =
         isError: isGetError,
         error: getError,
         isFetching: isGetFetching,
-      } = useGetUserByIdQuery(idProp); // ?? skipToken);
+      } = useGetUserByIdQuery(idProp, { pollingInterval: 3000 }); // ?? skipToken);
 
       const [userDisplayModal, setDisplayUserModal] =
         useState(initialFormState);
 
+      /*       setTimeout(() => {
+        setIsUser(false);
+      }, 5000); */
+
       useEffect(() => {
-        //console.log(idProp);
+        //console.log(isUser);
         if (modalModeProp === "update" && user && user.roles) {
           setDisplayUserModal({
             id: user.id,
@@ -83,6 +89,11 @@ const UsermanagerDialog =
             })),
           });
         } else {
+          initialFormState.roles = qroles.map((role) => ({
+            id: role.id,
+            name: role.name,
+            selected: false,
+          }));
           setDisplayUserModal(initialFormState);
         }
         //if (user) console.log(user.roles[0].id);
@@ -136,10 +147,13 @@ const UsermanagerDialog =
             firstname: userDisplayModal.firstName,
             lastname: userDisplayModal.lastName,
             phone: userDisplayModal.phone,
-            roles: userDisplayModal.roles.filter(i=>i.selected).map(i=>i.name),
+            roles: userDisplayModal.roles
+              .filter((i) => i.selected)
+              .map((i) => i.name),
           }).unwrap();
 
           if (res) {
+            setDisplayUserModal(initialFormState);
             handleCloseModalProp();
           }
         } else if (modalModeProp === "add") {
@@ -150,9 +164,13 @@ const UsermanagerDialog =
             email: userDisplayModal.email,
             phone: userDisplayModal.phone,
             password: userDisplayModal.password,
+            roles: userDisplayModal.roles
+              .filter((i) => i.selected)
+              .map((i) => i.name),
           }).unwrap();
 
           if (res) {
+            setDisplayUserModal(initialFormState);
             handleCloseModalProp();
           }
           /*           userService
@@ -175,35 +193,22 @@ const UsermanagerDialog =
       };
 
       const handleChange = (event) => {
-        console.log(event.target.checked);
-        console.log(event.target.value);
         setDisplayUserModal((prevUser) => {
           // return { ...prevUser, roles: [...prevUser.roles, {selected: event.target.checked}] };
           return {
             ...prevUser,
-            roles: prevUser.roles.map((element) => {
-              return element.id === event.target.value
-                ? { ...element, selected: event.target.checked }
-                : element;
+            roles: prevUser.roles.map((role) => {
+              return role.id === event.target.value
+                ? { ...role, selected: event.target.checked }
+                : role;
             }),
           };
-
-          /* roles: qroles.map((role) => ({
-            id: role.id,
-            name: role.name,
-            selected: user.roles.some((r) => r.id === role.id),
-          })), */
-
-          /* if(name === "state" || name === "zip"){
-             newPerson.address.stateZip[name] = value
-          } */
-          //return newUser;
         });
       };
 
-      let xxx = "";
-      if (modalModeProp === "update" && userDisplayModal) {
-        xxx = userDisplayModal.roles.map((role) => {
+      let CheckBoxRender = "";
+      if (userDisplayModal) {
+        CheckBoxRender = userDisplayModal.roles.map((role) => {
           // if (user && user.roles) {
           //const even = user.roles.find((r) => r.id === role.id);
           // console.log(userDisplayModal);
@@ -220,29 +225,24 @@ const UsermanagerDialog =
               value={role.id}
             />
           );
-          /*  else
-              return <FormControlLabel
-              key={role.id}
-              control={<Checkbox />}
-              label={role.name}
-            />; */
-          // }
         });
       }
-      //xxx = (<div>{user.roles}</div>);
+      console.log(isGetLoading)
+      if (isGetLoading && !user) return <Button variant="text">Text</Button>
       return (
-        <Dialog open={openModalProp} onClose={handleCloseModalProp}>
-          <DialogTitle>Subscribe</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here.
-            </DialogContentText>
-            <FormGroup>{xxx}</FormGroup>
+        <>
+          <Dialog open={openModalProp} onClose={handleCloseModalProp}>
+            <DialogTitle>Subscribe</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To subscribe to this website, please enter your email address
+                here.
+              </DialogContentText>
+              <FormGroup>{CheckBoxRender}</FormGroup>
 
-            {modalModeProp === "add" && (
-              <>
-                {/*  <TextField
+              {modalModeProp === "add" && (
+                <>
+                  {/*  <TextField
                 label="کد ملی"
                 margin="dense"
                 id="nationalId"
@@ -256,84 +256,84 @@ const UsermanagerDialog =
                   })
                 }
               /> */}
-                <TextField
-                  label="کلمه رمز"
-                  margin="dense"
-                  id="password"
-                  type="password"
-                  fullWidth
-                  variant="standard"
-                  onChange={(e) =>
-                    setDisplayUserModal({
-                      ...userDisplayModal,
-                      password: e.target.value,
-                    })
-                  }
-                />
-              </>
-            )}
-            <TextField
-              autoFocus
-              label="نام"
-              margin="dense"
-              id="firstName"
-              type="firstName"
-              fullWidth
-              variant="standard"
-              value={userDisplayModal.firstName || ""}
-              onChange={(e) =>
-                setDisplayUserModal({
-                  ...userDisplayModal,
-                  firstName: e.target.value,
-                })
-              }
-            />
-            <TextField
-              label="نام خانوادگی"
-              margin="dense"
-              id="lastName"
-              type="lastName"
-              fullWidth
-              variant="standard"
-              value={userDisplayModal.lastName || ""}
-              onChange={(e) =>
-                setDisplayUserModal({
-                  ...userDisplayModal,
-                  lastName: e.target.value,
-                })
-              }
-            />
-            <TextField
-              label="موبایل"
-              margin="dense"
-              id="phone"
-              type="phone"
-              fullWidth
-              variant="standard"
-              value={userDisplayModal.phone || ""}
-              onChange={(e) =>
-                setDisplayUserModal({
-                  ...userDisplayModal,
-                  phone: e.target.value,
-                })
-              }
-            />
-            <TextField
-              label="پست الکترونیکی"
-              margin="dense"
-              id="email"
-              type="email"
-              fullWidth
-              variant="standard"
-              value={userDisplayModal.email || ""}
-              onChange={(e) =>
-                setDisplayUserModal({
-                  ...userDisplayModal,
-                  email: e.target.value,
-                })
-              }
-            />
-            {/*  <TextField
+                  <TextField
+                    label="کلمه رمز"
+                    margin="dense"
+                    id="password"
+                    type="password"
+                    fullWidth
+                    variant="standard"
+                    onChange={(e) =>
+                      setDisplayUserModal({
+                        ...userDisplayModal,
+                        password: e.target.value,
+                      })
+                    }
+                  />
+                </>
+              )}
+              <TextField
+                autoFocus
+                label="نام"
+                margin="dense"
+                id="firstName"
+                type="firstName"
+                fullWidth
+                variant="standard"
+                value={userDisplayModal.firstName || ""}
+                onChange={(e) =>
+                  setDisplayUserModal({
+                    ...userDisplayModal,
+                    firstName: e.target.value,
+                  })
+                }
+              />
+              <TextField
+                label="نام خانوادگی"
+                margin="dense"
+                id="lastName"
+                type="lastName"
+                fullWidth
+                variant="standard"
+                value={userDisplayModal.lastName || ""}
+                onChange={(e) =>
+                  setDisplayUserModal({
+                    ...userDisplayModal,
+                    lastName: e.target.value,
+                  })
+                }
+              />
+              <TextField
+                label="موبایل"
+                margin="dense"
+                id="phone"
+                type="phone"
+                fullWidth
+                variant="standard"
+                value={userDisplayModal.phone || ""}
+                onChange={(e) =>
+                  setDisplayUserModal({
+                    ...userDisplayModal,
+                    phone: e.target.value,
+                  })
+                }
+              />
+              <TextField
+                label="پست الکترونیکی"
+                margin="dense"
+                id="email"
+                type="email"
+                fullWidth
+                variant="standard"
+                value={userDisplayModal.email || ""}
+                onChange={(e) =>
+                  setDisplayUserModal({
+                    ...userDisplayModal,
+                    email: e.target.value,
+                  })
+                }
+              />
+              {/*  <TextField
             label="سن"
             margin="dense"
             id="age"
@@ -364,12 +364,13 @@ const UsermanagerDialog =
             <FormControlLabel value="مرد" control={<Radio />} label="مرد" />
             <FormControlLabel value="زن" control={<Radio />} label="زن" />
           </RadioGroup> */}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseModalProp}>Cancel</Button>
-            <Button onClick={handleSubmmit}>Subscribe</Button>
-          </DialogActions>
-        </Dialog>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseModalProp}>Cancel</Button>
+              <Button onClick={handleSubmmit}>Subscribe</Button>
+            </DialogActions>
+          </Dialog>
+        </>
       );
     };
 //);

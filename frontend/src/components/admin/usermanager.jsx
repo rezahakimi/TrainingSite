@@ -23,7 +23,7 @@ const UserManager = () => {
   const { data: users = [] } = useGetAllUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
   const [openModal, setOpenModal] = useState(false);
-  const [modalMode, setModalMode] = useState("add");
+  const [modalMode, setModalMode] = useState("");
   const [id, setId] = useState("");
 
   //console.log(user)
