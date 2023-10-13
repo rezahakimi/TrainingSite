@@ -17,7 +17,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useSelector } from "react-redux";
 import UserManager from "./usermanager";
-import Test from "./test";
+import ArticleManager from "./articlemanager";
 
 const Dashboard = () => {
   const drawerWidth = 240;
@@ -59,12 +59,12 @@ const Dashboard = () => {
                   <ListItemText primary="UserManager" />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding  onClick={() => setComponent("test")}>
+              <ListItem disablePadding  onClick={() => setComponent("article")}>
                 <ListItemButton>
                   <ListItemIcon>
                      <MailIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Test1" />
+                  <ListItemText primary="Article" />
                 </ListItemButton>
               </ListItem>
           </List>
@@ -87,7 +87,7 @@ const Dashboard = () => {
         <Toolbar />
         <main>
           {component === "user" ? <UserManager /> : null}
-          {component === "test" ? <Test /> : null}
+          {component === "article" ? <ArticleManager /> : null}
         </main>
       </Box>
     </Box>

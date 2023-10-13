@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const UserSchema = mongoose.Schema(
   {
@@ -25,12 +25,13 @@ const UserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    roles:[
+    roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Role"
-      }
-    ]
+        ref: "Role",
+      },
+    ],
+    articles: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
   },
   {
     timestamps: true,
@@ -43,8 +44,8 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     next();
   }
 
@@ -52,6 +53,6 @@ UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;

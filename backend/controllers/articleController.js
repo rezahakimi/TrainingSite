@@ -11,7 +11,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
     .populate({
       path: "createdUser",
       match: {},
-      select: "firstName lastName -_id",
+      select: "firstname lastname -_id",
     })
     .exec();
   if (articles) {
@@ -22,7 +22,8 @@ const getAllArticles = asyncHandler(async (req, res) => {
         content: article.content,
         createdDate: article.createdDate,
         lastModifyDate: article.lastModifyDate,
-        createdUser: article.firstname + " " + article.lastname,
+        createdUserId: article.createdUser._id,
+        createdUser: article.createdUser.firstname + " " + article.createdUser.lastname,
       };
     });
 
@@ -43,11 +44,13 @@ const getArticleById = asyncHandler(async (req, res) => {
     .exec();
   if (article) {
     const myArticle = {
-      id: user._id,
+      id: article._id,
       content: article.content,
+      title: article.title,
       createdDate: article.createdDate,
       lastModifyDate: article.lastModifyDate,
-      createdUser: article.firstname + " " + article.lastname,
+      createdUserId: article.createdUser._id,
+      createdUser: article.createdUser.firstname + " " + article.createdUser.lastname,
     };
 
     res.status(200).json(myArticle);
@@ -58,23 +61,29 @@ const getArticleById = asyncHandler(async (req, res) => {
 });
 
 const createArticle = asyncHandler(async (req, res) => {
-  const { title, content, userid } = req.body;
+  try {
+    const { title, content, userid } = req.body;
 
-  const user = await User.findById(userid);
-  if (!user) {
-    res.status(404);
-    throw new Error("User not found");
-  }
+    const user = await User.findById(userid);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
 
-  const article = new Article({
-    title,
-    content,
-    lastModifyDate: Date.now(),
-    createdUser: user._id,
-  });
-  article.save().then((a) => {
+    const article = new Article({
+      title,
+      content,
+      lastModifyDate: Date.now(),
+      createdUser: user._id,
+    });
+    await article.save();
+
+    user.articles.push(article);
+    await user.save();
     res.send({ message: "Article was Added successfully!" });
-  });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
 });
 
 const updateArticle = asyncHandler(async (req, res) => {
@@ -96,16 +105,32 @@ const updateArticle = asyncHandler(async (req, res) => {
 });
 
 const deleteArticle = asyncHandler(async (req, res) => {
-  Article.findByIdAndDelete(req.params.id)
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) {
+      return res.status(404).send({ message: "Article not found" });
+    }
+    const articleId = article._id;
+    const user = await User.findById(article.createdUser);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    await Article.findByIdAndDelete(articleId );
+    await User.findByIdAndUpdate(user._id, {
+      $pull: { articles: articleId },
+  });    /* Article.findByIdAndDelete(req.params.id)
     .then((article) => {
-      if (!article) {
-        return res.status(404).send({ message: "Article not found" });
-      }
-      res.send({ message: "Article was deleted successfully!" });
+      
     })
     .catch((error) => {
-      res.status(500).send(error);
-    });
+      res.status(500).
+      send(error);
+    }); */
+    res.send({ message: "Article was deleted successfully!" });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
 });
 
 export {
