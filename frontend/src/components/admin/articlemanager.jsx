@@ -25,7 +25,7 @@ const ArticleManager = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [id, setId] = useState("");
-
+  const [fetchArticleMain, setFetchArticleMain] = useState(true);
   //console.log(user)
 
   const columns = [
@@ -78,9 +78,8 @@ const ArticleManager = () => {
     e.stopPropagation();
     setModalMode("update");
      setId(row.id);
-
         setOpenModal(true);
-
+        setFetchArticleMain(false);
   };
 
   const onDisplayAddModalButtonClick = (e) => {
@@ -130,6 +129,7 @@ const ArticleManager = () => {
         modalModeProp={modalMode}
         handleCloseModalProp={handleCloseModal}
         idProp={id}
+        fetchArticle={fetchArticleMain}
         /* ref={childRef} */
       ></ArticlemanagerDialog>
     </>

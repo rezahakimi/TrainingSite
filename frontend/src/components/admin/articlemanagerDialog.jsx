@@ -31,7 +31,7 @@ const initialArticleState = {
   content: "",
   createdDate: "",
   lastModifyDate: "",
-  createdUserId:"",
+  createdUserId: "",
   createdUser: "",
 };
 
@@ -40,11 +40,11 @@ const ArticlemanagerDialog = ({
   modalModeProp,
   handleCloseModalProp,
   idProp,
+  fetchArticle,
 }) => {
   const [createArticle] = useCreateArticleMutation();
   const [updateArticle] = useUpdateArticleMutation();
   const { data: users = [] } = useGetAllUsersQuery();
-  const [selectedUser, setSelectedUser] = React.useState(null);
 
   const {
     data: article,
@@ -53,27 +53,31 @@ const ArticlemanagerDialog = ({
     isError: isGetError,
     error: getError,
     isFetching: isGetFetching,
-  } = useGetArticleByIdQuery(idProp);
+  } = useGetArticleByIdQuery(idProp, { skip: fetchArticle });
 
   const [userDisplayModal, setDisplayUserModal] = useState(initialArticleState);
-  console.log(article)
+  //console.log(article)
+  //console.log(idProp)
+  //console.log(fetchArticle)
 
   useEffect(() => {
     if (modalModeProp === "update" && article) {
-      setDisplayUserModal({
-        id: article.id,
-        title: article.title,
-        content: article.content,
-        createdDate: article.createdDate,
-        lastModifyDate: article.lastModifyDate,
-        createdUserId: article.createdUserId,
-        createdUser: article.createdUser,
+      setDisplayUserModal((prevV) => {
+        const x = {
+          id: article.id,
+          title: article.title,
+          content: article.content,
+          createdDate: article.createdDate,
+          lastModifyDate: article.lastModifyDate,
+          createdUserId: article.createdUserId,
+          createdUser: article.createdUser,
+        };
+        return [ ...prevV, x ];
       });
-      //setSelectedUser(article.createdUserId);
     } else {
       setDisplayUserModal(initialArticleState);
     }
-  }, [article, modalModeProp]);
+  }, [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
@@ -91,7 +95,7 @@ const ArticlemanagerDialog = ({
       const res = await createArticle({
         title: userDisplayModal.title,
         content: userDisplayModal.content,
-        userid: selectedUser.id
+        userid: userDisplayModal.createdUserId,
       }).unwrap();
 
       if (res) {
@@ -114,9 +118,12 @@ const ArticlemanagerDialog = ({
           <Autocomplete
             id="user-select"
             sx={{ width: 300 }}
-            value={selectedUser}
+            value={users.find((u) => u.id === userDisplayModal.createdUserId)}
             onChange={(event, newValue) => {
-              setSelectedUser(newValue);
+              setDisplayUserModal({
+                ...userDisplayModal,
+                createdUserId: newValue,
+              });
             }}
             options={users}
             autoHighlight

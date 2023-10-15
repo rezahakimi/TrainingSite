@@ -15,15 +15,15 @@ const getAllArticles = asyncHandler(async (req, res) => {
     })
     .exec();
   if (articles) {
-    const myArticles = articles.map((article) => {
+    const myArticles = articles.map((a) => {
       return {
-        id: article._id,
-        title: article.title,
-        content: article.content,
-        createdDate: article.createdDate,
-        lastModifyDate: article.lastModifyDate,
-        createdUserId: article.createdUser._id,
-        createdUser: article.createdUser.firstname + " " + article.createdUser.lastname,
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        createdDate: a.createdDate,
+        lastModifyDate: a.lastModifyDate,
+        createdUserId: a.createdUser._id,
+        createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
       };
     });
 
@@ -35,7 +35,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
 });
 const getArticleById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
-  const article = await Article.findById(req.params.id)
+  const a = await Article.findById(req.params.id)
     .populate({
       path: "createdUser",
       match: {},
@@ -44,13 +44,13 @@ const getArticleById = asyncHandler(async (req, res) => {
     .exec();
   if (article) {
     const myArticle = {
-      id: article._id,
-      content: article.content,
-      title: article.title,
-      createdDate: article.createdDate,
-      lastModifyDate: article.lastModifyDate,
-      createdUserId: article.createdUser._id,
-      createdUser: article.createdUser.firstname + " " + article.createdUser.lastname,
+      id: a._id,
+      content: a.content,
+      title: a.title,
+      createdDate: a.createdDate,
+      lastModifyDate: a.lastModifyDate,
+      createdUserId: a.createdUser._id,
+      createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
     };
 
     res.status(200).json(myArticle);
