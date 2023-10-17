@@ -42,7 +42,7 @@ const getArticleById = asyncHandler(async (req, res) => {
       select: "firstname lastname _id", //"name -_id",
     })
     .exec();
-  if (article) {
+  if (a) {
     const myArticle = {
       id: a._id,
       content: a.content,

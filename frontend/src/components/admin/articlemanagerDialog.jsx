@@ -62,7 +62,17 @@ const ArticlemanagerDialog = ({
 
   useEffect(() => {
     if (modalModeProp === "update" && article) {
-      setDisplayUserModal((prevV) => {
+      const x = {
+        id: article.id,
+        title: article.title,
+        content: article.content,
+        createdDate: article.createdDate,
+        lastModifyDate: article.lastModifyDate,
+        createdUserId: article.createdUserId,
+        createdUser: article.createdUser,
+      };
+      setDisplayUserModal(
+        /* prevV => {
         const x = {
           id: article.id,
           title: article.title,
@@ -73,7 +83,9 @@ const ArticlemanagerDialog = ({
           createdUser: article.createdUser,
         };
         return [ ...prevV, x ];
-      });
+      } */
+      x
+      );
     } else {
       setDisplayUserModal(initialArticleState);
     }
@@ -118,7 +130,8 @@ const ArticlemanagerDialog = ({
           <Autocomplete
             id="user-select"
             sx={{ width: 300 }}
-            value={users.find((u) => u.id === userDisplayModal.createdUserId)}
+            value={users.find((u) => u.id === userDisplayModal.createdUserId)|| ''}
+            freeSolo={true}
             onChange={(event, newValue) => {
               setDisplayUserModal({
                 ...userDisplayModal,
@@ -127,7 +140,7 @@ const ArticlemanagerDialog = ({
             }}
             options={users}
             autoHighlight
-            getOptionLabel={(option) => option.firstname + option.lastname}
+            getOptionLabel={(option) => option.firstname + option.lastname || ""}
             renderOption={(props, option) => (
               <Box
                 component="li"
