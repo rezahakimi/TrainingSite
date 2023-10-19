@@ -87,7 +87,7 @@ const createArticle = asyncHandler(async (req, res) => {
 });
 
 const updateArticle = asyncHandler(async (req, res) => {
-  const { id, title, content } = req.body;
+  const { id, title, content, userid } = req.body;
   const article = await Article.findById(id);
 
   if (!article) {
@@ -95,9 +95,16 @@ const updateArticle = asyncHandler(async (req, res) => {
     throw new Error("Article not found");
   }
 
+  const user = await User.findById(userid);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
   if (article) {
     article.title = title;
     article.content = content;
+    article.createdUser= user._id;
     article.save().then((a) => {
       res.send({ message: "Article was updated successfully!" });
     });

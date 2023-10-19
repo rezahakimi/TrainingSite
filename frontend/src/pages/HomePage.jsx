@@ -4,6 +4,7 @@ import SearchBox from '../components/search'
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container } from "@mui/material";
+import Articles from '../components/article/articles';
 
 const HomePage = () => {
   
@@ -18,7 +19,7 @@ const HomePage = () => {
       >
         <Appbar />
         <SearchBox />
-    fdgdgdgf
+    <Articles></Articles>
     </Container>
     </ThemeProvider>
   )

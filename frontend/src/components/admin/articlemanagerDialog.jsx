@@ -55,7 +55,8 @@ const ArticlemanagerDialog = ({
     isFetching: isGetFetching,
   } = useGetArticleByIdQuery(idProp, { skip: fetchArticle });
 
-  const [userDisplayModal, setDisplayUserModal] = useState(initialArticleState);
+  const [articleDisplayModal, setDisplayArticleModal] =
+    useState(initialArticleState);
   //console.log(article)
   //console.log(idProp)
   //console.log(fetchArticle)
@@ -71,7 +72,7 @@ const ArticlemanagerDialog = ({
         createdUserId: article.createdUserId,
         createdUser: article.createdUser,
       };
-      setDisplayUserModal(
+      setDisplayArticleModal(
         /* prevV => {
         const x = {
           id: article.id,
@@ -84,34 +85,39 @@ const ArticlemanagerDialog = ({
         };
         return [ ...prevV, x ];
       } */
-      x
+        x
       );
     } else {
-      setDisplayUserModal(initialArticleState);
+      setDisplayArticleModal(initialArticleState);
     }
   }, [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
+
+      console.log(articleDisplayModal);
+
       const res = await updateArticle({
-        id: userDisplayModal.id,
-        title: userDisplayModal.title,
-        content: userDisplayModal.content,
+        id: articleDisplayModal.id,
+        title: articleDisplayModal.title,
+        content: articleDisplayModal.content,
+        userid: articleDisplayModal.createdUserId
       }).unwrap();
+      console.log(articleDisplayModal);
 
       if (res) {
-        setDisplayUserModal(initialArticleState);
+        setDisplayArticleModal(initialArticleState);
         handleCloseModalProp();
       }
     } else if (modalModeProp === "add") {
       const res = await createArticle({
-        title: userDisplayModal.title,
-        content: userDisplayModal.content,
-        userid: userDisplayModal.createdUserId,
+        title: articleDisplayModal.title,
+        content: articleDisplayModal.content,
+        userid: articleDisplayModal.createdUserId,
       }).unwrap();
 
       if (res) {
-        setDisplayUserModal(initialArticleState);
+        setDisplayArticleModal(initialArticleState);
         handleCloseModalProp();
       }
     }
@@ -130,17 +136,24 @@ const ArticlemanagerDialog = ({
           <Autocomplete
             id="user-select"
             sx={{ width: 300 }}
-            value={users.find((u) => u.id === userDisplayModal.createdUserId)|| ''}
+            value={
+              users.find((u) => u.id === articleDisplayModal.createdUserId) ||
+            {}
+            }
             freeSolo={true}
             onChange={(event, newValue) => {
-              setDisplayUserModal({
-                ...userDisplayModal,
-                createdUserId: newValue,
+              setDisplayArticleModal((prevPostsData) => {
+                return {
+                  ...prevPostsData,
+                  createdUserId: newValue.id,
+                };
               });
             }}
             options={users}
             autoHighlight
-            getOptionLabel={(option) => option.firstname + option.lastname || ""}
+            getOptionLabel={(option) =>
+              option.firstname + option.lastname || ""
+            }
             renderOption={(props, option) => (
               <Box
                 component="li"
@@ -154,7 +167,7 @@ const ArticlemanagerDialog = ({
                   src={`https://flagcdn.com/w20/${option.id.toLowerCase()}.png`}
                   alt=""
                 /> */}
-                {option.firstname} {option.lastname}
+                {option.firstname+ ' '} {option.lastname}
               </Box>
             )}
             renderInput={(params) => (
@@ -176,10 +189,10 @@ const ArticlemanagerDialog = ({
             type="title"
             fullWidth
             variant="standard"
-            value={userDisplayModal.title || ""}
+            value={articleDisplayModal.title || ""}
             onChange={(e) =>
-              setDisplayUserModal({
-                ...userDisplayModal,
+              setDisplayArticleModal({
+                ...articleDisplayModal,
                 title: e.target.value,
               })
             }
@@ -191,10 +204,10 @@ const ArticlemanagerDialog = ({
             type="content"
             fullWidth
             variant="standard"
-            value={userDisplayModal.content || ""}
+            value={articleDisplayModal.content || ""}
             onChange={(e) =>
-              setDisplayUserModal({
-                ...userDisplayModal,
+              setDisplayArticleModal({
+                ...articleDisplayModal,
                 content: e.target.value,
               })
             }
