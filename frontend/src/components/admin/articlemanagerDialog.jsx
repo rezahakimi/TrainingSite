@@ -95,7 +95,7 @@ const ArticlemanagerDialog = ({
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
 
-      console.log(articleDisplayModal);
+     // console.log(articleDisplayModal);
 
       const res = await updateArticle({
         id: articleDisplayModal.id,

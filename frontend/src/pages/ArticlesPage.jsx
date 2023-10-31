@@ -1,12 +1,20 @@
 import React from "react";
-import Appbar from "../components/appbar";
-import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
+import { useParams } from "react-router-dom";
+import ArticleDetails from "../components/article/articleDetails";
 
-const HomePage = () => {
+const ArtilesPage = () => {
+  const { articleid } = useParams();
+  let articlesRender;
+
+  if (articleid) {
+    articlesRender = <ArticleDetails articleId={articleid}></ArticleDetails>;
+  } else {
+    articlesRender = <ArticleList></ArticleList>;
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -26,7 +34,7 @@ const HomePage = () => {
             <div>2</div>
           </Grid>
           <Grid item xs>
-            <ArticleList></ArticleList>
+            {articlesRender}
           </Grid>
         </Grid>
         <Grid item xs={2}>
@@ -37,4 +45,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ArtilesPage;
