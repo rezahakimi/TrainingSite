@@ -20,7 +20,13 @@ const ArticleSchema = mongoose.Schema(
     createdUser: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
-    }
+    },
+    categories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ArticleCat",
+      },
+    ],
   },
   {
     timestamps: true,
