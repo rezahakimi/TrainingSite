@@ -36,14 +36,15 @@ function App() {
   const { userInfo: user } = useSelector((state) => state.auth);
 
   let apppbar;
-  if (user) {
+  //console.log(user)
+  //if (user) {
     apppbar = (
       <>
         <Appbar></Appbar>
         <SearchBox></SearchBox>
       </>
     );
-  }
+ // }
   //console.log(user)
   return (
     <BrowserRouter>

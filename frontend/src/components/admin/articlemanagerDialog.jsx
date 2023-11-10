@@ -16,7 +16,15 @@ import {
   DialogTitle,
   FormGroup,
   Autocomplete,
+  OutlinedInput,
+  Select,
+  InputLabel,
+  MenuItem,
+  Chip
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { useTheme } from '@mui/material/styles';
 import {
   useCreateArticleMutation,
   useGetArticleByIdQuery,
@@ -24,6 +32,9 @@ import {
 } from "../../slices/articleApiSlice";
 import { useSelector } from "react-redux";
 import { useGetAllUsersQuery } from "../../slices/userApiSlice";
+import { useGetAllArticleCatsQuery } from "../../slices/articleCatApiSlice";
+import CustomizedHook from "../common/tagautocomplete";
+
 
 const initialArticleState = {
   id: "",
@@ -33,6 +44,7 @@ const initialArticleState = {
   lastModifyDate: "",
   createdUserId: "",
   createdUser: "",
+  categories: []
 };
 
 const ArticlemanagerDialog = ({
@@ -42,13 +54,17 @@ const ArticlemanagerDialog = ({
   idProp,
   fetchArticle,
 }) => {
+  const theme = useTheme();
   const [createArticle] = useCreateArticleMutation();
   const [updateArticle] = useUpdateArticleMutation();
   const { data: users = [] } = useGetAllUsersQuery();
 
+  const { data: articleCats = [], isLoading: isArticleCatLoading } =
+    useGetAllArticleCatsQuery();
+
   const {
     data: article,
-    isLoading: isGetLoading,
+    isLoading: isArticleLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
     error: getError,
@@ -57,9 +73,6 @@ const ArticlemanagerDialog = ({
 
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
-  //console.log(article)
-  //console.log(idProp)
-  //console.log(fetchArticle)
 
   useEffect(() => {
     if (modalModeProp === "update" && article) {
@@ -71,6 +84,7 @@ const ArticlemanagerDialog = ({
         lastModifyDate: article.lastModifyDate,
         createdUserId: article.createdUserId,
         createdUser: article.createdUser,
+        categories: article.categories
       };
       setDisplayArticleModal(
         /* prevV => {
@@ -91,19 +105,22 @@ const ArticlemanagerDialog = ({
       setDisplayArticleModal(initialArticleState);
     }
   }, [article, modalModeProp, fetchArticle]);
+  //console.log(articleDisplayModal);
 
   const handleSubmmit = async () => {
-    if (modalModeProp === "update") {
+    console.log(articleDisplayModal)
 
-     // console.log(articleDisplayModal);
+    if (modalModeProp === "update") {
+      // console.log(articleDisplayModal);
 
       const res = await updateArticle({
         id: articleDisplayModal.id,
         title: articleDisplayModal.title,
         content: articleDisplayModal.content,
-        userid: articleDisplayModal.createdUserId
+        userid: articleDisplayModal.createdUserId,
+        categories: articleDisplayModal.categories
       }).unwrap();
-      console.log(articleDisplayModal);
+      //console.log(articleDisplayModal);
 
       if (res) {
         setDisplayArticleModal(initialArticleState);
@@ -114,6 +131,7 @@ const ArticlemanagerDialog = ({
         title: articleDisplayModal.title,
         content: articleDisplayModal.content,
         userid: articleDisplayModal.createdUserId,
+        categories: articleDisplayModal.categories
       }).unwrap();
 
       if (res) {
@@ -123,22 +141,67 @@ const ArticlemanagerDialog = ({
     }
   };
 
-  if (isGetLoading && !article)
-    return <Button variant="text">loading -----------</Button>;
+  if (isArticleLoading && !article)
+    return <Button variant="isArticleLoading">loading -----------</Button>;
+  if (isArticleCatLoading)
+    return <Button variant="isArticleCatLoading">loading -----------</Button>;
+    //console.log(articleCats.filter(ac => articleDisplayModal.categories.some(item => item === ac.id)).map(i=>i.id))
+    let selectedArticleCats = articleCats.filter(ac => articleDisplayModal.categories.some(item => item === ac.id)
+    );
+    //.map(i=>i.id);
+    let renderSelectedArticleCats;
+
+    //if (selectedArticleCats?.length > 0) {
+      renderSelectedArticleCats = <Autocomplete
+        multiple
+        id="tags-filled"
+        options={articleCats}
+        value ={selectedArticleCats} 
+        freeSolo
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip variant="outlined" label={option.title} {...getTagProps({ index })} />
+          ))
+        }
+        getOptionLabel={(option) =>
+          option.title || ""
+        }
+        onChange={(event, newValue) => {
+          setDisplayArticleModal((prevPostsData) => {
+            return {
+              ...prevPostsData,
+              categories: newValue.map(nv=>nv.id),
+            };
+          }); 
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="filled"
+            label="freeSolo"
+            placeholder="Favorites"
+          />
+        )}
+      />
+   // }
+
   return (
     <>
       <Dialog open={openModalProp} onClose={handleCloseModalProp}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Article Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here.
+            Insert article details.
           </DialogContentText>
+
+{renderSelectedArticleCats}
+
           <Autocomplete
             id="user-select"
             sx={{ width: 300 }}
             value={
               users.find((u) => u.id === articleDisplayModal.createdUserId) ||
-            {}
+              {}
             }
             freeSolo={true}
             onChange={(event, newValue) => {
@@ -167,7 +230,7 @@ const ArticlemanagerDialog = ({
                   src={`https://flagcdn.com/w20/${option.id.toLowerCase()}.png`}
                   alt=""
                 /> */}
-                {option.firstname+ ' '} {option.lastname}
+                {option.firstname + " "} {option.lastname}
               </Box>
             )}
             renderInput={(params) => (

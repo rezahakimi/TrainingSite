@@ -40,6 +40,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
         lastModifyDate: a.lastModifyDate,
         createdUserId: a.createdUser._id,
         createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+        categories: a.categories
       };
     });
 
@@ -67,6 +68,7 @@ const getArticleById = asyncHandler(async (req, res) => {
       lastModifyDate: a.lastModifyDate,
       createdUserId: a.createdUser._id,
       createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+      categories: a.categories
     };
 
     res.status(200).json(myArticle);
@@ -78,7 +80,7 @@ const getArticleById = asyncHandler(async (req, res) => {
 
 const createArticle = asyncHandler(async (req, res) => {
   try {
-    const { title, content, userid, articlecat } = req.body;
+    const { title, content, userid, categories } = req.body;
 
     const user = await User.findById(userid);
     if (!user) {
@@ -91,7 +93,7 @@ const createArticle = asyncHandler(async (req, res) => {
       content,
       lastModifyDate: Date.now(),
       createdUser: user._id,
-      categories: articlecat
+      categories: categories
     });
     await article.save();
 
@@ -105,7 +107,7 @@ const createArticle = asyncHandler(async (req, res) => {
 });
 
 const updateArticle = asyncHandler(async (req, res) => {
-  const { id, title, content, userid, articlecat  } = req.body;
+  const { id, title, content, userid, categories  } = req.body;
   const article = await Article.findById(id);
 
   if (!article) {
@@ -123,14 +125,14 @@ const updateArticle = asyncHandler(async (req, res) => {
     article.title = title;
     article.content = content;
     article.createdUser= user._id;
-    article.categories= articlecat;
+    article.categories= categories;
 
-    const oldarticlecat = article.categories;
+    const oldcategories = article.categories;
 
     await article.save();
 
-      const added = difference(articlecat, oldarticlecat);
-      const removed = difference(oldarticlecat, articlecat);
+      const added = difference(categories, oldcategories);
+      const removed = difference(oldcategories, categories);
       await ArticleCat.updateMany({ '_id': added }, { $addToSet: { articles: article._id } });
       await ArticleCat.updateMany({ '_id': removed }, { $pull: { articles: article._id } });
     

@@ -41,31 +41,31 @@ export default function AppbarDesktop({ matches }) {
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink exact to="/">Home</NavLink>} />
+          <ListItemText primary={<NavLink  to="/">Home</NavLink>} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink exact to="/articles">Articles</NavLink>} />
+          <ListItemText primary={<NavLink  to="/articles">Articles</NavLink>} />
         </ListItem>
         <ListItem >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink exact to="/cat">Categories</NavLink>} />
+          <ListItemText primary={<NavLink  to="/cat">Categories</NavLink>} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink exact to="/cat">About us</NavLink>} />
+          <ListItemText primary={<NavLink  to="/cat">About us</NavLink>} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink exact to="/cat">Contact us</NavLink>} />
+          <ListItemText primary={<NavLink  to="/cat">Contact us</NavLink>} />
         </ListItem>
         <ListItemButton onClick={() => dispatch(setShowSearchBox(true))}>
           <ListItemIcon>
