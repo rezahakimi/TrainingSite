@@ -20,7 +20,8 @@ import {
   Select,
   InputLabel,
   MenuItem,
-  Chip
+  Chip,
+  useMediaQuery
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -33,8 +34,6 @@ import {
 import { useSelector } from "react-redux";
 import { useGetAllUsersQuery } from "../../slices/userApiSlice";
 import { useGetAllArticleCatsQuery } from "../../slices/articleCatApiSlice";
-import CustomizedHook from "../common/tagautocomplete";
-
 
 const initialArticleState = {
   id: "",
@@ -55,6 +54,8 @@ const ArticlemanagerDialog = ({
   fetchArticle,
 }) => {
   const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
+
   const [createArticle] = useCreateArticleMutation();
   const [updateArticle] = useUpdateArticleMutation();
   const { data: users = [] } = useGetAllUsersQuery();
@@ -145,7 +146,6 @@ const ArticlemanagerDialog = ({
     return <Button variant="isArticleLoading">loading -----------</Button>;
   if (isArticleCatLoading)
     return <Button variant="isArticleCatLoading">loading -----------</Button>;
-    //console.log(articleCats.filter(ac => articleDisplayModal.categories.some(item => item === ac.id)).map(i=>i.id))
     let selectedArticleCats = articleCats.filter(ac => articleDisplayModal.categories.some(item => item === ac.id)
     );
     //.map(i=>i.id);
@@ -153,6 +153,7 @@ const ArticlemanagerDialog = ({
 
     //if (selectedArticleCats?.length > 0) {
       renderSelectedArticleCats = <Autocomplete
+      sx={{ mt: 2}}
         multiple
         id="tags-filled"
         options={articleCats}
@@ -177,17 +178,16 @@ const ArticlemanagerDialog = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            variant="filled"
             label="freeSolo"
-            placeholder="Favorites"
+            placeholder="Tags"
           />
         )}
       />
    // }
-
+ 
   return (
     <>
-      <Dialog open={openModalProp} onClose={handleCloseModalProp}>
+      <Dialog open={openModalProp} onClose={handleCloseModalProp} fullScreen={matches} >
         <DialogTitle>Article Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -198,7 +198,7 @@ const ArticlemanagerDialog = ({
 
           <Autocomplete
             id="user-select"
-            sx={{ width: 300 }}
+            sx={{ mt: 2}}
             value={
               users.find((u) => u.id === articleDisplayModal.createdUserId) ||
               {}
@@ -245,6 +245,7 @@ const ArticlemanagerDialog = ({
             )}
           />
           <TextField
+          sx={{ mt: 2}}
             autoFocus
             label="عنوان"
             margin="dense"
@@ -261,6 +262,7 @@ const ArticlemanagerDialog = ({
             }
           />
           <TextField
+          sx={{ mt: 2}}
             label="متن"
             margin="dense"
             id="content"
@@ -274,11 +276,13 @@ const ArticlemanagerDialog = ({
                 content: e.target.value,
               })
             }
+            multiline
+            rows={8}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModalProp}>Cancel</Button>
-          <Button onClick={handleSubmmit}>Subscribe</Button>
+          <Button onClick={handleSubmmit}>Save</Button>
         </DialogActions>
       </Dialog>
     </>
