@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useGetAllArticlesQuery, useDeleteArticleMutation } from "../../slices/articleApiSlice";
+import {
+  useGetAllArticlesQuery,
+  useDeleteArticleMutation,
+} from "../../slices/articleApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -19,22 +22,21 @@ import AddIcon from "@mui/icons-material/Add";
 import ArticlemanagerDialog from "./articlemanagerDialog";
 
 const ArticleManager = () => {
- // const childRef = useRef(null);
+  // const childRef = useRef(null);
   const { data: articles = [] } = useGetAllArticlesQuery();
   const [deleteArticle] = useDeleteArticleMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [id, setId] = useState("");
-  const [fetchArticleMain, setFetchArticleMain] = useState(true);
+  //const [fetchArticleMain, setFetchArticleMain] = useState(true);
   //console.log(user)
 
   const columns = [
     {
-        field: "createdUser",
-        headerName: "نویسنده",
-        width: 150,
-
-      },
+      field: "createdUser",
+      headerName: "نویسنده",
+      width: 150,
+    },
     {
       field: "title",
       headerName: "عنوان مقاله",
@@ -55,14 +57,14 @@ const ArticleManager = () => {
           <Tooltip title="jbjb" arrow>
             <IconButton
               color="primary"
-               onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)} 
+              onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)}
             >
               <EditIcon />
             </IconButton>
           </Tooltip>
           <IconButton
             color="primary"
-            onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)} 
+            onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)}
           >
             <DeleteIcon />
           </IconButton>
@@ -71,15 +73,14 @@ const ArticleManager = () => {
     },
   ];
 
-  useEffect(() => {
-    }, [id]);
+  useEffect(() => {}, [id]);
 
   const onDisplayUpdateModalButtonClick = async (e, row) => {
     e.stopPropagation();
     setModalMode("update");
-     setId(row.id);
-        setOpenModal(true);
-        setFetchArticleMain(false);
+    setId(row.id);
+    setOpenModal(true);
+    // setFetchArticleMain(false);
   };
 
   const onDisplayAddModalButtonClick = (e) => {
@@ -129,7 +130,7 @@ const ArticleManager = () => {
         modalModeProp={modalMode}
         handleCloseModalProp={handleCloseModal}
         idProp={id}
-        fetchArticle={fetchArticleMain}
+        /* fetchArticle={fetchArticleMain} */
         /* ref={childRef} */
       ></ArticlemanagerDialog>
     </>

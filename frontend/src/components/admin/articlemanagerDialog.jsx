@@ -21,11 +21,11 @@ import {
   InputLabel,
   MenuItem,
   Chip,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   useCreateArticleMutation,
   useGetArticleByIdQuery,
@@ -34,6 +34,8 @@ import {
 import { useSelector } from "react-redux";
 import { useGetAllUsersQuery } from "../../slices/userApiSlice";
 import { useGetAllArticleCatsQuery } from "../../slices/articleCatApiSlice";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const initialArticleState = {
   id: "",
@@ -43,7 +45,7 @@ const initialArticleState = {
   lastModifyDate: "",
   createdUserId: "",
   createdUser: "",
-  categories: []
+  categories: [],
 };
 
 const ArticlemanagerDialog = ({
@@ -51,10 +53,10 @@ const ArticlemanagerDialog = ({
   modalModeProp,
   handleCloseModalProp,
   idProp,
-  fetchArticle,
+  //fetchArticle,
 }) => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('md'));
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
 
   const [createArticle] = useCreateArticleMutation();
   const [updateArticle] = useUpdateArticleMutation();
@@ -70,10 +72,11 @@ const ArticlemanagerDialog = ({
     isError: isGetError,
     error: getError,
     isFetching: isGetFetching,
-  } = useGetArticleByIdQuery(idProp, { skip: fetchArticle });
+  } = useGetArticleByIdQuery(idProp, { pollingInterval: 3000 }); //, { skip: fetchArticle });
 
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
+  const [editorContent, setEditorContent] = useState("");
 
   useEffect(() => {
     if (modalModeProp === "update" && article) {
@@ -85,120 +88,145 @@ const ArticlemanagerDialog = ({
         lastModifyDate: article.lastModifyDate,
         createdUserId: article.createdUserId,
         createdUser: article.createdUser,
-        categories: article.categories
+        categories: article.categories,
       };
-      setDisplayArticleModal(
-        /* prevV => {
-        const x = {
-          id: article.id,
-          title: article.title,
-          content: article.content,
-          createdDate: article.createdDate,
-          lastModifyDate: article.lastModifyDate,
-          createdUserId: article.createdUserId,
-          createdUser: article.createdUser,
-        };
-        return [ ...prevV, x ];
-      } */
-        x
-      );
+      /* setDisplayArticleModal(
+          (existingValues) => ({
+            ...existingValues,
+            id: article.id,
+            title: article.title,
+            content: article.content,
+            createdDate: article.createdDate,
+            lastModifyDate: article.lastModifyDate,
+            createdUserId: article.createdUserId,
+            createdUser: article.createdUser,
+            categories: article.categories,
+          })
+        ); */
+      // console.log(article.categories);
+      setDisplayArticleModal({
+        id: article.id,
+        title: article.title,
+        createdDate: article.createdDate,
+        lastModifyDate: article.lastModifyDate,
+        createdUserId: article.createdUserId,
+        createdUser: article.createdUser,
+        categories: article.categories,
+      });
+      setEditorContent(article.content);
+      //console.log(article);
     } else {
       setDisplayArticleModal(initialArticleState);
+      setEditorContent("");
     }
-  }, [article, modalModeProp, fetchArticle]);
-  //console.log(articleDisplayModal);
+  }, [article, modalModeProp]);
+  // [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
-    console.log(articleDisplayModal)
-
     if (modalModeProp === "update") {
       // console.log(articleDisplayModal);
 
       const res = await updateArticle({
         id: articleDisplayModal.id,
         title: articleDisplayModal.title,
-        content: articleDisplayModal.content,
+        content: editorContent,
         userid: articleDisplayModal.createdUserId,
-        categories: articleDisplayModal.categories
+        categories: articleDisplayModal.categories,
       }).unwrap();
       //console.log(articleDisplayModal);
 
       if (res) {
         setDisplayArticleModal(initialArticleState);
+        setEditorContent("");
         handleCloseModalProp();
       }
     } else if (modalModeProp === "add") {
       const res = await createArticle({
         title: articleDisplayModal.title,
-        content: articleDisplayModal.content,
+        content: editorContent,
         userid: articleDisplayModal.createdUserId,
-        categories: articleDisplayModal.categories
+        categories: articleDisplayModal.categories,
       }).unwrap();
 
       if (res) {
         setDisplayArticleModal(initialArticleState);
+        setEditorContent("");
         handleCloseModalProp();
       }
     }
   };
 
-  if (isArticleLoading && !article)
-    return <Button variant="isArticleLoading">loading -----------</Button>;
+  if (isArticleLoading)
+    return <Button variant="text">isArticleLoading -----------</Button>;
   if (isArticleCatLoading)
-    return <Button variant="isArticleCatLoading">loading -----------</Button>;
-    let selectedArticleCats = articleCats.filter(ac => articleDisplayModal.categories.some(item => item === ac.id)
+    return <Button variant="text">isArticleCatLoading -----------</Button>;
+  if (!article) return <Button variant="text">Article -----------</Button>;
+
+  let renderSelectedArticleCats;
+  let selectedArticleCats = [];
+  //console.log(articleDisplayModal?.categories);
+
+  if (
+    articleDisplayModal.categories !== undefined &&
+    articleDisplayModal.categories.length > 0
+  ) {
+    selectedArticleCats = articleCats.filter((ac) =>
+      articleDisplayModal.categories.some((item) => item === ac.id)
     );
     //.map(i=>i.id);
-    let renderSelectedArticleCats;
+    console.log(selectedArticleCats);
+  }
 
-    //if (selectedArticleCats?.length > 0) {
-      renderSelectedArticleCats = <Autocomplete
-      sx={{ mt: 2}}
-        multiple
-        id="tags-filled"
-        options={articleCats}
-        value ={selectedArticleCats} 
-        freeSolo
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip variant="outlined" label={option.title} {...getTagProps({ index })} />
-          ))
-        }
-        getOptionLabel={(option) =>
-          option.title || ""
-        }
-        onChange={(event, newValue) => {
-          setDisplayArticleModal((prevPostsData) => {
-            return {
-              ...prevPostsData,
-              categories: newValue.map(nv=>nv.id),
-            };
-          }); 
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="freeSolo"
-            placeholder="Tags"
+  //if (selectedArticleCats?.length > 0) {
+  renderSelectedArticleCats = (
+    <Autocomplete
+      sx={{ mt: 2 }}
+      multiple
+      id="tags-filled"
+      options={articleCats}
+      value={selectedArticleCats || null}
+      freeSolo
+      renderTags={(value, getTagProps) =>
+        value.map((option, index) => (
+          <Chip
+            variant="outlined"
+            label={option.title}
+            {...getTagProps({ index })}
           />
-        )}
-      />
-   // }
- 
+        ))
+      }
+      getOptionLabel={(option) => option.title || ""}
+      onChange={(event, newValue) => {
+        setDisplayArticleModal((prevPostsData) => {
+          return {
+            ...prevPostsData,
+            categories: newValue.map((nv) => nv.id),
+          };
+        });
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label="freeSolo" placeholder="Tags" />
+      )}
+    />
+  );
+  // }
+
+  // console.log(articleDisplayModal.createdUser);
+  // console.log(articleDisplayModal.title);
+  // console.log(articleDisplayModal);
+
   return (
     <>
-      <Dialog open={openModalProp} onClose={handleCloseModalProp} fullScreen={matches} >
+      <Dialog open={openModalProp} onClose={handleCloseModalProp} fullScreen>
         <DialogTitle>Article Details</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Insert article details.
-          </DialogContentText>
+          <DialogContentText>Insert article details.</DialogContentText>
 
-{renderSelectedArticleCats}
+          {renderSelectedArticleCats}
 
           <Autocomplete
             id="user-select"
-            sx={{ mt: 2}}
+            sx={{ mt: 2 }}
             value={
               users.find((u) => u.id === articleDisplayModal.createdUserId) ||
               {}
@@ -245,7 +273,7 @@ const ArticlemanagerDialog = ({
             )}
           />
           <TextField
-          sx={{ mt: 2}}
+            sx={{ mt: 2 }}
             autoFocus
             label="عنوان"
             margin="dense"
@@ -261,7 +289,7 @@ const ArticlemanagerDialog = ({
               })
             }
           />
-          <TextField
+          {/*    <TextField
           sx={{ mt: 2}}
             label="متن"
             margin="dense"
@@ -278,6 +306,32 @@ const ArticlemanagerDialog = ({
             }
             multiline
             rows={8}
+          /> */}
+
+          {/* <ReactQuill
+            value={articleDisplayModal.content || ""}
+            modules={modules}
+            onChange={(v) =>
+              setDisplayArticleModal({
+                ...articleDisplayModal,
+                content: v,
+              })
+            }
+            theme="snow"
+          /> */}
+
+          <CKEditor
+            editor={ClassicEditor}
+            data={editorContent || ""}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setEditorContent(data);
+              /* setDisplayArticleModal({
+                ...articleDisplayModal,
+                content: editor.getData(),
+              });
+              console.log({ event, editor, data }); */
+            }}
           />
         </DialogContent>
         <DialogActions>

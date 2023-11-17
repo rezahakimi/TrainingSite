@@ -44,6 +44,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       query: (id) => ({
         url: `${ARTICLE_URL}/${id}`,
         method: "GET",
+        providesTags: ["Article"],
       }),
     }),
   }),
