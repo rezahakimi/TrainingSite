@@ -8,8 +8,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";
 const pagesize = 3;
 
-const ArticleList = () => {
-  const { data: articles = [] } = useGetAllArticlesQuery();
+const ArticleList = ({ catId }) => {
+  //console.log(catId);
+  const { data: articles = [] } = useGetAllArticlesQuery(catId);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -18,11 +19,11 @@ const ArticleList = () => {
   const getArticlesByPaging = {
     getdata: (from, to) => {
       const data = articles.slice(from, to);
-      return new Promise((resolve, reject)=>{
-          resolve({
-              count: articles.length,
-              data: data
-          });
+      return new Promise((resolve, reject) => {
+        resolve({
+          count: articles.length,
+          data: data,
+        });
       });
     },
   };
@@ -31,9 +32,8 @@ const ArticleList = () => {
     return (
       <Grid
         item
-        
         key={a.id}
-       /*  xs={2}
+        /*  xs={2}
         sm={4}
         md={4} */
         xs={12}
@@ -44,21 +44,21 @@ const ArticleList = () => {
         alignItems="center"
       >
         <Container
-        disableGutters
-        maxWidth="xl"
-        sx={{
-          background: "#fff",
-        }}
-      >
-        {matches ? (
-          <div>sdfsdf</div>
-        ) : (
-/*           <div style={{border: '1px solid red'}}>
- */          <ArticleRow article={a} matches={matches} />
-          /* </div> */
-          /*           <SingleProductDesktop product={product} matches={matches} />
-           */
-        )}
+          disableGutters
+          maxWidth="xl"
+          sx={{
+            background: "#fff",
+          }}
+        >
+          {matches ? (
+            <div>sdfsdf</div>
+          ) : (
+            /*           <div style={{border: '1px solid red'}}>
+             */ <ArticleRow article={a} matches={matches} />
+            /* </div> */
+            /*           <SingleProductDesktop product={product} matches={matches} />
+             */
+          )}
         </Container>
       </Grid>
     );

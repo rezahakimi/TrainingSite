@@ -9,6 +9,8 @@ import {
   Button,
   Container,
   Link,
+  Chip,
+  Stack,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
@@ -50,17 +52,20 @@ const ArticleRow = ({ article, matches }) => {
             </Typography>
 
             <Typography variant="h5" component="div">
-              <NavLink  to={`/articles/${article.id}/`}>
-                {article.title}
-              </NavLink>
+              <NavLink to={`/articles/${article.id}/`}>{article.title}</NavLink>
             </Typography>
 
-            <Typography variant="body2">{article.content}</Typography>
+            <Typography variant="body2">{article.abstract}</Typography>
+            <Stack direction="row" spacing={1}>
+              {article.categories.map((cat, index) => (
+                <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
+                  <Chip variant="outlined" label={cat.title} clickable />
+                </NavLink>
+              ))}
+            </Stack>
           </CardContent>
           <CardActions>
-            <NavLink  to={`/articles/${article.id}/`}>
-              Learn More
-            </NavLink>
+            <NavLink to={`/articles/${article.id}/`}>Learn More</NavLink>
           </CardActions>
         </Card>
       </Container>

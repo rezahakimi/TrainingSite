@@ -5,8 +5,29 @@ const ARTICLE_URL = "/articles";
 export const articleApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllArticles: builder.query({
-      query: () => ({
-        url: `${ARTICLE_URL}/`,
+      query: (catid) => {
+        if (catid) {
+          return {
+            url: `${ARTICLE_URL}/cat/${catid}`,
+            method: "GET",
+          };
+        } else {
+          return {
+            url: `${ARTICLE_URL}/`,
+            method: "GET",
+          };
+        }
+      },
+      // providesTags: ["User"],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: "Article", id })), "Article"]
+          : ["Article"],
+    }),
+
+    getAllArticlesByCategory: builder.query({
+      query: (catid) => ({
+        url: `${ARTICLE_URL}/cat/${catid}`,
         method: "GET",
       }),
       // providesTags: ["User"],
@@ -15,6 +36,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           ? [...result.map(({ id }) => ({ type: "Article", id })), "Article"]
           : ["Article"],
     }),
+
     createArticle: builder.mutation({
       query: (data) => ({
         url: `${ARTICLE_URL}/`,
@@ -52,6 +74,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetAllArticlesQuery,
+  useGetAllArticlesByCategoryQuery,
   useCreateArticleMutation,
   useUpdateArticleMutation,
   useDeleteArticleMutation,

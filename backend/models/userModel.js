@@ -25,6 +25,9 @@ const UserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    profileImg: {
+      type: String,
+    },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

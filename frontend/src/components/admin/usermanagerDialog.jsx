@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogTitle,
   FormGroup,
+  Container,
 } from "@mui/material";
 import {
   useRegisterUserMutation,
@@ -67,6 +68,7 @@ const UsermanagerDialog =
 
       const [userDisplayModal, setDisplayUserModal] =
         useState(initialFormState);
+      const [selectedImage, setSelectedImage] = useState(null);
 
       /*       setTimeout(() => {
         setIsUser(false);
@@ -105,7 +107,11 @@ const UsermanagerDialog =
 
       //  },
       //}));
-
+      const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedImage(URL.createObjectURL(file));
+        //  setSelectedImage(file);
+      };
       const handleSubmmit = async () => {
         if (modalModeProp === "update") {
           /*  userService
@@ -142,15 +148,33 @@ const UsermanagerDialog =
             .catch(function (error) {
               console.log(error);
             }); */
-          const res = await updateUser({
-            id: user.id,
-            firstname: userDisplayModal.firstName,
-            lastname: userDisplayModal.lastName,
-            phone: userDisplayModal.phone,
-            roles: userDisplayModal.roles
-              .filter((i) => i.selected)
-              .map((i) => i.name),
-          }).unwrap();
+          //console.log(selectedImage);
+          const payload = new FormData();
+          payload.append("id", user.id);
+          payload.append("firstname", userDisplayModal.firstName);
+          payload.append("lastname", userDisplayModal.lastName);
+          payload.append("phone", userDisplayModal.phone);
+          payload.append(
+            "roles[]",
+            userDisplayModal.roles.filter((i) => i.selected).map((i) => i.name)
+          );
+          payload.append("image", selectedImage);
+
+          const res = await updateUser(
+            /*  {
+            jsonData: {
+              id: user.id,
+              firstname: userDisplayModal.firstName,
+              lastname: userDisplayModal.lastName,
+              phone: userDisplayModal.phone,
+              roles: userDisplayModal.roles
+                .filter((i) => i.selected)
+                .map((i) => i.name),
+            },
+            image: payload,
+          } */
+            payload
+          ).unwrap();
 
           if (res) {
             setDisplayUserModal(initialFormState);
@@ -227,8 +251,8 @@ const UsermanagerDialog =
           );
         });
       }
-     // console.log(isGetLoading)
-      if (isGetLoading && !user) return <Button variant="text">Text</Button>
+      // console.log(isGetLoading)
+      if (isGetLoading && !user) return <Button variant="text">Text</Button>;
       return (
         <>
           <Dialog open={openModalProp} onClose={handleCloseModalProp}>
@@ -364,6 +388,36 @@ const UsermanagerDialog =
             <FormControlLabel value="مرد" control={<Radio />} label="مرد" />
             <FormControlLabel value="زن" control={<Radio />} label="زن" />
           </RadioGroup> */}
+
+              <Container maxWidth="md" sx={{ boxShadow: 1, p: 2 }}>
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="image-upload"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="image-upload">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component="span"
+                    startIcon={<i className="material-icons">cloud_upload</i>}
+                  >
+                    Upload Image
+                  </Button>
+                </label>
+                <p>
+                  {selectedImage && (
+                    <img
+                      src={selectedImage}
+                      alt="Uploaded"
+                      width="200"
+                      height="200"
+                    />
+                  )}
+                </p>
+              </Container>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseModalProp}>Cancel</Button>

@@ -3,17 +3,23 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ArticleDetails from "../components/article/articleDetails";
 
 const ArtilesPage = () => {
   const { articleid } = useParams();
+  const location = useLocation();
+  const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
 
   if (articleid) {
     articlesRender = <ArticleDetails articleId={articleid}></ArticleDetails>;
   } else {
-    articlesRender = <ArticleList></ArticleList>;
+    if (articleCatQuery) {
+      articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+    } else {
+      articlesRender = <ArticleList></ArticleList>;
+    }
   }
   return (
     <ThemeProvider theme={theme}>

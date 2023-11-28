@@ -40,6 +40,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const initialArticleState = {
   id: "",
   title: "",
+  abstract: "",
   content: "",
   createdDate: "",
   lastModifyDate: "",
@@ -76,6 +77,8 @@ const ArticlemanagerDialog = ({
 
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
+
+  const [editorAbstract, setEditorAbstract] = useState("");
   const [editorContent, setEditorContent] = useState("");
 
   useEffect(() => {
@@ -83,6 +86,7 @@ const ArticlemanagerDialog = ({
       const x = {
         id: article.id,
         title: article.title,
+        abstract: article.abstract,
         content: article.content,
         createdDate: article.createdDate,
         lastModifyDate: article.lastModifyDate,
@@ -113,10 +117,12 @@ const ArticlemanagerDialog = ({
         createdUser: article.createdUser,
         categories: article.categories,
       });
+      setEditorAbstract(article.abstract);
       setEditorContent(article.content);
       //console.log(article);
     } else {
       setDisplayArticleModal(initialArticleState);
+      setEditorAbstract("");
       setEditorContent("");
     }
   }, [article, modalModeProp]);
@@ -129,6 +135,7 @@ const ArticlemanagerDialog = ({
       const res = await updateArticle({
         id: articleDisplayModal.id,
         title: articleDisplayModal.title,
+        abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
         categories: articleDisplayModal.categories,
@@ -137,12 +144,14 @@ const ArticlemanagerDialog = ({
 
       if (res) {
         setDisplayArticleModal(initialArticleState);
+        setEditorAbstract("");
         setEditorContent("");
         handleCloseModalProp();
       }
     } else if (modalModeProp === "add") {
       const res = await createArticle({
         title: articleDisplayModal.title,
+        abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
         categories: articleDisplayModal.categories,
@@ -150,6 +159,7 @@ const ArticlemanagerDialog = ({
 
       if (res) {
         setDisplayArticleModal(initialArticleState);
+        setEditorAbstract("");
         setEditorContent("");
         handleCloseModalProp();
       }
@@ -319,6 +329,20 @@ const ArticlemanagerDialog = ({
             }
             theme="snow"
           /> */}
+
+          <CKEditor
+            editor={ClassicEditor}
+            data={editorAbstract || ""}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setEditorAbstract(data);
+              /* setDisplayArticleModal({
+                ...articleDisplayModal,
+                content: editor.getData(),
+              });
+              console.log({ event, editor, data }); */
+            }}
+          />
 
           <CKEditor
             editor={ClassicEditor}

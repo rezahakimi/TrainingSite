@@ -55,7 +55,7 @@ const getUserById = asyncHandler(async (req, res) => {
     .populate({
       path: "roles",
       match: {},
-      select: "name _id",//"name -_id",
+      select: "name _id", //"name -_id",
     })
     .exec();
   if (user) {
@@ -67,8 +67,8 @@ const getUserById = asyncHandler(async (req, res) => {
       phone: user.phone,
       roles: user.roles.map((role) => {
         const container = {};
-        container.id= role._id;
-        container.name= role.name;
+        container.id = role._id;
+        container.name = role.name;
         //console.log(container);
         return container;
       }),
@@ -174,8 +174,9 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const { id, firstname, lastname, phone, roles } = req.body;
+  const imagePath = req.file ? req.file.path : null;
   const user = await User.findById(id);
 
   if (!user) {

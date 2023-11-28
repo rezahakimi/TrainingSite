@@ -6,20 +6,24 @@ const ArticleSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    abstract: {
+      type: String,
+      required: true,
+    },
     content: {
       type: String,
       required: true,
     },
     createdDate: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     lastModifyDate: {
       type: Date,
     },
     createdUser: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
     },
     categories: [
       {

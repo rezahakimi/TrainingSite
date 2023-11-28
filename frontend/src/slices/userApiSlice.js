@@ -1,54 +1,58 @@
-import { apiSlice } from './apiSlice';
+import { apiSlice } from "./apiSlice";
 
-const USER_URL = '/users';
+const USER_URL = "/users";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
       query: () => ({
         url: `${USER_URL}/`,
-        method: 'GET',
+        method: "GET",
       }),
-     // providesTags: ["User"],
-     providesTags: (result, error, arg) =>
+      // providesTags: ["User"],
+      providesTags: (result, error, arg) =>
         result
-          ? [...result.map(({ email }) => ({ type: 'User', email })), 'User']
-          : ['User'],
+          ? [...result.map(({ email }) => ({ type: "User", email })), "User"]
+          : ["User"],
     }),
     registerUser: builder.mutation({
       query: (data) => ({
         url: `${USER_URL}/`,
-        method: 'POST',
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ["User"]
+      invalidatesTags: ["User"],
     }),
     updateUser: builder.mutation({
-      query: (data) => ({
-        url: `${USER_URL}/`,
-        method: 'PATCH',
-        body: data,
-      }),
-      invalidatesTags: ["User"]
+      query: (data) => {
+        console.log(data);
+        return {
+          url: `${USER_URL}/`,
+          method: "PATCH",
+          body: data,
+          //credentials: "include",
+          formData: true,
+        };
+      },
+      invalidatesTags: ["User"],
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `${USER_URL}/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }],
-
+      invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
     getUserById: builder.query({
       query: (id) => ({
         url: `${USER_URL}/${id}`,
-        method: 'GET',
+        method: "GET",
       }),
     }),
     getAllRoles: builder.query({
       query: () => ({
         url: `${USER_URL}/roles`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response) => response,
     }),
@@ -67,7 +71,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),*/
-  }), 
+  }),
 });
 
 export const {

@@ -4,12 +4,13 @@ import asyncHandler from "express-async-handler";
 import db from "../models/index.js";
 import User from "../models/userModel.js";
 import ArticleCat from "../models/articleCatModel.js";
+import mongoose from "mongoose";
 
 const Article = db.article;
 
 function difference(A, B) {
-  const arrA = Array.isArray(A) ? A.map(x => x.toString()) : [A.toString()];
-  const arrB = Array.isArray(B) ? B.map(x => x.toString()) : [B.toString()];
+  const arrA = Array.isArray(A) ? A.map((x) => x.toString()) : [A.toString()];
+  const arrB = Array.isArray(B) ? B.map((x) => x.toString()) : [B.toString()];
 
   const result = [];
   for (const p of arrA) {
@@ -21,13 +22,17 @@ function difference(A, B) {
   return result;
 }
 
-
 const getAllArticles = asyncHandler(async (req, res) => {
   const articles = await Article.find()
     .populate({
       path: "createdUser",
       match: {},
       select: "firstname lastname -_id",
+    })
+    .populate({
+      path: "categories",
+      match: {},
+      select: "title _id",
     })
     .exec();
   if (articles) {
@@ -36,11 +41,17 @@ const getAllArticles = asyncHandler(async (req, res) => {
         id: a._id,
         title: a.title,
         content: a.content,
+        abstract: a.abstract,
         createdDate: a.createdDate,
         lastModifyDate: a.lastModifyDate,
         createdUserId: a.createdUser._id,
         createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
-        categories: a.categories
+        categories: a.categories.map((c) => {
+          return {
+            id: c._id,
+            title: c.title,
+          };
+        }),
       };
     });
 
@@ -50,6 +61,49 @@ const getAllArticles = asyncHandler(async (req, res) => {
     throw new Error("Users not found");
   }
 });
+
+const getAllArticlesByCategory = asyncHandler(async (req, res) => {
+  const articles = await Article.find({
+    categories: new mongoose.Types.ObjectId(req.params.id),
+  })
+    .populate({
+      path: "createdUser",
+      match: {},
+      select: "firstname lastname -_id",
+    })
+    .populate({
+      path: "categories",
+      match: { _id: req.params.cat },
+      select: "title _id",
+    })
+    .exec();
+  if (articles) {
+    const myArticles = articles.map((a) => {
+      return {
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        abstract: a.abstract,
+        createdDate: a.createdDate,
+        lastModifyDate: a.lastModifyDate,
+        createdUserId: a.createdUser._id,
+        createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+        categories: a.categories.map((c) => {
+          return {
+            id: c._id,
+            title: c.title,
+          };
+        }),
+      };
+    });
+
+    res.status(200).json(myArticles);
+  } else {
+    res.status(404);
+    throw new Error("Users not found");
+  }
+});
+
 const getArticleById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const a = await Article.findById(req.params.id)
@@ -63,12 +117,13 @@ const getArticleById = asyncHandler(async (req, res) => {
     const myArticle = {
       id: a._id,
       content: a.content,
+      abstract: a.abstract,
       title: a.title,
       createdDate: a.createdDate,
       lastModifyDate: a.lastModifyDate,
       createdUserId: a.createdUser._id,
       createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
-      categories: a.categories
+      categories: a.categories,
     };
 
     res.status(200).json(myArticle);
@@ -91,15 +146,19 @@ const createArticle = asyncHandler(async (req, res) => {
     const article = new Article({
       title,
       content,
+      abstract,
       lastModifyDate: Date.now(),
       createdUser: user._id,
-      categories: categories
+      categories: categories,
     });
     await article.save();
 
     user.articles.push(article);
     await user.save();
-    await ArticleCat.updateMany({ '_id': article.categories }, { $push: { articles: article._id } });
+    await ArticleCat.updateMany(
+      { _id: article.categories },
+      { $push: { articles: article._id } }
+    );
     res.send({ message: "Article was Added successfully!" });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -107,7 +166,7 @@ const createArticle = asyncHandler(async (req, res) => {
 });
 
 const updateArticle = asyncHandler(async (req, res) => {
-  const { id, title, content, userid, categories  } = req.body;
+  const { id, title, abstract, content, userid, categories } = req.body;
   const article = await Article.findById(id);
 
   if (!article) {
@@ -116,27 +175,34 @@ const updateArticle = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findById(article.createdUser);
-    if (!user) {
-      res.status(404);
-      throw new Error("User not found");
-    }
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
 
   if (article) {
     article.title = title;
     article.content = content;
-    article.createdUser= user._id;
-    article.categories= categories;
+    article.abstract = abstract;
+    article.createdUser = user._id;
+    article.categories = categories;
 
     const oldcategories = article.categories;
 
     await article.save();
 
-      const added = difference(categories, oldcategories);
-      const removed = difference(oldcategories, categories);
-      await ArticleCat.updateMany({ '_id': added }, { $addToSet: { articles: article._id } });
-      await ArticleCat.updateMany({ '_id': removed }, { $pull: { articles: article._id } });
-    
-      res.send({ message: "Article was updated successfully!" });
+    const added = difference(categories, oldcategories);
+    const removed = difference(oldcategories, categories);
+    await ArticleCat.updateMany(
+      { _id: added },
+      { $addToSet: { articles: article._id } }
+    );
+    await ArticleCat.updateMany(
+      { _id: removed },
+      { $pull: { articles: article._id } }
+    );
+
+    res.send({ message: "Article was updated successfully!" });
   }
 });
 
@@ -152,12 +218,15 @@ const deleteArticle = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error("User not found");
     }
-    await Article.findByIdAndDelete(articleId );
+    await Article.findByIdAndDelete(articleId);
     await User.findByIdAndUpdate(user._id, {
       $pull: { articles: articleId },
-  });    
-  await ArticleCat.updateMany({ '_id': article.categories }, { $pull: { articles: article._id } });
-  /* Article.findByIdAndDelete(req.params.id)
+    });
+    await ArticleCat.updateMany(
+      { _id: article.categories },
+      { $pull: { articles: article._id } }
+    );
+    /* Article.findByIdAndDelete(req.params.id)
     .then((article) => {
       
     })
@@ -177,4 +246,5 @@ export {
   getAllArticles,
   getArticleById,
   updateArticle,
+  getAllArticlesByCategory,
 };
