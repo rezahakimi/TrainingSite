@@ -43,6 +43,8 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/articlecats", articleCatRoutes);
 app.use("/api/auth", authRoutes);
 
+app.use(express.static("public"));
+
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
 

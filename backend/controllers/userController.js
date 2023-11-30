@@ -2,6 +2,9 @@ import asyncHandler from "express-async-handler";
 //import User from "../models/userModel.js";
 //import Role from "../models/roleModel.js";
 import db from "../models/index.js";
+import pathConfig from "../config/pathConfig.js";
+import fs from "fs";
+import path from "path";
 
 const User = db.user;
 const Role = db.role;
@@ -72,6 +75,7 @@ const getUserById = asyncHandler(async (req, res) => {
         //console.log(container);
         return container;
       }),
+      profileImg: user.profileImg,
     };
 
     res.status(200).json(myUsers);
@@ -174,15 +178,18 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const { id, firstname, lastname, phone, roles } = req.body;
-  const imagePath = req.file ? req.file.path : null;
+  //console.log(req.file);
+  const imageFileName = req.file ? req.file.filename : null;
   const user = await User.findById(id);
 
   if (!user) {
     res.status(404);
     throw new Error("User not found");
   }
+
+  let prevImageFileName = user.profileImg;
 
   if (roles) {
     for (let i = 0; i < roles.length; i++) {
@@ -199,6 +206,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.lastname = lastname;
     user.firstname = firstname;
     user.phone = phone;
+    user.profileImg = imageFileName;
     user.save().then((user) => {
       //console.log(user)
       if (roles) {
@@ -222,6 +230,23 @@ const updateUser = asyncHandler(async (req, res) => {
             .then(res.send({ message: "User was updated successfully!" }));
         });
       }
+      //  console.log(pathConfig.imageProliePath);
+      console.log(path.join("public/" + prevImageFileName));
+      if (prevImageFileName)
+        fs.unlink(
+          path.join(
+            pathConfig.staticFolder +
+              "/" +
+              pathConfig.imageProliePath +
+              prevImageFileName
+          ),
+          (err) => {
+            if (err) console.log(err);
+            else {
+              console.log("\nDeleted file: example_file.txt");
+            }
+          }
+        );
     });
   }
 });

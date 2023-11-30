@@ -29,6 +29,7 @@ import {
   useGetAllRolesQuery,
 } from "../../slices/userApiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
+import config from "../../config/";
 
 const initialFormState = {
   id: "",
@@ -69,6 +70,7 @@ const UsermanagerDialog =
       const [userDisplayModal, setDisplayUserModal] =
         useState(initialFormState);
       const [selectedImage, setSelectedImage] = useState(null);
+      const [selectedBlobImage, setSelectedBlobImage] = useState(null);
 
       /*       setTimeout(() => {
         setIsUser(false);
@@ -90,6 +92,10 @@ const UsermanagerDialog =
               selected: user.roles.some((r) => r.id === role.id),
             })),
           });
+          setSelectedBlobImage(
+            "http://localhost:5000/" + config.imageProliePath + user.profileImg
+          );
+          console.log(selectedBlobImage);
         } else {
           initialFormState.roles = qroles.map((role) => ({
             id: role.id,
@@ -109,8 +115,8 @@ const UsermanagerDialog =
       //}));
       const handleImageChange = (e) => {
         const file = e.target.files[0];
-        setSelectedImage(URL.createObjectURL(file));
-        //  setSelectedImage(file);
+        setSelectedImage(file);
+        setSelectedBlobImage(URL.createObjectURL(file));
       };
       const handleSubmmit = async () => {
         if (modalModeProp === "update") {
@@ -408,9 +414,9 @@ const UsermanagerDialog =
                   </Button>
                 </label>
                 <p>
-                  {selectedImage && (
+                  {selectedBlobImage && (
                     <img
-                      src={selectedImage}
+                      src={selectedBlobImage}
                       alt="Uploaded"
                       width="200"
                       height="200"
