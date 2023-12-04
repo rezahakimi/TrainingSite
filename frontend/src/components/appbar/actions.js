@@ -24,33 +24,45 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../slices/authApiSlice";
 import { logout } from "../../slices/authSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import avator from "../../assets/images/avatar/2.jpg";
 import LoginIcon from "@mui/icons-material/Login";
+import config from "../../config/";
 
 export default function Actions({ matches }) {
   const Component = matches
     ? ActionIconsContainerMobile
     : ActionIconsContainerDesktop;
-  //console.log(matches)
   const { userInfo } = useSelector((state) => state.auth);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [selectedBlobImage, setSelectedBlobImage] = useState(avator);
+
+  //console.log(userInfo);
+  //"http://localhost:5000/" +  config.imageProliePath +  user.profileImg
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
+
   const logoutHandler = async () => {
     try {
       const refreshToken = userInfo.refreshToken;
       await logoutApiCall({ refreshToken }).unwrap();
       dispatch(logout());
+      setAnchorElUser(null);
       navigate("/login");
     } catch (err) {
       console.error(err);
     }
   };
-
+  useEffect(() => {
+    console.log(anchorElUser);
+    if (userInfo && userInfo.profileImg)
+      setSelectedBlobImage(
+        config.serverPath + config.imageProliePath + userInfo.profileImg
+      );
+  }, [userInfo]);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -114,7 +126,7 @@ export default function Actions({ matches }) {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src={avator} />
+                    <Avatar alt="Remy Sharp" src={selectedBlobImage} />
                   </IconButton>
                 </Tooltip>
                 <Menu

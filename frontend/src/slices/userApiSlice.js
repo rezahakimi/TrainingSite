@@ -25,7 +25,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUser: builder.mutation({
       query: (data) => {
-        console.log(data);
+        // console.log(data);
         return {
           url: `${USER_URL}/`,
           method: "PATCH",

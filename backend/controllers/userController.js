@@ -179,7 +179,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   //console.log(req.body);
-  const { id, firstname, lastname, phone, roles } = req.body;
+  const { id, firstname, lastname, phone, roles, changeimage } = req.body;
   //console.log(req.file);
   const imageFileName = req.file ? req.file.filename : null;
   const user = await User.findById(id);
@@ -206,7 +206,8 @@ const updateUser = asyncHandler(async (req, res) => {
     user.lastname = lastname;
     user.firstname = firstname;
     user.phone = phone;
-    user.profileImg = imageFileName;
+    if (changeimage === "yes") user.profileImg = imageFileName;
+
     user.save().then((user) => {
       //console.log(user)
       if (roles) {
@@ -215,9 +216,8 @@ const updateUser = asyncHandler(async (req, res) => {
         })
           .then((mroles) => {
             user.roles = mroles.map((role) => role._id);
-            user
-              .save()
-              .then(res.send({ message: "User was updated successfully!" }));
+            user.save();
+            // .then(res.send({ message: "User was updated successfully!" }));
           })
           .catch((err) => {
             res.status(500).send({ message: err });
@@ -225,14 +225,12 @@ const updateUser = asyncHandler(async (req, res) => {
       } else {
         Role.findOne({ name: "user" }).then((mrole) => {
           user.roles = [mrole._id];
-          user
-            .save()
-            .then(res.send({ message: "User was updated successfully!" }));
+          user.save();
+          // .then(res.send({ message: "User was updated successfully!" }));
         });
       }
       //  console.log(pathConfig.imageProliePath);
-      console.log(path.join("public/" + prevImageFileName));
-      if (prevImageFileName)
+      if (prevImageFileName && changeimage === "yes")
         fs.unlink(
           path.join(
             pathConfig.staticFolder +
@@ -247,6 +245,7 @@ const updateUser = asyncHandler(async (req, res) => {
             }
           }
         );
+      res.status(200).json(user);
     });
   }
 });

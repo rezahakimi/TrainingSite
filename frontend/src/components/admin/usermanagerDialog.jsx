@@ -5,6 +5,7 @@ import React, {
   useState,
 } from "react";
 import {
+  IconButton,
   Checkbox,
   Button,
   Dialog,
@@ -30,6 +31,8 @@ import {
 } from "../../slices/userApiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import config from "../../config/";
+import { useSelector } from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const initialFormState = {
   id: "",
@@ -53,6 +56,7 @@ const UsermanagerDialog =
     //, ref
     {
       //const [isUser, setIsUser] = useState(true);
+      const { loginUserInfo } = useSelector((state) => state.auth);
 
       const [registerUser] = useRegisterUserMutation();
       const [updateUser] = useUpdateUserMutation();
@@ -71,6 +75,7 @@ const UsermanagerDialog =
         useState(initialFormState);
       const [selectedImage, setSelectedImage] = useState(null);
       const [selectedBlobImage, setSelectedBlobImage] = useState(null);
+      const [selectedImageChanged, setSelectedImageChanged] = useState("no");
 
       /*       setTimeout(() => {
         setIsUser(false);
@@ -92,10 +97,11 @@ const UsermanagerDialog =
               selected: user.roles.some((r) => r.id === role.id),
             })),
           });
-          setSelectedBlobImage(
-            "http://localhost:5000/" + config.imageProliePath + user.profileImg
-          );
-          console.log(selectedBlobImage);
+          if (user.profileImg)
+            setSelectedBlobImage(
+              config.serverPath + config.imageProliePath + user.profileImg
+            );
+          // setSelectedImage(config.serverPath + config.imageProliePath + user.profileImg);
         } else {
           initialFormState.roles = qroles.map((role) => ({
             id: role.id,
@@ -113,10 +119,17 @@ const UsermanagerDialog =
 
       //  },
       //}));
+      const handleselectedImageDelete = (e) => {
+        setSelectedBlobImage(null);
+        setSelectedImage(null);
+        setSelectedImageChanged("yes");
+      };
+
       const handleImageChange = (e) => {
         const file = e.target.files[0];
         setSelectedImage(file);
         setSelectedBlobImage(URL.createObjectURL(file));
+        setSelectedImageChanged("yes");
       };
       const handleSubmmit = async () => {
         if (modalModeProp === "update") {
@@ -164,8 +177,14 @@ const UsermanagerDialog =
             "roles[]",
             userDisplayModal.roles.filter((i) => i.selected).map((i) => i.name)
           );
-          payload.append("image", selectedImage);
-
+          //console.log(selectedBlobImage);
+          // console.log(selectedImage);
+          if (selectedBlobImage != null && selectedImage != null)
+            payload.append("image", selectedImage);
+          else if (selectedBlobImage == null && selectedImage == null) {
+            payload.append("image", null);
+          }
+          payload.append("changeimage", selectedImageChanged);
           const res = await updateUser(
             /*  {
             jsonData: {
@@ -183,7 +202,12 @@ const UsermanagerDialog =
           ).unwrap();
 
           if (res) {
+            // if(loginUserInfo.email===userDisplayModal.email)
+            // console.log(loginUserInfo.email);
+            // console.log(userDisplayModal.email);
             setDisplayUserModal(initialFormState);
+            setSelectedBlobImage(null);
+            setSelectedImage(null);
             handleCloseModalProp();
           }
         } else if (modalModeProp === "add") {
@@ -422,6 +446,12 @@ const UsermanagerDialog =
                       height="200"
                     />
                   )}
+                  <IconButton
+                    onClick={handleselectedImageDelete}
+                    aria-label="delete"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </p>
               </Container>
             </DialogContent>

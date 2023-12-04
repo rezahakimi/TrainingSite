@@ -117,15 +117,18 @@ const signin = asyncHandler(async (req, res) => {
 
       //var passwordIsValid = bcrypt.compareSync(password, user.password);
       if (user && user.matchPassword(password)) {
-
-        RefreshToken.findOneAndRemove({ user: user._id }, {
-          useFindAndModify: false,
-        })
-          .exec().then(()=>{
+        RefreshToken.findOneAndRemove(
+          { user: user._id },
+          {
+            useFindAndModify: false,
+          }
+        )
+          .exec()
+          .then(() => {
             const token = generateToken(res, user._id);
             RefreshToken.createToken(user).then((refreshToken) => {
               var authorities = [];
-    
+
               for (let i = 0; i < user.roles.length; i++) {
                 authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
               }
@@ -138,11 +141,10 @@ const signin = asyncHandler(async (req, res) => {
                 roles: authorities,
                 accessToken: token,
                 refreshToken: refreshToken,
+                profileImg: user.profileImg,
               });
             });
           });
-
-
       } else {
         return res.status(401).send({
           accessToken: null,
