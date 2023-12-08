@@ -12,8 +12,30 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
-      console.log(action.payload);
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
+    },
+    setCredentialsUpdate: (state, action) => {
+      let uInfo = JSON.parse(localStorage.getItem("userInfo"));
+      if (uInfo) {
+        uInfo.firstname = action.payload.firstname;
+        uInfo.lastname = action.payload.lastname;
+        uInfo.phone = action.payload.phone;
+        uInfo.profileImg = action.payload.profileImg;
+        localStorage.setItem("userInfo", JSON.stringify(uInfo));
+      }
+      return {
+        ...state,
+
+        userInfo: {
+          ...state.userInfo,
+          firstname: action.payload.firstname,
+          lastname: action.payload.lastname,
+          phone: action.payload.phone,
+          profileImg: action.payload.profileImg,
+        },
+      };
+      //state.userInfo = action.payload;
+      // localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     logout: (state, action) => {
       state.userInfo = null;
@@ -22,6 +44,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, setCredentialsUpdate, logout } =
+  authSlice.actions;
 
 export default authSlice.reducer;

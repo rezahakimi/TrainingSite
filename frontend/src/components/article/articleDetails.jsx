@@ -4,10 +4,10 @@ import { NavLink } from "react-router-dom";
 
 const ArticleDetails = ({ articleId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
-  console.log(article);
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  //console.log(article.categories);
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -27,16 +27,18 @@ const ArticleDetails = ({ articleId }) => {
       }}
     >
       <Stack direction="row" spacing={1}>
-        {article.categories.map((cat, index) => (
-          <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
-            <Chip variant="outlined" label={cat.title} clickable />
-          </NavLink>
-        ))}
+        {article.categories.map((cat, index) => {
+          return (
+            <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
+              <Chip variant="outlined" label={cat.title} clickable />
+            </NavLink>
+          );
+        })}
       </Stack>
       <Typography variant={"h5"} lineHeight={2}>
-        {article.title}
+        <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
       </Typography>
-      <Typography variant={"body1"}>${article.content}</Typography>
+      <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
     </Box>
   );
 };

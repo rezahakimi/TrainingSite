@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import Appbar from "./components/appbar";
 import SearchBox from "./components/common/search";
 import ArtilesPage from "./pages/ArticlesPage";
+import ProfilePage from "./pages/ProfilePage";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -38,13 +39,13 @@ function App() {
   let apppbar;
   //console.log(user)
   //if (user) {
-    apppbar = (
-      <>
-        <Appbar></Appbar>
-        <SearchBox></SearchBox>
-      </>
-    );
- // }
+  apppbar = (
+    <>
+      <Appbar></Appbar>
+      <SearchBox></SearchBox>
+    </>
+  );
+  // }
   //console.log(user)
   return (
     <BrowserRouter>
@@ -55,6 +56,7 @@ function App() {
           <Route path="/articles" element={<ArtilesPage />}>
             <Route path=":articleid" element={<ArtilesPage />} />
           </Route>
+          <Route path="/profile" element={<ProfilePage />}></Route>
           {/*  <Route
       path='/dashboard'
       element={

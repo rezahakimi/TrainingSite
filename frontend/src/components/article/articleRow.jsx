@@ -54,8 +54,7 @@ const ArticleRow = ({ article, matches }) => {
             <Typography variant="h5" component="div">
               <NavLink to={`/articles/${article.id}/`}>{article.title}</NavLink>
             </Typography>
-
-            <Typography variant="body2">{article.abstract}</Typography>
+            <div dangerouslySetInnerHTML={{ __html: article.abstract }}></div>
             <Stack direction="row" spacing={1}>
               {article.categories.map((cat, index) => (
                 <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>

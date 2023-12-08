@@ -45,19 +45,8 @@ export default function Actions({ matches }) {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const logoutHandler = async () => {
-    try {
-      const refreshToken = userInfo.refreshToken;
-      await logoutApiCall({ refreshToken }).unwrap();
-      dispatch(logout());
-      setAnchorElUser(null);
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  };
   useEffect(() => {
-    console.log(anchorElUser);
+    //console.log(anchorElUser);
     if (userInfo && userInfo.profileImg)
       setSelectedBlobImage(
         config.serverPath + config.imageProliePath + userInfo.profileImg
@@ -67,9 +56,16 @@ export default function Actions({ matches }) {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseMenu = (menuType, event) => {
+  const handleCloseMenu = async (menuType, event) => {
     if (menuType === "profile") {
+      navigate("/profile");
     } else if (menuType === "logout") {
+      const refreshToken = userInfo.refreshToken;
+      await logoutApiCall({ refreshToken }).unwrap();
+      dispatch(logout());
+      setAnchorElUser(null);
+      navigate("/login");
+    } else if (menuType === "changepass") {
     }
     setAnchorElUser(null);
   };
@@ -159,10 +155,19 @@ export default function Actions({ matches }) {
                     key="profile"
                     onClick={(event) => handleCloseMenu("profile")}
                   >
-                    <Typography textAlign="center">پروفایل</Typography>
+                    <Typography textAlign="center">My Profile</Typography>
                   </MenuItem>
-                  <MenuItem key="logout" onClick={logoutHandler}>
-                    <Typography textAlign="center">خروج</Typography>
+                  <MenuItem
+                    key="changepass"
+                    onClick={(event) => handleCloseMenu("changepass")}
+                  >
+                    <Typography textAlign="center">Change Password</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    key="logout"
+                    onClick={(event) => handleCloseMenu("logout")}
+                  >
+                    <Typography textAlign="center">Sign Out</Typography>
                   </MenuItem>
                 </Menu>
               </Box>

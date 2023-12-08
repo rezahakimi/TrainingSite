@@ -133,7 +133,7 @@ const signin = asyncHandler(async (req, res) => {
                 authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
               }
               res.status(200).send({
-                //userId: user._id,
+                id: user._id,
                 firstname: user.firstname,
                 lastname: user.lastname,
                 email: user.email,

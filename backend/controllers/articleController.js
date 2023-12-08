@@ -112,6 +112,11 @@ const getArticleById = asyncHandler(async (req, res) => {
       match: {},
       select: "firstname lastname _id", //"name -_id",
     })
+    .populate({
+      path: "categories",
+      match: { _id: req.params.cat },
+      select: "title _id",
+    })
     .exec();
   if (a) {
     const myArticle = {
@@ -123,7 +128,12 @@ const getArticleById = asyncHandler(async (req, res) => {
       lastModifyDate: a.lastModifyDate,
       createdUserId: a.createdUser._id,
       createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
-      categories: a.categories,
+      categories: a.categories.map((c) => {
+        return {
+          id: c._id,
+          title: c.title,
+        };
+      }),
     };
 
     res.status(200).json(myArticle);

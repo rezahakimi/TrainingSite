@@ -56,7 +56,7 @@ const UsermanagerDialog =
     //, ref
     {
       //const [isUser, setIsUser] = useState(true);
-      const { loginUserInfo } = useSelector((state) => state.auth);
+      //const { loginUserInfo } = useSelector((state) => state.auth);
 
       const [registerUser] = useRegisterUserMutation();
       const [updateUser] = useUpdateUserMutation();
