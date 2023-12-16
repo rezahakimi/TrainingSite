@@ -2,6 +2,7 @@ import express from "express";
 import {
   registerUser,
   updateUser,
+  changePasswordUser,
   allAccess,
   userBoard,
   moderatorBoard,
@@ -57,7 +58,8 @@ const router = express.Router();
 router.route("/roles").get(getAllRoles);
 router.route("/:id").get(getUserById);
 router.route("/").get(getAllUsers);
-router.route("/").post(registerUser);
+router.route("/").post(upload.single("image"), registerUser);
+router.route("/changepassword").post(changePasswordUser);
 router.route("/").patch(upload.single("image"), updateUser);
 router.route("/:id").delete(deleteUser);
 

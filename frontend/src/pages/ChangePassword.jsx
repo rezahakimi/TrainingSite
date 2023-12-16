@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { LoginTextField, LoginButton } from "../styles/login";
 import {
   Grid,
-  List,
-  ListItemText,
   Typography,
-  Button,
-  Stack,
   Container,
   FormControlLabel,
   Checkbox,
+  TextField,
+  Button,
+  IconButton,
 } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { Colors } from "../styles/theme";
 import { Box } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
@@ -20,48 +18,62 @@ import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../slices/authApiSlice";
-import { setCredentials } from "../slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { useChangePasswordUserMutation } from "../slices/userApiSlice";
+import { logout } from "../slices/authSlice";
 
-const ProductDetailWrapper = styled(Box)(({ theme }) => ({
-  display: "flex",
-  padding: theme.spacing(4),
-}));
+const initialFormState = {
+  id: "",
+  password: "",
+  confirmpassword: "",
+};
 
-const LoginPage = () => {
+const ChangePassword = () => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   //const [email, setEmail] = useState("");
   //const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [displayUser, setDisplayUser] = useState(initialFormState);
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [changePasswordUser] = useChangePasswordUserMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      setDisplayUser({
+        id: userInfo.id,
+      });
     }
   }, [navigate, userInfo]);
 
-  const loginHandler = async (event) => {
+  const changePasswordHandler = async (event) => {
     event.preventDefault();
-    try {
-      const data = new FormData(event.currentTarget);
-      const email = data.get("email");
-      const password = data.get("password");
-      //console.log(email);
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      navigate("/");
-    } catch (err) {
-      //toast.error(err?.data?.message || err.error);
-    }
-  };
+    //  try {
 
+    if (displayUser.password === displayUser.confirmpassword) {
+      const data = new FormData(event.currentTarget);
+      //payload.append("id", displayUser.id);
+      //payload.append("password", displayUser.password);
+      //payload.append("confirmpassword", displayUser.confirmpassword);
+
+      const id = displayUser.id;
+      const res = await changePasswordUser({
+        id: displayUser.id,
+        password: displayUser.password,
+        confirmpassword: displayUser.confirmpassword,
+      }).unwrap();
+      if (res) {
+        dispatch(logout());
+        navigate("/login");
+      }
+    }
+    //  } catch (err) {
+    //toast.error(err?.data?.message || err.error);
+    //  }
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
@@ -80,7 +92,7 @@ const LoginPage = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            ورود
+            Change Password
           </Typography>
           <Box
             component="form"
@@ -90,22 +102,11 @@ const LoginPage = () => {
               pb: 12,
               fontSize: { xs: "12px", md: "14px" },
             }}
-            onSubmit={loginHandler}
+            onSubmit={changePasswordHandler}
           >
-            <LoginTextField
+            <TextField
               color="primary"
-              label="پست الکترونیکی"
-              variant="standard"
-              required
-              fullWidth
-              id="email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <LoginTextField
-              color="primary"
-              label="کلمه رمز"
+              label="Password"
               variant="standard"
               required
               fullWidth
@@ -113,33 +114,40 @@ const LoginPage = () => {
               name="password"
               type="password"
               autoComplete="current-password"
+              onChange={(e) =>
+                setDisplayUser({
+                  ...displayUser,
+                  password: e.target.value,
+                })
+              }
+            />
+            <TextField
+              color="primary"
+              label="Confirm Password"
+              variant="standard"
+              required
+              fullWidth
+              id="confirmpassword"
+              name="confirmpassword"
+              type="password"
+              autoComplete="current-password"
+              onChange={(e) =>
+                setDisplayUser({
+                  ...displayUser,
+                  confirmpassword: e.target.value,
+                })
+              }
             />
 
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <LoginButton
+            <Button
               sx={{ mt: 3, mb: 2 }}
               type="submit"
-              startIcon={<LoginIcon sx={{ color: Colors.white }} />}
+              startIcon={<AppRegistrationIcon sx={{ color: Colors.white }} />}
               variant="contained"
               theme={theme}
             >
-              login
-            </LoginButton>
-            <Grid container>
-              <Grid item xs>
-                <NavLink to="forgetpassword" variant="body2">
-                  Forgot password?
-                </NavLink>
-              </Grid>
-              <Grid item>
-                <NavLink to="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </NavLink>
-              </Grid>
-            </Grid>
+              Change Password
+            </Button>
           </Box>
         </Box>
       </Container>
@@ -147,4 +155,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ChangePassword;

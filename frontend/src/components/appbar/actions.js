@@ -66,6 +66,7 @@ export default function Actions({ matches }) {
       setAnchorElUser(null);
       navigate("/login");
     } else if (menuType === "changepass") {
+      navigate("/changepassword");
     }
     setAnchorElUser(null);
   };

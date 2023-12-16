@@ -16,11 +16,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
           : ["User"],
     }),
     registerUser: builder.mutation({
-      query: (data) => ({
-        url: `${USER_URL}/`,
-        method: "POST",
-        body: data,
-      }),
+      query: (data) => {
+        return {
+          url: `${USER_URL}/`,
+          method: "POST",
+          body: data,
+          formData: true,
+        };
+      },
       invalidatesTags: ["User"],
     }),
     updateUser: builder.mutation({
@@ -56,6 +59,17 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: (response) => response,
     }),
+    changePasswordUser: builder.mutation({
+      query: (data) => {
+        console.log(data);
+        return {
+          url: `${USER_URL}/changepassword`,
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
     /* logout: builder.mutation({
       query: (data) => ({
         url: `${AUTH_URL}/logout`,
@@ -78,6 +92,7 @@ export const {
   useGetAllUsersQuery,
   useRegisterUserMutation,
   useUpdateUserMutation,
+  useChangePasswordUserMutation,
   useDeleteUserMutation,
   useGetUserByIdQuery,
   useGetAllRolesQuery,

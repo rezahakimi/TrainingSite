@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Box,
   Typography,
@@ -7,7 +8,7 @@ import {
   TextField,
   Button,
   IconButton,
-  FormControlLabel,
+  Snackbar,
   List,
   ListItem,
   ListItemText,
@@ -25,12 +26,13 @@ import config from "../../config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
 import { setCredentialsUpdate } from "../../slices/authSlice";
+import CloseIcon from "@mui/icons-material/Close";
 
 const initialFormState = {
-  id: "",
   firstName: "",
   lastName: "",
   phone: "",
+  profileImg: "",
   roles: [
     {
       id: "",
@@ -56,6 +58,7 @@ const Profile = ({ userId }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedBlobImage, setSelectedBlobImage] = useState(null);
   const [selectedImageChanged, setSelectedImageChanged] = useState("no");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -65,6 +68,7 @@ const Profile = ({ userId }) => {
         firstName: user.firstname,
         lastName: user.lastname,
         phone: user.phone,
+        profileImg: user.profileImg,
         roles: qroles.map((role) => ({
           id: role.id,
           name: role.name,
@@ -81,7 +85,7 @@ const Profile = ({ userId }) => {
   const handleselectedImageDelete = (e) => {
     setSelectedBlobImage(null);
     setSelectedImage(null);
-    setSelectedImageChanged("yes");
+    if (userDisplay.profileImg === "") setSelectedImageChanged("yes");
   };
 
   const handleImageChange = (e) => {
@@ -91,7 +95,13 @@ const Profile = ({ userId }) => {
     setSelectedImageChanged("yes");
   };
 
-  //console.log(user);
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
   const SubmitHandler = async (event) => {
     event.preventDefault();
     const payload = new FormData();
@@ -113,6 +123,7 @@ const Profile = ({ userId }) => {
       //setDisplayUser(initialFormState);
       // setSelectedBlobImage(null);
       // setSelectedImage(null);
+      setOpenSnackbar(true);
     }
   };
 
@@ -130,6 +141,22 @@ const Profile = ({ userId }) => {
     });
   }
 
+  const renderSnackbar = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleSnackbarClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   if (getUserError) {
     return <div>Error: {getUserError.message}</div>;
   }
@@ -138,123 +165,132 @@ const Profile = ({ userId }) => {
   }
   //console.log(selectedBlobImage);
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          boxShadow: 3,
-          borderRadius: 2,
-          px: 4,
-          py: 6,
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          background: Colors.white,
-          color: Colors.primary,
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          My Profile
-        </Typography>
+    <>
+      <Container component="main" maxWidth="sm">
         <Box
-          component="form"
           sx={{
-            p: { xs: 4, md: 10 },
-            pt: 12,
-            pb: 12,
-            fontSize: { xs: "12px", md: "14px" },
+            boxShadow: 3,
+            borderRadius: 2,
+            px: 4,
+            py: 6,
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            background: Colors.white,
+            color: Colors.primary,
           }}
-          onSubmit={SubmitHandler}
         >
-          <TextField
-            autoFocus
-            label="First Name"
-            margin="dense"
-            id="firstName"
-            type="firstName"
-            fullWidth
-            variant="standard"
-            value={userDisplay.firstName || ""}
-            onChange={(e) =>
-              setDisplayUser({
-                ...userDisplay,
-                firstName: e.target.value,
-              })
-            }
-          />
-          <TextField
-            label="Last Name"
-            margin="dense"
-            id="lastName"
-            type="lastName"
-            fullWidth
-            variant="standard"
-            value={userDisplay.lastName || ""}
-            onChange={(e) =>
-              setDisplayUser({
-                ...userDisplay,
-                lastName: e.target.value,
-              })
-            }
-          />
-          <TextField
-            label="Mobile"
-            margin="dense"
-            id="phone"
-            type="phone"
-            fullWidth
-            variant="standard"
-            value={userDisplay.phone || ""}
-            onChange={(e) =>
-              setDisplayUser({
-                ...userDisplay,
-                phone: e.target.value,
-              })
-            }
-          />
-          {RolesRender}
-          <Container maxWidth="md" sx={{ boxShadow: 1, p: 2 }}>
-            <input
-              accept="image/*"
-              style={{ display: "none" }}
-              id="image-upload"
-              type="file"
-              onChange={handleImageChange}
-            />
-            <label htmlFor="image-upload">
-              <Button variant="contained" color="primary" component="span">
-                Upload Image
-              </Button>
-            </label>
-            <p>
-              {selectedBlobImage && (
-                <img
-                  src={selectedBlobImage}
-                  alt="Uploaded"
-                  width="200"
-                  height="200"
-                />
-              )}
-              <IconButton
-                onClick={handleselectedImageDelete}
-                aria-label="delete"
-              >
-                <DeleteIcon />
-              </IconButton>
-            </p>
-          </Container>
-
-          <Button
-            sx={{ mt: 3, mb: 2 }}
-            type="submit"
-            startIcon={<AppRegistrationIcon sx={{ color: Colors.white }} />}
-            variant="contained"
+          <Typography component="h1" variant="h5">
+            My Profile
+          </Typography>
+          <Box
+            component="form"
+            sx={{
+              p: { xs: 4, md: 10 },
+              pt: 12,
+              pb: 12,
+              fontSize: { xs: "12px", md: "14px" },
+            }}
+            onSubmit={SubmitHandler}
           >
-            Save
-          </Button>
+            <TextField
+              autoFocus
+              label="First Name"
+              margin="dense"
+              id="firstName"
+              type="firstName"
+              fullWidth
+              variant="standard"
+              value={userDisplay.firstName || ""}
+              onChange={(e) =>
+                setDisplayUser({
+                  ...userDisplay,
+                  firstName: e.target.value,
+                })
+              }
+            />
+            <TextField
+              label="Last Name"
+              margin="dense"
+              id="lastName"
+              type="lastName"
+              fullWidth
+              variant="standard"
+              value={userDisplay.lastName || ""}
+              onChange={(e) =>
+                setDisplayUser({
+                  ...userDisplay,
+                  lastName: e.target.value,
+                })
+              }
+            />
+            <TextField
+              label="Mobile"
+              margin="dense"
+              id="phone"
+              type="phone"
+              fullWidth
+              variant="standard"
+              value={userDisplay.phone || ""}
+              onChange={(e) =>
+                setDisplayUser({
+                  ...userDisplay,
+                  phone: e.target.value,
+                })
+              }
+            />
+            {RolesRender}
+            <Container maxWidth="md" sx={{ boxShadow: 1, p: 2 }}>
+              <input
+                accept="image/*"
+                style={{ display: "none" }}
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="image-upload">
+                <Button variant="contained" color="primary" component="span">
+                  Upload Image
+                </Button>
+              </label>
+              <p>
+                {selectedBlobImage && (
+                  <img
+                    src={selectedBlobImage}
+                    alt="Uploaded"
+                    width="200"
+                    height="200"
+                  />
+                )}
+                <IconButton
+                  onClick={handleselectedImageDelete}
+                  aria-label="delete"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </p>
+            </Container>
+
+            <Button
+              sx={{ mt: 3, mb: 2 }}
+              type="submit"
+              startIcon={<AppRegistrationIcon sx={{ color: Colors.white }} />}
+              variant="contained"
+            >
+              Save
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message="Update Succful"
+        action={renderSnackbar}
+      />
+    </>
   );
 };
 

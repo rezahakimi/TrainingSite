@@ -16,6 +16,8 @@ import Appbar from "./components/appbar";
 import SearchBox from "./components/common/search";
 import ArtilesPage from "./pages/ArticlesPage";
 import ProfilePage from "./pages/ProfilePage";
+import SignupPage from "./pages/SignupPage";
+import ChangePassword from "./pages/ChangePassword";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -85,6 +87,8 @@ function App() {
       }
      /> */}
         </Route>
+        <Route path="/signup" element={<SignupPage />}></Route>
+        <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>

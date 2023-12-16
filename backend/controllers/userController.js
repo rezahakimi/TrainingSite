@@ -105,7 +105,8 @@ const getUserById = asyncHandler(async (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, phone, password, roles } = req.body;
-
+  const imageFileName = req.file ? req.file.filename : null;
+  console.log(imageFileName);
   const userExistsEmail = await User.findOne({ email });
 
   if (userExistsEmail) {
@@ -137,6 +138,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     phone,
     password,
+    profileImg: imageFileName,
   });
 
   user.save().then((user) => {
@@ -250,6 +252,25 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const changePasswordUser = asyncHandler(async (req, res) => {
+  const { id, password, confirmpassword } = req.body;
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  if (user) {
+    if (password === confirmpassword) {
+      user.password = password;
+
+      user.save().then((user) => {
+        res.status(200).json(user);
+      });
+    }
+  }
+});
+
 const deleteUser = asyncHandler(async (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then((user) => {
@@ -286,6 +307,7 @@ export {
   getAllUsers,
   getUserById,
   updateUser,
+  changePasswordUser,
   getAllRoles,
   allAccess,
   userBoard,
