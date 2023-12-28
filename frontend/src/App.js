@@ -18,6 +18,7 @@ import ArtilesPage from "./pages/ArticlesPage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import ChangePassword from "./pages/ChangePassword";
+import UserPage from "./pages/UserPage";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -59,6 +60,7 @@ function App() {
             <Route path=":articleid" element={<ArtilesPage />} />
           </Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
+          <Route path="/users/:userid" element={<UserPage />}></Route>
           {/*  <Route
       path='/dashboard'
       element={

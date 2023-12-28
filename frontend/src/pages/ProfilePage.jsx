@@ -5,7 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
-import Profile from "../components/user/profile";
+import ProfileManage from "../components/user/profileManage";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
@@ -30,7 +30,7 @@ const ProfilePage = () => {
             <div>2</div>
           </Grid>
           <Grid item xs>
-            <Profile userId={userInfo.id}></Profile>
+            <ProfileManage userId={userInfo.id}></ProfileManage>
           </Grid>
         </Grid>
         <Grid item xs={2}>

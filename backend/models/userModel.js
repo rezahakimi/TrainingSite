@@ -35,6 +35,7 @@ const UserSchema = mongoose.Schema(
       },
     ],
     articles: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
+    friends: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

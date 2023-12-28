@@ -43,13 +43,15 @@ const ArticleRow = ({ article, matches }) => {
       >
         <Card sx={{ sx: 1.0 }}>
           <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {article.createdUser}
-            </Typography>
+            <NavLink to={`/users/${article.createdUserId}/`}>
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+              >
+                {article.createdUser}
+              </Typography>
+            </NavLink>
 
             <Typography variant="h5" component="div">
               <NavLink to={`/articles/${article.id}/`}>{article.title}</NavLink>

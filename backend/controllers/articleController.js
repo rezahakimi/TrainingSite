@@ -27,7 +27,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
     .populate({
       path: "createdUser",
       match: {},
-      select: "firstname lastname -_id",
+      select: "firstname lastname _id",
     })
     .populate({
       path: "categories",

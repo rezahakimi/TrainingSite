@@ -301,6 +301,91 @@ const getAllRoles = asyncHandler(async (req, res) => {
   }
 });
 
+const getFriends = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const userFriends = await User.findById(id)
+    .populate({
+      path: "friends",
+      match: {},
+      select: "firstname _id lastname email phone profileImg", //"name -_id",
+    })
+    .exec();
+
+  const myFriendss = userFriends.friends.map((u) => {
+    return {
+      id: u._id,
+      firstname: u.firstname,
+      lastname: u.lastname,
+      email: u.email,
+      phone: u.phone,
+      profileImg: u.profileImg,
+    };
+  });
+
+  res.status(200).json(myFriendss);
+});
+
+const addFriend = asyncHandler(async (req, res) => {
+  const { friendId } = req.body;
+  const id = req.params.id;
+  if (id === friendId) {
+    res.status(404);
+    throw new Error("User Not be friend");
+  }
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const friend = await User.findById(friendId);
+  if (!friend) {
+    res.status(404);
+    throw new Error("friend not found");
+  }
+  await User.updateOne({ _id: id }, { $push: { friends: friend._id } });
+  1;
+
+  res.send({ message: "User was updated successfully!" });
+});
+
+const removeFriend = asyncHandler(async (req, res) => {
+  const { friendId } = req.body;
+  const id = req.params.id;
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const friend = await User.findById(friendId);
+  if (!friend) {
+    res.status(404);
+    throw new Error("friend not found");
+  }
+
+  const userFriend = User.find({
+    friends: { _id: friendId },
+  });
+  console.log(userFriend);
+  if (!userFriend) {
+    res.status(404);
+    throw new Error("userFriend not found");
+  }
+
+  await User.updateOne({ _id: id }, { $pull: { friends: friend._id } });
+
+  res.send({ message: "User was updated successfully!" });
+});
+
 export {
   registerUser,
   deleteUser,
@@ -309,6 +394,9 @@ export {
   updateUser,
   changePasswordUser,
   getAllRoles,
+  getFriends,
+  addFriend,
+  removeFriend,
   allAccess,
   userBoard,
   moderatorBoard,

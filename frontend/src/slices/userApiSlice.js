@@ -61,11 +61,45 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     changePasswordUser: builder.mutation({
       query: (data) => {
-        console.log(data);
         return {
           url: `${USER_URL}/changepassword`,
           method: "POST",
           body: data,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    getAllFriends: builder.query({
+      query: (id) => ({
+        url: `${USER_URL}/friends/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response,
+    }),
+    addFriend: builder.mutation({
+      query: (data) => {
+        let id = data.userId;
+        let friendId = data.friendId;
+        return {
+          url: `${USER_URL}/Friends/${id}`,
+          method: "POST",
+          body: { friendId },
+          //credentials: "include",
+          formData: true,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    removeFriend: builder.mutation({
+      query: (data) => {
+        let id = data.userId;
+        let friendId = data.friendId;
+        return {
+          url: `${USER_URL}/Friends/${id}`,
+          method: "DELETE",
+          body: { friendId },
+          //credentials: "include",
+          formData: true,
         };
       },
       invalidatesTags: ["User"],
@@ -96,4 +130,7 @@ export const {
   useDeleteUserMutation,
   useGetUserByIdQuery,
   useGetAllRolesQuery,
+  useGetAllFriendsQuery,
+  useAddFriendMutation,
+  useRemoveFriendMutation,
 } = userApiSlice;

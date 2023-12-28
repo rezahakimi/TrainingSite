@@ -42,7 +42,7 @@ const initialFormState = {
   ],
 };
 
-const Profile = ({ userId }) => {
+const ProfileManage = ({ userId }) => {
   const {
     data: user,
     isLoading: isGetLoading,
@@ -294,4 +294,4 @@ const Profile = ({ userId }) => {
   );
 };
 
-export default Profile;
+export default ProfileManage;
