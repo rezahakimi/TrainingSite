@@ -5,7 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
-import Friends from "../components/user/friends";
+import FriendsList from "../components/user/friendsList";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
@@ -34,7 +34,7 @@ const HomePage = () => {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          <Friends userId={userInfo.id}></Friends>
+          <FriendsList userId={userInfo.id}></FriendsList>
         </Grid>
       </Grid>
     </ThemeProvider>

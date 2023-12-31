@@ -5,6 +5,7 @@ import db from "../models/index.js";
 import pathConfig from "../config/pathConfig.js";
 import fs from "fs";
 import path from "path";
+import mongoose from "mongoose";
 
 const User = db.user;
 const Role = db.role;
@@ -313,8 +314,9 @@ const getFriends = asyncHandler(async (req, res) => {
   const userFriends = await User.findById(id)
     .populate({
       path: "friends",
-      match: {},
-      select: "firstname _id lastname email phone profileImg", //"name -_id",
+      match: { confirmRequest: true },
+      select:
+        "firstname _id lastname email phone profileImg iAapplied confirmRequest friendRequestDate friendAcceptDate", //"name -_id",
     })
     .exec();
 
@@ -326,13 +328,53 @@ const getFriends = asyncHandler(async (req, res) => {
       email: u.email,
       phone: u.phone,
       profileImg: u.profileImg,
+      iAapplied: u.iAapplied,
+      confirmRequest: u.confirmRequest,
+      friendIdRequestDate: u.friendIdRequestDate,
+      friendIdAcceptDate: u.friendIdAcceptDate,
     };
   });
 
   res.status(200).json(myFriendss);
 });
 
-const addFriend = asyncHandler(async (req, res) => {
+const getRequestFriends = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const userFriends = await User.findById(id)
+    .populate({
+      path: "friends",
+      match: { iAapplied: false, confirmRequest: false },
+      select:
+        "firstname _id lastname email phone profileImg iAapplied confirmRequest friendRequestDate friendAcceptDate", //"name -_id",
+    })
+    .exec();
+
+  const myFriendss = userFriends.friends.map((u) => {
+    return {
+      id: u._id,
+      firstname: u.firstname,
+      lastname: u.lastname,
+      email: u.email,
+      phone: u.phone,
+      profileImg: u.profileImg,
+      iAapplied: u.iAapplied,
+      confirmRequest: u.confirmRequest,
+      friendIdRequestDate: u.friendIdRequestDate,
+      friendIdAcceptDate: u.friendIdAcceptDate,
+    };
+  });
+
+  res.status(200).json(myFriendss);
+});
+
+const requestFriend = asyncHandler(async (req, res) => {
   const { friendId } = req.body;
   const id = req.params.id;
   if (id === friendId) {
@@ -351,8 +393,84 @@ const addFriend = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("friend not found");
   }
-  await User.updateOne({ _id: id }, { $push: { friends: friend._id } });
-  1;
+
+  await user.friends.map((f) => {
+    if (f.friendId.toString() === friendId) {
+      res.status(404);
+      throw new Error("friend allready exist");
+    }
+  });
+
+  await User.updateOne(
+    { _id: id },
+    {
+      $push: {
+        friends: {
+          friendId: friend._id,
+          iAapplied: true,
+          confirmRequest: false,
+          friendRequestDate: Date.now(),
+          friendAcceptDate: Date.now(),
+        },
+      },
+    }
+  );
+
+  await User.updateOne(
+    { _id: friendId },
+    {
+      $push: {
+        friends: {
+          friendId: user._id,
+          iAapplied: false,
+          confirmRequest: false,
+          friendRequestDate: Date.now(),
+          friendAcceptDate: Date.now(),
+        },
+      },
+    }
+  );
+  res.send({ message: "User was updated successfully!" });
+});
+
+const acceptFriend = asyncHandler(async (req, res) => {
+  const { friendId } = req.body;
+  const id = req.params.id;
+  if (id === friendId) {
+    res.status(404);
+    throw new Error("User Not be friend");
+  }
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const friend = await User.findById(friendId);
+  if (!friend) {
+    res.status(404);
+    throw new Error("friend not found");
+  }
+  await User.updateOne(
+    { _id: id, "friends.friendId": friendId },
+    {
+      $set: {
+        "friends.$.confirmRequest": true,
+        "friends.$.friendAcceptDate": Date.now(),
+      },
+    }
+  );
+
+  await User.updateOne(
+    { _id: friendId, "friends.friendId": id },
+    {
+      $set: {
+        "friends.$.confirmRequest": true,
+        "friends.$.friendAcceptDate": Date.now(),
+      },
+    }
+  );
 
   res.send({ message: "User was updated successfully!" });
 });
@@ -381,7 +499,14 @@ const removeFriend = asyncHandler(async (req, res) => {
     throw new Error("userFriend not found");
   }
 
-  await User.updateOne({ _id: id }, { $pull: { friends: friend._id } });
+  await User.updateOne(
+    { _id: id },
+    { $pull: { friends: { friendId: friendId } } }
+  );
+  await User.updateOne(
+    { _id: friendId },
+    { $pull: { friends: { friendId: id } } }
+  );
 
   res.send({ message: "User was updated successfully!" });
 });
@@ -395,7 +520,9 @@ export {
   changePasswordUser,
   getAllRoles,
   getFriends,
-  addFriend,
+  getRequestFriends,
+  acceptFriend,
+  requestFriend,
   removeFriend,
   allAccess,
   userBoard,

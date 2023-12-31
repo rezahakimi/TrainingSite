@@ -14,7 +14,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useGetAllFriendsQuery } from "../../slices/userApiSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Colors } from "../../styles/theme";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useEffect, useState } from "react";
@@ -38,9 +38,10 @@ const initialFormState = {
   ],
 };
 
-const Friends = ({ userId }) => {
+const FriendsList = ({ userId }) => {
+  const navigate = useNavigate();
   const {
-    data: friends,
+    data: friends = [],
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
@@ -48,10 +49,11 @@ const Friends = ({ userId }) => {
     isFetching: isGetFetching,
   } = useGetAllFriendsQuery(userId);
 
-  const [userDisplay, setDisplayUser] = useState(initialFormState);
-  const dispatch = useDispatch();
-
   useEffect(() => {}, []);
+
+  const handleFriendClick = async (friendId, event) => {
+    navigate("/users/" + friendId + "/");
+  };
 
   if (getUserError) {
     return <div>Error: {getUserError.message}</div>;
@@ -63,24 +65,38 @@ const Friends = ({ userId }) => {
   let friendsRender = "";
   if (friends) {
     friendsRender = friends.map((f) => {
+      let fId = f.id;
       return (
         <ListItem key={f.id} alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <ListItemAvatar onClick={(event) => handleFriendClick(fId)}>
+            <Avatar
+              alt="Remy Sharp"
+              src={config.serverPath + config.imageProliePath + f.profileImg}
+            />
           </ListItemAvatar>
           <ListItemText
-            primary="Brunch this weekend?"
+            onClick={(event) => handleFriendClick(fId)}
+            primary={f.lastname}
             secondary={
               <React.Fragment>
+                {/*  <NavLink to={`/users/${f.id}/`}>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    {f.firstname}
+                  </Typography>
+                </NavLink>
+ */}
                 <Typography
                   sx={{ display: "inline" }}
                   component="span"
                   variant="body2"
                   color="text.primary"
                 >
-                  f.firstname
+                  {f.firstname}
                 </Typography>
-                {" — I'll be in your neighborhood doing errands this…"}
               </React.Fragment>
             }
           />
@@ -91,10 +107,10 @@ const Friends = ({ userId }) => {
 
   return (
     <>
-      <Divider variant="inset" component="li" />
+      <div>Friends</div>
       {friendsRender}
     </>
   );
 };
 
-export default Friends;
+export default FriendsList;

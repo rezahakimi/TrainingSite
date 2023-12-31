@@ -152,6 +152,12 @@ export default function Actions({ matches }) {
                   }}
                   open={Boolean(anchorElUser)}
                 >
+                  <MenuItem>
+                    <Typography textAlign="center">
+                      {userInfo.firstname + " " + userInfo.lastname}
+                    </Typography>
+                  </MenuItem>
+                  <Divider />
                   <MenuItem
                     key="profile"
                     onClick={(event) => handleCloseMenu("profile")}

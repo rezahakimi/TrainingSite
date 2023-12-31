@@ -35,7 +35,24 @@ const UserSchema = mongoose.Schema(
       },
     ],
     articles: [{ type: mongoose.Types.ObjectId, ref: "Article" }],
-    friends: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+    friends: [
+      {
+        friendId: { type: mongoose.Types.ObjectId, ref: "User" },
+        iAapplied: {
+          //من درخواست داده ام
+          type: Boolean,
+        },
+        confirmRequest: {
+          type: Boolean,
+        },
+        friendRequestDate: {
+          type: Date,
+        },
+        friendAcceptDate: {
+          type: Date,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

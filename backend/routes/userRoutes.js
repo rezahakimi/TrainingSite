@@ -11,9 +11,11 @@ import {
   getUserById,
   deleteUser,
   getAllRoles,
-  addFriend,
+  requestFriend,
   removeFriend,
   getFriends,
+  getRequestFriends,
+  acceptFriend,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authWithCookieMiddleware.js";
 import {
@@ -65,9 +67,11 @@ router.route("/").post(upload.single("image"), registerUser);
 router.route("/changepassword").post(changePasswordUser);
 router.route("/").patch(upload.single("image"), updateUser);
 router.route("/:id").delete(deleteUser);
-router.route("/friends/:id").get(getFriends);
-router.route("/friends/:id").post(addFriend);
-router.route("/friends/:id").delete(removeFriend);
+router.route("/getfriends/:id").get(getFriends);
+router.route("/getrequestfriends/:id").get(getRequestFriends);
+router.route("/requestFriend/:id").patch(requestFriend);
+router.route("/acceptFriend/:id").patch(acceptFriend);
+router.route("/removeFriend/:id").patch(removeFriend);
 
 router.route("/all").get(allAccess);
 
