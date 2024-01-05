@@ -311,29 +311,66 @@ const getFriends = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const userFriends = await User.findById(id)
-    .populate({
-      path: "friends",
-      match: { confirmRequest: true },
-      select:
-        "firstname _id lastname email phone profileImg iAapplied confirmRequest friendRequestDate friendAcceptDate", //"name -_id",
-    })
-    .exec();
+  /*const userFriends = await User.findById(id)
+    // .populate({
+    //   path: "friends.friendId",
+    //   match: { confirmRequest: true },
+    //    select:
+    //      "firstname _id lastname email phone profileImg iAapplied confirmRequest friendRequestDate friendAcceptDate", //"name -_id",
+    // })
 
-  const myFriendss = userFriends.friends.map((u) => {
-    return {
-      id: u._id,
-      firstname: u.firstname,
-      lastname: u.lastname,
-      email: u.email,
-      phone: u.phone,
-      profileImg: u.profileImg,
-      iAapplied: u.iAapplied,
-      confirmRequest: u.confirmRequest,
-      friendIdRequestDate: u.friendIdRequestDate,
-      friendIdAcceptDate: u.friendIdAcceptDate,
-    };
-  });
+      .aggregate([
+      {
+        $lookup: {
+          from: "User",
+          localField: "_id",
+          foreignField: "friends.friendId",
+          as: "ad",
+        },
+      }, */
+
+  /*     {
+        $project: {
+          _id: 0,
+          firstname: 1,
+          friends: {
+            $map: {
+              input: "$friends",
+              as: "reply",
+              in: {
+                id: "$$reply.friendId",
+              },
+            },
+          },
+        },
+      }, */
+
+  /* ]) 
+    .exec();*/
+
+  //console.log(userFriends);
+  const myFriendss = await Promise.all(
+    user.friends.map(async (u) => {
+      if (u.confirmRequest) {
+        const d = await User.findById(u.friendId)
+          // .select("_id firstname lastname email phone profileImg")
+          .exec();
+
+        return {
+          id: d._id,
+          firstname: d.firstname,
+          lastname: d.lastname,
+          email: d.email,
+          phone: d.phone,
+          profileImg: d.profileImg,
+          iAapplied: u.iAapplied,
+          confirmRequest: u.confirmRequest,
+          friendRequestDate: u.friendRequestDate,
+          friendAcceptDate: u.friendAcceptDate,
+        };
+      }
+    })
+  );
 
   res.status(200).json(myFriendss);
 });
@@ -347,29 +384,37 @@ const getRequestFriends = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const userFriends = await User.findById(id)
+  /*   const userFriends = await User.findById(id)
     .populate({
       path: "friends",
       match: { iAapplied: false, confirmRequest: false },
       select:
         "firstname _id lastname email phone profileImg iAapplied confirmRequest friendRequestDate friendAcceptDate", //"name -_id",
     })
-    .exec();
+    .exec(); */
 
-  const myFriendss = userFriends.friends.map((u) => {
-    return {
-      id: u._id,
-      firstname: u.firstname,
-      lastname: u.lastname,
-      email: u.email,
-      phone: u.phone,
-      profileImg: u.profileImg,
-      iAapplied: u.iAapplied,
-      confirmRequest: u.confirmRequest,
-      friendIdRequestDate: u.friendIdRequestDate,
-      friendIdAcceptDate: u.friendIdAcceptDate,
-    };
-  });
+  const myFriendss = await Promise.all(
+    user.friends.map(async (u) => {
+      if (!u.confirmRequest && !u.iAapplied) {
+        const d = await User.findById(u.friendId)
+          // .select("_id firstname lastname email phone profileImg")
+          .exec();
+
+        return {
+          id: d._id,
+          firstname: d.firstname,
+          lastname: d.lastname,
+          email: d.email,
+          phone: d.phone,
+          profileImg: d.profileImg,
+          iAapplied: u.iAapplied,
+          confirmRequest: u.confirmRequest,
+          friendRequestDate: u.friendRequestDate,
+          friendAcceptDate: u.friendAcceptDate,
+        };
+      }
+    })
+  );
 
   res.status(200).json(myFriendss);
 });
@@ -452,6 +497,7 @@ const acceptFriend = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("friend not found");
   }
+
   await User.updateOne(
     { _id: id, "friends.friendId": friendId },
     {

@@ -14,8 +14,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import {
-  useGetAllFriendsQuery,
-  useAddFriendMutation,
+  useGetFriendsQuery,
+  useRequestFriendMutation,
   useRemoveFriendMutation,
 } from "../../slices/userApiSlice";
 import { useEffect, useState } from "react";
@@ -46,8 +46,8 @@ const FriendManage = ({ userId }) => {
     isError: isGetFriendsError,
     error: getFriendsError,
     isFetching: isGetFriendsFetching,
-  } = useGetAllFriendsQuery(userId);
-  const [addFriend] = useAddFriendMutation();
+  } = useGetFriendsQuery(userId);
+  const [requestFriend] = useRequestFriendMutation();
   const [removeFriend] = useRemoveFriendMutation();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -61,10 +61,10 @@ const FriendManage = ({ userId }) => {
     });
   }, [friends]);
 
-  const SubmitAddFriendHandler = async (event) => {
+  const SubmitRequestFriendHandler = async (event) => {
     event.preventDefault();
     let userInfoId = userInfo.id;
-    const res = await addFriend({
+    const res = await requestFriend({
       userId: userId,
       friendId: userInfoId,
     }).unwrap();
@@ -93,16 +93,21 @@ const FriendManage = ({ userId }) => {
   if (isGetFriendsLoading && !friends && friends.length > 0) {
     return <div>Loading...</div>;
   }
+
   return (
     <>
-      {iAmFriend ? (
-        <IconButton aria-label="ّfriend" onClick={SubmitRemoveFriendHandler}>
-          <PersonRemoveIcon />
-        </IconButton>
+      {userInfo.id !== userId ? (
+        iAmFriend ? (
+          <IconButton aria-label="ّfriend" onClick={SubmitRemoveFriendHandler}>
+            <PersonRemoveIcon />
+          </IconButton>
+        ) : (
+          <IconButton aria-label="ّfriend" onClick={SubmitRequestFriendHandler}>
+            <PersonAddAlt1Icon />
+          </IconButton>
+        )
       ) : (
-        <IconButton aria-label="ّfriend" onClick={SubmitAddFriendHandler}>
-          <PersonAddAlt1Icon />
-        </IconButton>
+        <div></div>
       )}
     </>
   );

@@ -69,20 +69,34 @@ export const userApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["User"],
     }),
-    getAllFriends: builder.query({
+    getFriends: builder.query({
       query: (id) => ({
-        url: `${USER_URL}/friends/${id}`,
+        url: `${USER_URL}/getfriends/${id}`,
         method: "GET",
       }),
       transformResponse: (response) => response,
     }),
-    addFriend: builder.mutation({
+    requestFriend: builder.mutation({
       query: (data) => {
         let id = data.userId;
         let friendId = data.friendId;
         return {
-          url: `${USER_URL}/Friends/${id}`,
-          method: "POST",
+          url: `${USER_URL}/requestFriend/${id}`,
+          method: "PATCH",
+          body: { friendId },
+          //credentials: "include",
+          formData: true,
+        };
+      },
+      invalidatesTags: ["User"],
+    }),
+    acceptFriend: builder.mutation({
+      query: (data) => {
+        let id = data.userId;
+        let friendId = data.friendId;
+        return {
+          url: `${USER_URL}/acceptFriend/${id}`,
+          method: "PATCH",
           body: { friendId },
           //credentials: "include",
           formData: true,
@@ -95,8 +109,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
         let id = data.userId;
         let friendId = data.friendId;
         return {
-          url: `${USER_URL}/Friends/${id}`,
-          method: "DELETE",
+          url: `${USER_URL}/removeFriend/${id}`,
+          method: "PATCH",
           body: { friendId },
           //credentials: "include",
           formData: true,
@@ -130,7 +144,8 @@ export const {
   useDeleteUserMutation,
   useGetUserByIdQuery,
   useGetAllRolesQuery,
-  useGetAllFriendsQuery,
-  useAddFriendMutation,
+  useGetFriendsQuery,
+  useRequestFriendMutation,
+  useAcceptFriendMutation,
   useRemoveFriendMutation,
 } = userApiSlice;

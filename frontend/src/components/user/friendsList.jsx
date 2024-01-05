@@ -13,7 +13,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { useGetAllFriendsQuery } from "../../slices/userApiSlice";
+import { useGetFriendsQuery } from "../../slices/userApiSlice";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Colors } from "../../styles/theme";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
@@ -47,7 +47,7 @@ const FriendsList = ({ userId }) => {
     isError: isGetError,
     error: getUserError,
     isFetching: isGetFetching,
-  } = useGetAllFriendsQuery(userId);
+  } = useGetFriendsQuery(userId);
 
   useEffect(() => {}, []);
 
