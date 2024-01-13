@@ -2,7 +2,17 @@ import { apiSlice } from "./apiSlice";
 
 const USER_URL = "/users";
 
+function providesList(resultsWithIds, tagType) {
+  return resultsWithIds
+    ? [
+        { type: tagType, id: "LIST" },
+        ...resultsWithIds.map(({ id }) => ({ type: tagType, id })),
+      ]
+    : [{ type: tagType, id: "LIST" }];
+}
+
 export const userApiSlice = apiSlice.injectEndpoints({
+  tagTypes: ["User", "Friend"],
   endpoints: (builder) => ({
     getAllUsers: builder.query({
       query: () => ({
@@ -75,6 +85,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response) => response,
+      providesTags: (result = [], error, arg) => [
+        "Friend",
+        ...result.map(({ id }) => ({ type: "Friend", id })),
+      ],
+    }),
+    getRequestFriends: builder.query({
+      query: (id) => ({
+        url: `${USER_URL}/getrequestfriends/${id}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response,
+      providesTags: (result = [], error, arg) => [
+        "Friend",
+        ...result.map(({ id }) => ({ type: "Friend", id })),
+      ],
     }),
     requestFriend: builder.mutation({
       query: (data) => {
@@ -88,7 +113,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, arg) => [{ type: "Friend", id: arg.id }],
     }),
     acceptFriend: builder.mutation({
       query: (data) => {
@@ -102,7 +127,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, arg) => [{ type: "Friend", id: arg.id }],
     }),
     removeFriend: builder.mutation({
       query: (data) => {
@@ -116,7 +141,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ["User"],
+      invalidatesTags: (result, error, arg) => [{ type: "Friend", id: arg.id }],
     }),
     /* logout: builder.mutation({
       query: (data) => ({
@@ -145,6 +170,7 @@ export const {
   useGetUserByIdQuery,
   useGetAllRolesQuery,
   useGetFriendsQuery,
+  useGetRequestFriendsQuery,
   useRequestFriendMutation,
   useAcceptFriendMutation,
   useRemoveFriendMutation,

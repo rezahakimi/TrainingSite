@@ -54,6 +54,7 @@ const FriendManage = ({ userId }) => {
   const [iAmFriend, setIAmmFriend] = useState(false);
 
   useEffect(() => {
+    setIAmmFriend((iAmFriend) => false);
     friends.map((f) => {
       if (f.id === userInfo.id) {
         setIAmmFriend((iAmFriend) => true);
@@ -65,8 +66,8 @@ const FriendManage = ({ userId }) => {
     event.preventDefault();
     let userInfoId = userInfo.id;
     const res = await requestFriend({
-      userId: userId,
-      friendId: userInfoId,
+      userId: userInfoId,
+      friendId: userId,
     }).unwrap();
 
     if (res) {

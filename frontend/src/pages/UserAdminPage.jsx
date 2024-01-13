@@ -1,19 +1,17 @@
 import React from "react";
-import Appbar from "../components/appbar";
-import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
-import FriendsList from "../components/user/friendsList";
+import { useLocation, useParams } from "react-router-dom";
+import ArticleDetails from "../components/article/articleDetails";
+import UserInfo from "../components/user/userInfo";
 import { useSelector } from "react-redux";
+import FriendsList from "../components/user/friendsList";
+import FriendsRequestList from "../components/user/friendsRequestList";
 
-const HomePage = () => {
+const UserAdminPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  //console.log(userInfo);
-  let friendsListRender = null;
-  if (userInfo != null)
-    friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;
 
   return (
     <ThemeProvider theme={theme}>
@@ -27,22 +25,22 @@ const HomePage = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item xs={2}>
-          <div>1</div>
+          hj;
         </Grid>
         <Grid item container direction="column" xs={8} spacing={2}>
           <Grid item xs>
             <div>2</div>
           </Grid>
           <Grid item xs>
-            <ArticleList></ArticleList>
+            <FriendsRequestList userId={userInfo.id}></FriendsRequestList>
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          {friendsListRender}
+          jhj
         </Grid>
       </Grid>
     </ThemeProvider>
   );
 };
 
-export default HomePage;
+export default UserAdminPage;

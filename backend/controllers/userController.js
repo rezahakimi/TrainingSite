@@ -370,8 +370,7 @@ const getFriends = asyncHandler(async (req, res) => {
         };
       }
     })
-  );
-
+  ).then((values) => values.filter((v) => v));
   res.status(200).json(myFriendss);
 });
 
@@ -414,7 +413,7 @@ const getRequestFriends = asyncHandler(async (req, res) => {
         };
       }
     })
-  );
+  ).then((values) => values.filter((v) => v));
 
   res.status(200).json(myFriendss);
 });
@@ -475,7 +474,7 @@ const requestFriend = asyncHandler(async (req, res) => {
       },
     }
   );
-  res.send({ message: "User was updated successfully!" });
+  res.status(200).send({ message: "User was updated successfully!" });
 });
 
 const acceptFriend = asyncHandler(async (req, res) => {
@@ -518,7 +517,7 @@ const acceptFriend = asyncHandler(async (req, res) => {
     }
   );
 
-  res.send({ message: "User was updated successfully!" });
+  res.status(200).send({ message: "User was updated successfully!" });
 });
 
 const removeFriend = asyncHandler(async (req, res) => {
@@ -539,7 +538,7 @@ const removeFriend = asyncHandler(async (req, res) => {
   const userFriend = User.find({
     friends: { _id: friendId },
   });
-  console.log(userFriend);
+
   if (!userFriend) {
     res.status(404);
     throw new Error("userFriend not found");
@@ -554,7 +553,7 @@ const removeFriend = asyncHandler(async (req, res) => {
     { $pull: { friends: { friendId: id } } }
   );
 
-  res.send({ message: "User was updated successfully!" });
+  res.status(200).send({ message: "User was updated successfully!" });
 });
 
 export {

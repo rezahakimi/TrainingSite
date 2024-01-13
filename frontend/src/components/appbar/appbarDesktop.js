@@ -35,7 +35,7 @@ export default function AppbarDesktop({ matches }) {
 
   return (
     <AppbarContainer>
-      <AppbarHeader variant="h4">My Bags</AppbarHeader>
+      <AppbarHeader variant="h4">ZaMi</AppbarHeader>
       <MyList type="row">
         <ListItem>
           <ListItemIcon>
@@ -55,7 +55,12 @@ export default function AppbarDesktop({ matches }) {
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/cat">Categories</NavLink>} />
         </ListItem>
-
+        <ListItem>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary={<NavLink to="/useradmin">Admin</NavLink>} />
+        </ListItem>
         <ListItemButton onClick={() => dispatch(setShowSearchBox(true))}>
           <ListItemIcon>
             <SearchIcon />

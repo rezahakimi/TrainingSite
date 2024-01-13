@@ -19,6 +19,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import ChangePassword from "./pages/ChangePassword";
 import UserPage from "./pages/UserPage";
+import UserAdminPage from "./pages/UserAdminPage";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -89,6 +90,7 @@ function App() {
       }
      /> */}
         </Route>
+        <Route path="/useradmin" element={<UserAdminPage />}></Route>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/login" element={<LoginPage />} />
