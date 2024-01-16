@@ -6,6 +6,10 @@ import {
   getAllArticlesByCategory,
   getArticleById,
   updateArticle,
+  iLikeArticle,
+  iDisLikeArticle,
+  getUsersLikeArticle,
+  getUsersDisLikeArticle,
 } from "../controllers/articleController.js";
 
 const router = express.Router();
@@ -16,5 +20,9 @@ router.route("/").get(getAllArticles);
 router.route("/").post(createArticle);
 router.route("/").patch(updateArticle);
 router.route("/:id").delete(deleteArticle);
+router.route("/like/:id").patch(iLikeArticle);
+router.route("/dislike/:id").patch(iDisLikeArticle);
+router.route("/like/:id").get(getUsersLikeArticle);
+router.route("/dislike/:id").get(getUsersDisLikeArticle);
 
 export default router;

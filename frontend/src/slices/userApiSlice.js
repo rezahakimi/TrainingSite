@@ -134,7 +134,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         let id = data.userId;
         let friendId = data.friendId;
         return {
-          url: `${USER_URL}/removeFriend/${id}`,
+          url: `${USER_URL}/rejectFriend/${id}`,
           method: "PATCH",
           body: { friendId },
           //credentials: "include",

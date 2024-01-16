@@ -250,6 +250,149 @@ const deleteArticle = asyncHandler(async (req, res) => {
   }
 });
 
+const iLikeArticle = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const articleId = req.params.id;
+
+  const artilce = await Article.findById(articleId);
+  if (!artilce) {
+    res.status(404);
+    throw new Error("Article not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  await artilce.iLikes.map((il) => {
+    if (il.iLikeId.toString() === userId) {
+      res.status(404);
+      throw new Error("User allready like");
+    }
+  });
+
+  await Article.updateOne(
+    { _id: articleId },
+    {
+      $push: {
+        iLikes: {
+          iLikeId: userId,
+          iLikeLastModify: Date.now(),
+        },
+      },
+    }
+  );
+
+  await Article.updateOne(
+    { _id: articleId },
+    { $pull: { iDisLikes: { iDisLikeId: userId } } }
+  );
+  res.status(200).send({ message: "User was updated successfully!" });
+});
+
+const iDisLikeArticle = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  const articleId = req.params.id;
+
+  const artilce = await Article.findById(articleId);
+  if (!artilce) {
+    res.status(404);
+    throw new Error("Article not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  await artilce.iDisLikes.map((il) => {
+    if (il.iDisLikeId.toString() === userId) {
+      res.status(404);
+      throw new Error("User allready like");
+    }
+  });
+
+  await Article.updateOne(
+    { _id: articleId },
+    { $pull: { iLikes: { iLikeId: userId } } }
+  );
+
+  await Article.updateOne(
+    { _id: articleId },
+    {
+      $push: {
+        iDisLikes: {
+          iDisLikeId: userId,
+          iDisLikeLastModify: Date.now(),
+        },
+      },
+    }
+  );
+
+  res.status(200).send({ message: "User was updated successfully!" });
+});
+
+const getUsersLikeArticle = asyncHandler(async (req, res) => {
+  const articleId = req.params.id;
+
+  const article = await Article.findById(articleId);
+  if (!article) {
+    res.status(404);
+    throw new Error("Article not found");
+  }
+
+  const myUsersLike = await Promise.all(
+    article.iLikes.map(async (il) => {
+      const u = await User.findById(il.iLikeId)
+        // .select("_id firstname lastname email phone profileImg")
+        .exec();
+
+      return {
+        id: u._id,
+        firstname: u.firstname,
+        lastname: u.lastname,
+        email: u.email,
+        phone: u.phone,
+        profileImg: u.profileImg,
+      };
+    })
+  ).then((values) => values.filter((v) => v));
+
+  res.status(200).json(myUsersLike);
+});
+
+const getUsersDisLikeArticle = asyncHandler(async (req, res) => {
+  const articleId = req.params.id;
+
+  const article = await Article.findById(articleId);
+  if (!article) {
+    res.status(404);
+    throw new Error("Article not found");
+  }
+
+  const myUsersDisLike = await Promise.all(
+    article.iDisLikes.map(async (il) => {
+      const u = await User.findById(il.iDisLikeId)
+        // .select("_id firstname lastname email phone profileImg")
+        .exec();
+
+      return {
+        id: u._id,
+        firstname: u.firstname,
+        lastname: u.lastname,
+        email: u.email,
+        phone: u.phone,
+        profileImg: u.profileImg,
+      };
+    })
+  ).then((values) => values.filter((v) => v));
+
+  res.status(200).json(myUsersDisLike);
+});
+
 export {
   createArticle,
   deleteArticle,
@@ -257,4 +400,8 @@ export {
   getArticleById,
   updateArticle,
   getAllArticlesByCategory,
+  iLikeArticle,
+  iDisLikeArticle,
+  getUsersLikeArticle,
+  getUsersDisLikeArticle,
 };

@@ -12,7 +12,7 @@ import {
   deleteUser,
   getAllRoles,
   requestFriend,
-  removeFriend,
+  rejectFriend,
   getFriends,
   getRequestFriends,
   acceptFriend,
@@ -71,7 +71,7 @@ router.route("/getfriends/:id").get(getFriends);
 router.route("/getrequestfriends/:id").get(getRequestFriends);
 router.route("/requestFriend/:id").patch(requestFriend);
 router.route("/acceptFriend/:id").patch(acceptFriend);
-router.route("/removeFriend/:id").patch(removeFriend);
+router.route("/rejectFriend/:id").patch(rejectFriend);
 
 router.route("/all").get(allAccess);
 

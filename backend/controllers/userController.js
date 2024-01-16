@@ -520,7 +520,7 @@ const acceptFriend = asyncHandler(async (req, res) => {
   res.status(200).send({ message: "User was updated successfully!" });
 });
 
-const removeFriend = asyncHandler(async (req, res) => {
+const rejectFriend = asyncHandler(async (req, res) => {
   const { friendId } = req.body;
   const id = req.params.id;
   const user = await User.findById(id);
@@ -568,7 +568,7 @@ export {
   getRequestFriends,
   acceptFriend,
   requestFriend,
-  removeFriend,
+  rejectFriend,
   allAccess,
   userBoard,
   moderatorBoard,

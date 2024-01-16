@@ -31,6 +31,18 @@ const ArticleSchema = mongoose.Schema(
         ref: "ArticleCat",
       },
     ],
+    iLikes: [
+      {
+        iLikeId: { type: mongoose.Types.ObjectId, ref: "User" },
+        iLikeLastModify: { type: Date },
+      },
+    ],
+    iDisLikes: [
+      {
+        iDisLikeId: { type: mongoose.Types.ObjectId, ref: "User" },
+        iDisLikeLastModify: { type: Date },
+      },
+    ],
   },
   {
     timestamps: true,
