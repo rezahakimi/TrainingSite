@@ -5,10 +5,11 @@ import db from "../models/index.js";
 const connectDB = async () => {
   db.mongoose
     .connect(
-      `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,
+      //`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`,
+      "mongodb+srv://rezahakimi:publickey@cluster0.48qli8k.mongodb.net/?retryWrites=true&w=majority",
       {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
       }
     )
     .then(() => {
