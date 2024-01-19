@@ -10,12 +10,14 @@ import authRoutes from "./routes/authRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import articleCatRoutes from "./routes/articleCatRoutes.js";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 const port = process.env.PORT || 5000;
 
 await connectDB();
 
 const app = express();
+app.use(cors());
 process.env.TZ = "Asia/Tehran";
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
