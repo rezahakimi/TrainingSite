@@ -13,7 +13,7 @@ import bodyParser from "body-parser";
 
 const port = process.env.PORT || 5000;
 
-connectDB();
+await connectDB();
 
 const app = express();
 process.env.TZ = "Asia/Tehran";
