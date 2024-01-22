@@ -393,6 +393,26 @@ const getUsersDisLikeArticle = asyncHandler(async (req, res) => {
   res.status(200).json(myUsersDisLike);
 });
 
+const getUserLikeArticle = asyncHandler(async (req, res) => {
+  const userId = req.params.userid;
+  const articleId = req.params.articleid;
+
+  const article = await Article.findById(articleId);
+  if (!article) {
+    res.status(404);
+    throw new Error("Article not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const ilikeId = article.iLikes.filter((a) => a.iLikeId === userId);
+  res.status(200).json(ilikeId);
+});
+
 export {
   createArticle,
   deleteArticle,
@@ -404,4 +424,5 @@ export {
   iDisLikeArticle,
   getUsersLikeArticle,
   getUsersDisLikeArticle,
+  getUserLikeArticle,
 };

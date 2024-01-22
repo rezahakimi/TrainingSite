@@ -1,9 +1,17 @@
 import { Box, Typography, Stack, Chip } from "@mui/material";
 import { useGetArticleByIdQuery } from "../../slices/articleApiSlice";
 import { NavLink } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const ArticleDetails = ({ articleId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
+  //const [requestFriend] = useRequestFriendMutation();
+
+  const handleClick = () => {
+    console.info("You clicked the Chip.");
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -39,6 +47,15 @@ const ArticleDetails = ({ articleId }) => {
         <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
       </Typography>
       <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
+      <Stack direction="row" spacing={1}>
+        <Chip icon={<FavoriteIcon />} onClick={handleClick} label="With Icon" />
+        <Chip
+          icon={<FavoriteBorderIcon />}
+          onClick={handleClick}
+          label="With Icon"
+          variant="outlined"
+        />
+      </Stack>
     </Box>
   );
 };

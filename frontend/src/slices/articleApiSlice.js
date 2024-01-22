@@ -69,6 +69,24 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         providesTags: ["Article"],
       }),
     }),
+    iLikeArticle: builder.mutation({
+      query: (id) => ({
+        url: `${ARTICLE_URL}/like/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Article", id: arg.id },
+      ],
+    }),
+    iDisLikeArticle: builder.mutation({
+      query: (id) => ({
+        url: `${ARTICLE_URL}/dislike/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Article", id: arg.id },
+      ],
+    }),
   }),
 });
 
