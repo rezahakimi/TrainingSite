@@ -25,6 +25,6 @@ router.route("/like/:id").patch(iLikeArticle);
 router.route("/dislike/:id").patch(iDisLikeArticle);
 router.route("/like/:id").get(getUsersLikeArticle);
 router.route("/dislike/:id").get(getUsersDisLikeArticle);
-router.route("/dislike/:articleid/:userid").get(getUserLikeArticle);
+router.route("/like/:articleid/:userid").get(getUserLikeArticle);
 
 export default router;

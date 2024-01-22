@@ -409,7 +409,9 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const ilikeId = article.iLikes.filter((a) => a.iLikeId === userId);
+  const ilikeId = article.iLikes.filter(
+    (a) => a.iLikeId === new ObjectID(userId)
+  );
   res.status(200).json(ilikeId);
 });
 
