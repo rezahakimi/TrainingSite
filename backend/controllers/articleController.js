@@ -409,9 +409,10 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const ilikeId = article.iLikes.filter(
-    (a) => a.iLikeId === new ObjectID(userId)
-  );
+  const ilikeId = Article.find({
+    _id: mongoose.Schema.ObjectId(articleId),
+    "iLikes.iLikeId": mongoose.Schema.ObjectId(userId),
+  });
   res.status(200).json(ilikeId);
 });
 
