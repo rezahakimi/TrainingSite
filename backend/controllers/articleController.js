@@ -409,10 +409,11 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const ilikeId = await Article.find({
-    _id: articleId,
-    //"iLikes.iLikeId": userId,
-  });
+  const ilikeId = //article.iLikes.map(il => book.title)
+    await Article.find({
+      _id: articleId,
+      //"iLikes.iLikeId": userId,
+    }).exec();
   res.status(200).json(ilikeId);
 });
 
