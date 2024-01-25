@@ -410,8 +410,8 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
   }
 
   const ilikeId = Article.find({
-    _id: mongoose.Schema.ObjectId(articleId),
-    "iLikes.iLikeId": mongoose.Schema.ObjectId(userId),
+    _id: articleId,
+    "iLikes.iLikeId": userId,
   });
   res.status(200).json(ilikeId);
 });
