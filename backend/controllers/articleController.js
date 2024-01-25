@@ -411,7 +411,7 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
 
   const ilikeId = Article.find({
     _id: articleId,
-    "iLikes.iLikeId": userId,
+    //"iLikes.iLikeId": userId,
   });
   res.status(200).json(ilikeId);
 });
