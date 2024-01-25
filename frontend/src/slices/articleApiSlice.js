@@ -87,6 +87,17 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         { type: "Article", id: arg.id },
       ],
     }),
+    getUserLikeArticle: builder.query({
+      query: (data) => {
+        let userid = data.userId;
+        let articleid = data.articleId;
+        return {
+          url: `${ARTICLE_URL}/like/${articleid}/${userid}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response) => response,
+    }),
   }),
 });
 
@@ -97,4 +108,5 @@ export const {
   useUpdateArticleMutation,
   useDeleteArticleMutation,
   useGetArticleByIdQuery,
+  useGetUserLikeArticleQuery,
 } = articleApiSlice;

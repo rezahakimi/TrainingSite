@@ -5,15 +5,22 @@ import { Container, Grid, Box } from "@mui/material";
 import ArticleList from "../components/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
 import ArticleDetails from "../components/article/articleDetails";
+import { useSelector } from "react-redux";
 
 const ArtilesPage = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   const { articleid } = useParams();
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
 
   if (articleid) {
-    articlesRender = <ArticleDetails articleId={articleid}></ArticleDetails>;
+    articlesRender = (
+      <ArticleDetails
+        articleId={articleid}
+        userId={userInfo.id}
+      ></ArticleDetails>
+    );
   } else {
     if (articleCatQuery) {
       articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;

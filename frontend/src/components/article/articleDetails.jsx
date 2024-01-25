@@ -1,11 +1,22 @@
 import { Box, Typography, Stack, Chip } from "@mui/material";
-import { useGetArticleByIdQuery } from "../../slices/articleApiSlice";
+import {
+  useGetArticleByIdQuery,
+  useGetUserLikeArticleQuery,
+} from "../../slices/articleApiSlice";
 import { NavLink } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const ArticleDetails = ({ articleId }) => {
+const ArticleDetails = ({ articleId, userId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
+  const {
+    data: userLikeArticle,
+    isLoading: isGetUserLikeArticleLoading,
+    isSuccess: isGetUserLikeArticleSuccess,
+    isError: isGetUserLikeArticleError,
+    error: getGetUserLikeArticleError,
+    isFetching: isGetUserLikeArticleFetching,
+  } = useGetUserLikeArticleQuery({ articleId, userId });
   //const [requestFriend] = useRequestFriendMutation();
 
   const handleClick = () => {
@@ -20,6 +31,7 @@ const ArticleDetails = ({ articleId }) => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+  console.log(userLikeArticle);
   return (
     <Box
       sx={{
