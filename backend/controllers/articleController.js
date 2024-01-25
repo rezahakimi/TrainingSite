@@ -412,7 +412,7 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
   const ilikeId = //article.iLikes.map(il => book.title)
     await Article.find({
       _id: articleId,
-      //"iLikes.iLikeId": userId,
+      "iLikes.iLikeId": userId,
     }).exec();
   res.status(200).json(ilikeId);
 });
