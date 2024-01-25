@@ -414,7 +414,7 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
       _id: articleId,
       "iLikes.iLikeId": userId,
     }).exec();
-  res.status(200).json(ilikeId);
+  res.status(200).json(ilikeId ? true : false);
 });
 
 export {
