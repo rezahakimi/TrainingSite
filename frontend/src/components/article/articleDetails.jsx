@@ -9,14 +9,14 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const ArticleDetails = ({ articleId, userId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
-  const {
+  /*  const {
     data: userLikeArticle,
     isLoading: isGetUserLikeArticleLoading,
     isSuccess: isGetUserLikeArticleSuccess,
     isError: isGetUserLikeArticleError,
     error: getGetUserLikeArticleError,
     isFetching: isGetUserLikeArticleFetching,
-  } = useGetUserLikeArticleQuery({ articleId, userId });
+  } = useGetUserLikeArticleQuery({ articleId, userId }); */
   //const [requestFriend] = useRequestFriendMutation();
 
   const handleClick = () => {
@@ -31,7 +31,7 @@ const ArticleDetails = ({ articleId, userId }) => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  console.log(userLikeArticle);
+  console.log(article);
   return (
     <Box
       sx={{

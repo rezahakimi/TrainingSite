@@ -134,6 +134,13 @@ const getArticleById = asyncHandler(async (req, res) => {
           title: c.title,
         };
       }),
+      iLikes: a.iLikes.map((il) => {
+        return {
+          id: il._id,
+          userId: il.iLikeId,
+          userLikeLastModify: il.iLikeLastModify,
+        };
+      }),
     };
 
     res.status(200).json(myArticle);
@@ -409,12 +416,12 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  const ilikeId = //article.iLikes.map(il => book.title)
+  const articleiLikes = //article.iLikes.map(il => book.title)
     await Article.find({
       _id: articleId,
       "iLikes.iLikeId": userId,
     }).exec();
-  res.status(200).json(iLikes);
+  res.status(200).json(articleiLikes.iLikes);
 });
 
 export {
