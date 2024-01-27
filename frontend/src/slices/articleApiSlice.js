@@ -70,19 +70,33 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     iLikeArticle: builder.mutation({
-      query: (id) => ({
-        url: `${ARTICLE_URL}/like/${id}`,
-        method: "PATCH",
-      }),
+      query: (data) => {
+        let articleId = data.articleId;
+        let userId = data.userId;
+        return {
+          url: `${ARTICLE_URL}/like/${articleId}`,
+          method: "PATCH",
+          body: { userId },
+          //credentials: "include",
+          formData: true,
+        };
+      },
       invalidatesTags: (result, error, arg) => [
         { type: "Article", id: arg.id },
       ],
     }),
     iDisLikeArticle: builder.mutation({
-      query: (id) => ({
-        url: `${ARTICLE_URL}/dislike/${id}`,
-        method: "PATCH",
-      }),
+      query: (data) => {
+        let articleId = data.articleId;
+        let userId = data.userId;
+        return {
+          url: `${ARTICLE_URL}/dislike/${articleId}`,
+          method: "PATCH",
+          body: { userId },
+          //credentials: "include",
+          formData: true,
+        };
+      },
       invalidatesTags: (result, error, arg) => [
         { type: "Article", id: arg.id },
       ],
@@ -109,4 +123,6 @@ export const {
   useDeleteArticleMutation,
   useGetArticleByIdQuery,
   useGetUserLikeArticleQuery,
+  useILikeArticleMutation,
+  useIDisLikeArticleMutation,
 } = articleApiSlice;
