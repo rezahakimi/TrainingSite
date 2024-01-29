@@ -53,7 +53,9 @@ export default function AppbarDesktop({ matches }) {
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
-          <ListItemText primary={<NavLink to="/cat">Categories</NavLink>} />
+          <ListItemText
+            primary={<NavLink to="/articles/?cat=all">Categories</NavLink>}
+          />
         </ListItem>
         <ListItem>
           <ListItemIcon>

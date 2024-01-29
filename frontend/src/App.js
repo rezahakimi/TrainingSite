@@ -60,6 +60,8 @@ function App() {
           <Route path="/articles" element={<ArtilesPage />}>
             <Route path=":articleid" element={<ArtilesPage />} />
           </Route>
+          {/*           <Route path="/?cat" element={<ArtilesPage />}></Route>
+           */}{" "}
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/users/:userid" element={<UserPage />}></Route>
           {/*  <Route

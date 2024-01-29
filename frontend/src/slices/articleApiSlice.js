@@ -36,7 +36,6 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           ? [...result.map(({ id }) => ({ type: "Article", id })), "Article"]
           : ["Article"],
     }),
-
     createArticle: builder.mutation({
       query: (data) => ({
         url: `${ARTICLE_URL}/`,

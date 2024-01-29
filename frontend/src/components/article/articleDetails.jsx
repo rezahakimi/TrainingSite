@@ -13,24 +13,21 @@ import { useEffect, useState } from "react";
 const ArticleDetails = ({ articleId, userId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
   const [iLikedArticle, setILikedArticle] = useState(false);
+  const [iWriteArticle, setIWriteArticle] = useState(false);
 
-  /*  const {
-    data: userLikeArticle,
-    isLoading: isGetUserLikeArticleLoading,
-    isSuccess: isGetUserLikeArticleSuccess,
-    isError: isGetUserLikeArticleError,
-    error: getGetUserLikeArticleError,
-    isFetching: isGetUserLikeArticleFetching,
-  } = useGetUserLikeArticleQuery({ articleId, userId }); */
   const [iLikeArticle] = useILikeArticleMutation();
   const [iDisLikeArticle] = useIDisLikeArticleMutation();
 
   useEffect(() => {
     setILikedArticle((iliked) => false);
-    if (article)
+    setIWriteArticle((iWrite) => false);
+
+    if (article) {
       article.iLikes.map((a) => {
         if (a.userId === userId) setILikedArticle((iliked) => true);
       });
+      if (article.createdUserId === userId) setIWriteArticle((iWrite) => true);
+    }
   }, [article]);
 
   const handleClick = async () => {
@@ -64,11 +61,23 @@ const ArticleDetails = ({ articleId, userId }) => {
     return <div>Error: {error.message}</div>;
   }
 
-  let renderLikedIcon = <FavoriteBorderIcon />;
-  if (iLikedArticle) renderLikedIcon = <FavoriteIcon />;
-  console.log(userId);
+  let renderLikedIcon = <></>;
+  if (!iWriteArticle) {
+    renderLikedIcon = (
+      <Chip
+        icon={<FavoriteBorderIcon />}
+        onClick={handleClick}
+        label="With Icon"
+      />
+    );
+    if (iLikedArticle)
+      renderLikedIcon = (
+        <Chip icon={<FavoriteIcon />} onClick={handleClick} label="With Icon" />
+      );
+  }
+  console.log(iWriteArticle);
 
-  console.log(iLikedArticle);
+  //console.log(iLikedArticle);
   return (
     <Box
       sx={{
@@ -97,13 +106,7 @@ const ArticleDetails = ({ articleId, userId }) => {
       </Typography>
       <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
       <Stack direction="row" spacing={1}>
-        <Chip icon={renderLikedIcon} onClick={handleClick} label="With Icon" />
-        {/* <Chip
-          icon={<FavoriteBorderIcon />}
-          onClick={handleClick}
-          label="With Icon"
-          variant="outlined"
-        /> */}
+        {renderLikedIcon}
       </Stack>
     </Box>
   );

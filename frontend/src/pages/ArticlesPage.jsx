@@ -6,6 +6,7 @@ import ArticleList from "../components/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
 import ArticleDetails from "../components/article/articleDetails";
 import { useSelector } from "react-redux";
+import ArticleCatList from "../components/article/articleCatList";
 
 const ArtilesPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -13,7 +14,7 @@ const ArtilesPage = () => {
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
-
+  console.log(articleCatQuery);
   if (articleid) {
     articlesRender = (
       <ArticleDetails
@@ -23,7 +24,11 @@ const ArtilesPage = () => {
     );
   } else {
     if (articleCatQuery) {
-      articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+      if (articleCatQuery === "all") {
+        articlesRender = <ArticleCatList></ArticleCatList>;
+      } else {
+        articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+      }
     } else {
       articlesRender = <ArticleList></ArticleList>;
     }
