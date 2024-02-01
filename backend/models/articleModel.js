@@ -43,6 +43,9 @@ const ArticleSchema = mongoose.Schema(
         iDisLikeLastModify: { type: Date },
       },
     ],
+    comments: [
+      { commentId: { type: mongoose.Types.ObjectId, ref: "ArticleComment" } },
+    ],
   },
   {
     timestamps: true,

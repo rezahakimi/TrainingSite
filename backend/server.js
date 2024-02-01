@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import articleCatRoutes from "./routes/articleCatRoutes.js";
+import articleCommenrRoutes from "./routes/articleCommentRoutes.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 
@@ -43,6 +44,7 @@ app.use(
 );
 app.use("/api/articles", articleRoutes);
 app.use("/api/articlecats", articleCatRoutes);
+app.use("/api/articlecom", articleCommenrRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use(express.static("public"));

@@ -11,7 +11,7 @@ import {
   getUsersLikeArticle,
   getUsersDisLikeArticle,
   getUserLikeArticle,
-  getAllArticleCats,
+  //getAllArticleCats,
 } from "../controllers/articleController.js";
 
 const router = express.Router();
