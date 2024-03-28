@@ -44,27 +44,24 @@ const getAllArticles = asyncHandler(async (req, res) => {
   if (myArticles) {
     const myArticlesReturn = myArticles.map((a) => {
       return {
-        data: {
-          id: a._id,
-          title: a.title,
-          content: a.content,
-          abstract: a.abstract,
-          createdDate: a.createdDate,
-          lastModifyDate: a.lastModifyDate,
-          createdUserId: a.createdUser._id,
-          createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
-          categories: a.categories.map((c) => {
-            return {
-              id: c._id,
-              title: c.title,
-            };
-          }),
-        },
-        dataCount: 10,
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        abstract: a.abstract,
+        createdDate: a.createdDate,
+        lastModifyDate: a.lastModifyDate,
+        createdUserId: a.createdUser._id,
+        createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+        categories: a.categories.map((c) => {
+          return {
+            id: c._id,
+            title: c.title,
+          };
+        }),
       };
     });
 
-    res.status(200).json(myArticlesReturn);
+    res.status(200).json({ data: myArticlesReturn, dataCount: 10 });
   } else {
     res.status(404);
     throw new Error("Users not found");
