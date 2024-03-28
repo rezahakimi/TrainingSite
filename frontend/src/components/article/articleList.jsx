@@ -10,7 +10,14 @@ const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
   //console.log(catId);
-  const { data: articles = [] } = useGetAllArticlesQuery(catId);
+  const {
+    data: articles = [],
+    isLoading: isGetLoading,
+    isSuccess: isGetSuccess,
+    isError: isGetError,
+    error: getUserError,
+    isFetching: isGetFetching,
+  } = useGetAllArticlesQuery(catId);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -63,6 +70,10 @@ const ArticleList = ({ catId }) => {
       </Grid>
     );
   });
+
+  if (isGetLoading && !articles) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container>

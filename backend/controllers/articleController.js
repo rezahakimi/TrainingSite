@@ -23,7 +23,13 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
+  const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
+  const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
+
   const articles = await Article.find()
+    .sort({ id: 1 })
+    .skip((pageNumber - 1) * pagination)
+    .limit(pagination)
     .populate({
       path: "createdUser",
       match: {},
