@@ -11,7 +11,7 @@ const pagesize = 3;
 const ArticleList = ({ catId }) => {
   //console.log(catId);
   const {
-    data: articles = [],
+    data: articles,
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
@@ -23,7 +23,7 @@ const ArticleList = ({ catId }) => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
   //const [articles, SetArticless] = useState<IProducts[]>([]);
-  const getArticlesByPaging = {
+  /*   const getArticlesByPaging = {
     getdata: (from, to) => {
       const data = articles.slice(from, to);
       return new Promise((resolve, reject) => {
@@ -33,14 +33,14 @@ const ArticleList = ({ catId }) => {
         });
       });
     },
-  };
+  }; */
 
   const [passengersCount, setPassengersCount] = useState(0);
   const [pagingController, setPagingController] = useState({
     page: 0,
     rowsPerPage: 10,
   });
-
+  console.log(articles);
   const renderProducts = articles.map((a) => {
     return (
       <Grid

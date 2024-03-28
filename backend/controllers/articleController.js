@@ -81,7 +81,9 @@ const getAllArticles = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json({ data: myArticlesReturn, dataCount: articlesCount });
+    res
+      .status(200)
+      .json({ articlesData: myArticlesReturn, artilesCount: articlesCount });
   } else {
     res.status(404);
     throw new Error("Users not found");

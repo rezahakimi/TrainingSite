@@ -18,14 +18,14 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           };
         }
       },
-      // providesTags: ["User"],
-      providesTags: (result, error, arg) =>
-        result.data
+      providesTags: ["Article"],
+      /* providesTags: (result, error, arg) =>
+        result
           ? [
               ...result.data.map(({ id }) => ({ type: "Article", id })),
               "Article",
             ]
-          : ["Article"],
+          : ["Article"], */
     }),
 
     getAllArticlesByCategory: builder.query({
