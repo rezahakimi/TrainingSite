@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Paper, Grid, Typography, Container } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Grid,
+  Typography,
+  Container,
+  TablePagination,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useGetAllArticlesQuery } from "../../slices/articleApiSlice";
 import ArticleRow from "./articleRow";
@@ -11,7 +18,7 @@ const pagesize = 3;
 const ArticleList = ({ catId }) => {
   //console.log(catId);
   const {
-    data: articles,
+    data: articlesData,
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
@@ -35,13 +42,30 @@ const ArticleList = ({ catId }) => {
     },
   }; */
 
-  const [passengersCount, setPassengersCount] = useState(0);
+  const [articlesCount, setArticlesCount] = useState(0);
   const [pagingController, setPagingController] = useState({
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 2,
   });
-  console.log(articles);
-  const renderProducts = articles.map((a) => {
+  const handlePageChange = (event, newPage) => {
+    setPagingController({
+      ...pagingController,
+      page: newPage,
+    });
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPagingController({
+      ...pagingController,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
+    });
+  };
+  if (isGetLoading && !articlesData) {
+    return <div>Loading...</div>;
+  }
+  console.log(articlesData.articlesData);
+  const renderProducts = articlesData.articlesData.map((a) => {
     return (
       <Grid
         item
@@ -77,10 +101,6 @@ const ArticleList = ({ catId }) => {
     );
   });
 
-  if (isGetLoading && !articles) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Container>
       <Grid
@@ -93,6 +113,14 @@ const ArticleList = ({ catId }) => {
         {renderProducts}
       </Grid>
       {/* <AppPagination setProducts={(p) => SetProducts(p)}></AppPagination> */}
+      <TablePagination
+        component="div"
+        onPageChange={handlePageChange}
+        page={pagingController.page}
+        count={articlesCount}
+        rowsPerPage={pagingController.rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Container>
   );
 };
