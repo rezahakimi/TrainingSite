@@ -23,6 +23,8 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
+  //const { title, content, userid, categories } = req.body;
+
   const pageSize = req.body.pageSize ? parseInt(req.body.pageSize) : 2;
   const pageNumber = req.body.pageNumber ? parseInt(req.body.pageNumber) : 1;
 
@@ -46,8 +48,8 @@ const getAllArticles = asyncHandler(async (req, res) => {
     */
 
   let articlesCount = await Article.count({});
-  const myArticles = await Article.find()
-    .sort({ id: 1 })
+  const myArticles = await Article.find({})
+    //.sort({ id: 1 })
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize)
     .populate({
