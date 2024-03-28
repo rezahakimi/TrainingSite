@@ -23,7 +23,7 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
-  const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
+  const pagination = req.body.pagination ? parseInt(req.body.pagination) : 2;
   const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
 
   const articles = await Article.find()
