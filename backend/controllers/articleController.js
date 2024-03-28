@@ -23,13 +23,23 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
-  const pagination = req.body.pagination ? parseInt(req.body.pagination) : 2;
-  const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
-  let articles = await Article.find();
-  const myArticles = await articles
+  const pageSize = req.body.pagination ? parseInt(req.body.pageSize) : 2;
+  const pageNumber = req.body.page ? parseInt(req.body.pageNumber) : 1;
+
+  /* const articles = await Article.aggregate([
+    {
+      $facet: {
+        metadata: [{ $count: 'totalCount' }],
+        data: [{ $skip: (pageNumber - 1) * pageSize }, { $limit: pageSize }],
+      },
+    },
+  ]); */
+
+  //let articles = await Article.find();
+  const myArticles = await Article.find()
     .sort({ id: 1 })
-    .skip((pageNumber - 1) * pagination)
-    .limit(pagination)
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
     .populate({
       path: "createdUser",
       match: {},
@@ -61,7 +71,9 @@ const getAllArticles = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json({ data: myArticlesReturn });
+    res
+      .status(200)
+      .json({ data: myArticlesReturn, dataCount: myArticles.count() });
   } else {
     res.status(404);
     throw new Error("Users not found");
