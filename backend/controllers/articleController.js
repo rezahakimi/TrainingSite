@@ -44,20 +44,23 @@ const getAllArticles = asyncHandler(async (req, res) => {
   if (articles) {
     const myArticles = articles.map((a) => {
       return {
-        id: a._id,
-        title: a.title,
-        content: a.content,
-        abstract: a.abstract,
-        createdDate: a.createdDate,
-        lastModifyDate: a.lastModifyDate,
-        createdUserId: a.createdUser._id,
-        createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
-        categories: a.categories.map((c) => {
-          return {
-            id: c._id,
-            title: c.title,
-          };
-        }),
+        data: {
+          id: a._id,
+          title: a.title,
+          content: a.content,
+          abstract: a.abstract,
+          createdDate: a.createdDate,
+          lastModifyDate: a.lastModifyDate,
+          createdUserId: a.createdUser._id,
+          createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+          categories: a.categories.map((c) => {
+            return {
+              id: c._id,
+              title: c.title,
+            };
+          }),
+        },
+        dataCount: articles.count(),
       };
     });
 

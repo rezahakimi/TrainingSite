@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Paper, Grid, Typography, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useGetAllArticlesQuery } from "../../slices/articleApiSlice";
@@ -34,6 +34,12 @@ const ArticleList = ({ catId }) => {
       });
     },
   };
+
+  const [passengersCount, setPassengersCount] = useState(0);
+  const [pagingController, setPagingController] = useState({
+    page: 0,
+    rowsPerPage: 10,
+  });
 
   const renderProducts = articles.map((a) => {
     return (
