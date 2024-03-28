@@ -33,9 +33,19 @@ const getAllArticles = asyncHandler(async (req, res) => {
         data: [{ $skip: (pageNumber - 1) * pageSize }, { $limit: pageSize }],
       },
     },
-  ]); */
+  ]); 
+  
+  return res.status(200).json({
+      success: true,
+      articles: {
+        metadata: { totalCount: articles[0].metadata[0].totalCount, page, pageSize },
+        data: articles[0].data,
+      },
+    });
+    
+    */
 
-  //let articles = await Article.find();
+  let articlesCount = await Article.count({});
   const myArticles = await Article.find()
     .sort({ id: 1 })
     .skip((pageNumber - 1) * pageSize)
@@ -71,9 +81,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
       };
     });
 
-    res
-      .status(200)
-      .json({ data: myArticlesReturn, dataCount: myArticles.count() });
+    res.status(200).json({ data: myArticlesReturn, dataCount: articlesCount });
   } else {
     res.status(404);
     throw new Error("Users not found");
