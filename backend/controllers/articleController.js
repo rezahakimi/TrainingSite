@@ -26,7 +26,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
   const pagination = req.body.pagination ? parseInt(req.body.pagination) : 2;
   const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
   let articles = await Article.find();
-  const myArticles = await articles
+  const myArticles = articles
     .sort({ id: 1 })
     .skip((pageNumber - 1) * pagination)
     .limit(pagination)
