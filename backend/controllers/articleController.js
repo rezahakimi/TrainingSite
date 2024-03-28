@@ -60,7 +60,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
             };
           }),
         },
-        dataCount: articles.count(),
+        dataCount: 10,
       };
     });
 
