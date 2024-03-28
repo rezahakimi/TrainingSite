@@ -20,8 +20,11 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       },
       // providesTags: ["User"],
       providesTags: (result, error, arg) =>
-        result
-          ? [...result.map(({ id }) => ({ type: "Article", id })), "Article"]
+        result.data
+          ? [
+              ...result.data.map(({ id }) => ({ type: "Article", id })),
+              "Article",
+            ]
           : ["Article"],
     }),
 

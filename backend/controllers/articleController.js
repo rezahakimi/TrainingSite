@@ -25,8 +25,8 @@ function difference(A, B) {
 const getAllArticles = asyncHandler(async (req, res) => {
   const pagination = req.body.pagination ? parseInt(req.body.pagination) : 2;
   const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
-
-  const articles = await Article.find()
+  let articles = await Article.find();
+  const myArticles = await articles
     .sort({ id: 1 })
     .skip((pageNumber - 1) * pagination)
     .limit(pagination)
@@ -41,8 +41,8 @@ const getAllArticles = asyncHandler(async (req, res) => {
       select: "title _id",
     })
     .exec();
-  if (articles) {
-    const myArticles = articles.map((a) => {
+  if (myArticles) {
+    const myArticlesReturn = myArticles.map((a) => {
       return {
         data: {
           id: a._id,
@@ -64,7 +64,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json(myArticles);
+    res.status(200).json(myArticlesReturn);
   } else {
     res.status(404);
     throw new Error("Users not found");
