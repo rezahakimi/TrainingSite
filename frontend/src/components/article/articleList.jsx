@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -29,6 +29,17 @@ const ArticleList = ({ catId }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
+  const [articlesCount, setArticlesCount] = useState(0);
+  const [pagingController, setPagingController] = useState({
+    page: 0,
+    rowsPerPage: 2,
+  });
+
+  useEffect(() => {
+    //setPassengersList(data.data);
+    if (articlesData) setArticlesCount(articlesData.artilesCount);
+  }, [pagingController]);
+
   //const [articles, SetArticless] = useState<IProducts[]>([]);
   /*   const getArticlesByPaging = {
     getdata: (from, to) => {
@@ -42,11 +53,6 @@ const ArticleList = ({ catId }) => {
     },
   }; */
 
-  const [articlesCount, setArticlesCount] = useState(0);
-  const [pagingController, setPagingController] = useState({
-    page: 0,
-    rowsPerPage: 2,
-  });
   const handlePageChange = (event, newPage) => {
     setPagingController({
       ...pagingController,

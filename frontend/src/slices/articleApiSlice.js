@@ -13,7 +13,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           };
         } else {
           return {
-            url: `${ARTICLE_URL}/`,
+            url: (page = 1) => `${ARTICLE_URL}/?page=${page}`,
             method: "GET",
           };
         }
