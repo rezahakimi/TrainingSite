@@ -17,28 +17,49 @@ const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
   //console.log(catId);
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [noMoreResults, setNoMoreResults] = useState(false);
+  const [articlesCount, setArticlesCount] = useState(0);
+  const [pagingController, setPagingController] = useState({
+    page: 2,
+    rowsPerPage: 2,
+  });
+  // const [articlesData, setUsers] = useState({
+  //   articlesData: [],
+  //   artilesCount: 5,
+  // });
+
+  console.log(pagingController.page);
+  let pageNumber = pagingController.page;
+
   const {
-    data: articlesData,
+    data,
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
     error: getUserError,
     isFetching: isGetFetching,
-  } = useGetAllArticlesQuery(catId);
+  } = useGetAllArticlesQuery(
+    { catId: catId, pageNumber: pageNumber }
+    // ,
+    // {
+    //   skip: noMoreResults,
+    // }
+  );
 
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
-
-  const [articlesCount, setArticlesCount] = useState(0);
-  const [pagingController, setPagingController] = useState({
-    page: 0,
-    rowsPerPage: 2,
-  });
-
-  useEffect(() => {
-    //setPassengersList(data.data);
-    if (articlesData) setArticlesCount(articlesData.artilesCount);
-  }, [pagingController]);
+  // useEffect(() => {
+  //   //   //setPassengersList(data.data);
+  //   console.log(data);
+  //   if (data) {
+  //     setUsers({ ...articlesData, ...data });
+  //   } else if (pagingController.page > 1) {
+  //     setNoMoreResults(true);
+  //   }
+  //   //   //if (articlesData) setArticlesCount(articlesData.artilesCount);
+  // }, [data]);
 
   //const [articles, SetArticless] = useState<IProducts[]>([]);
   /*   const getArticlesByPaging = {
@@ -67,11 +88,12 @@ const ArticleList = ({ catId }) => {
       page: 0,
     });
   };
-  if (isGetLoading && !articlesData) {
+  if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
-  console.log(articlesData.articlesData);
-  const renderProducts = articlesData.articlesData.map((a) => {
+  console.log(data.articlesData);
+
+  const renderProducts = data.articlesData.map((a) => {
     return (
       <Grid
         item
@@ -119,14 +141,24 @@ const ArticleList = ({ catId }) => {
         {renderProducts}
       </Grid>
       {/* <AppPagination setProducts={(p) => SetProducts(p)}></AppPagination> */}
-      <TablePagination
+      <button
+        onClick={() =>
+          setPagingController({
+            ...pagingController,
+            page: pagingController.page + 1,
+          })
+        }
+      >
+        Next
+      </button>
+      {/*  <TablePagination
         component="div"
         onPageChange={handlePageChange}
         page={pagingController.page}
         count={articlesCount}
         rowsPerPage={pagingController.rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      /> */}
     </Container>
   );
 };
