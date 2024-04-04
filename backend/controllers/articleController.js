@@ -24,8 +24,8 @@ function difference(A, B) {
 
 const getAllArticles = asyncHandler(async (req, res) => {
   //const { title, content, userid, categories } = req.body;
-  const pageSize = req.body.pageSize ? parseInt(req.query.pageSize) : 2;
-  const pageNumber = req.body.page ? parseInt(req.query.page) : 1;
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
+  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
 
   /* const articles = await Article.aggregate([
     {
