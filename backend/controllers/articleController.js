@@ -48,7 +48,16 @@ const getAllArticles = asyncHandler(async (req, res) => {
     */
 
   let articlesCount = await Article.count({});
-  const myArticles = await Article.find({ search })
+  const myArticles = await Article.find({
+    $or: [
+      {
+        title: search,
+      },
+      {
+        abstract: search,
+      },
+    ],
+  })
     //.sort({ id: 1 })
     .skip(pageNumber * pageSize)
     .limit(pageSize)

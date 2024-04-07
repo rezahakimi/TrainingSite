@@ -6,6 +6,7 @@ import {
   Typography,
   Container,
   TablePagination,
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useGetAllArticlesQuery } from "../../slices/articleApiSlice";
@@ -26,6 +27,7 @@ const ArticleList = ({ catId }) => {
     pageSize: 2,
     count: 5,
   });
+  const [searchContent, setSearchContent] = useState("");
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
   //   artilesCount: 5,
@@ -43,7 +45,12 @@ const ArticleList = ({ catId }) => {
     error: getUserError,
     isFetching: isGetFetching,
   } = useGetAllArticlesQuery(
-    { catId: catId, pageNumber: pageNumber, pageSize: pageSize }
+    {
+      catId: catId,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      search: searchContent,
+    }
     // ,
     // {
     //   skip: noMoreResults,
@@ -92,9 +99,15 @@ const ArticleList = ({ catId }) => {
       page: 0,
     });
   };
+
+  function something(value) {
+    setSearchContent(JSON.stringify(value));
+  }
+
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
+
   console.log(pagingController.page);
   console.log(pagingController.pageSize);
   console.log(pagingController.count);
@@ -139,6 +152,11 @@ const ArticleList = ({ catId }) => {
 
   return (
     <Container>
+      <TextField
+        onChange={(e) => {
+          something(e.target.value);
+        }}
+      />
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}

@@ -5,7 +5,7 @@ const ARTICLE_URL = "/articles";
 export const articleApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllArticles: builder.query({
-      query: ({ catid, pageNumber, pageSize }) => {
+      query: ({ catid, pageNumber, pageSize, search }) => {
         if (catid) {
           return {
             url: `${ARTICLE_URL}/cat/${catid}`,
@@ -13,7 +13,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           };
         } else {
           return {
-            url: `${ARTICLE_URL}/?page=${pageNumber}&pageSize=${pageSize}`,
+            url: `${ARTICLE_URL}/?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
             //url: `${ARTICLE_URL}/`,
             method: "GET",
           };
