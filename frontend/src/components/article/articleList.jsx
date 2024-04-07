@@ -22,10 +22,10 @@ const ArticleList = ({ catId }) => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
   const [noMoreResults, setNoMoreResults] = useState(false);
-  const [articlesCount, setArticlesCount] = useState(0);
   const [pagingController, setPagingController] = useState({
-    page: 2,
+    page: 0,
     rowsPerPage: 2,
+    count: 0,
   });
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
@@ -50,16 +50,20 @@ const ArticleList = ({ catId }) => {
     // }
   );
 
-  // useEffect(() => {
-  //   //   //setPassengersList(data.data);
-  //   console.log(data);
-  //   if (data) {
-  //     setUsers({ ...articlesData, ...data });
-  //   } else if (pagingController.page > 1) {
-  //     setNoMoreResults(true);
-  //   }
-  //   //   //if (articlesData) setArticlesCount(articlesData.artilesCount);
-  // }, [data]);
+  useEffect(() => {
+    //   //   //setPassengersList(data.data);
+    //   console.log(data);
+    //   if (data) {
+    //     setUsers({ ...articlesData, ...data });
+    //   } else if (pagingController.page > 1) {
+    //     setNoMoreResults(true);
+    //   }
+    if (data)
+      setPagingController({
+        ...pagingController,
+        count: data.artilesCount,
+      });
+  }, [data]);
 
   //const [articles, SetArticless] = useState<IProducts[]>([]);
   /*   const getArticlesByPaging = {
@@ -84,14 +88,16 @@ const ArticleList = ({ catId }) => {
   const handleChangeRowsPerPage = (event) => {
     setPagingController({
       ...pagingController,
-      rowsPerPage: parseInt(event.target.value, 10),
-      page: 0,
+      rowsPerPage: parseInt(event.target.value, 2),
+      page: 1,
     });
   };
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
+  //console.log(data);
   console.log(data.articlesData);
+  console.log(data.artilesCount);
 
   const renderProducts = data.articlesData.map((a) => {
     return (
@@ -151,14 +157,18 @@ const ArticleList = ({ catId }) => {
       >
         Next
       </button>
-      {/*  <TablePagination
+      <TablePagination
         component="div"
         onPageChange={handlePageChange}
-        page={pagingController.page}
-        count={articlesCount}
+        page={
+          !pagingController.count || pagingController.count <= 0
+            ? 1
+            : pagingController.page
+        }
+        count={pagingController.count || 0}
         rowsPerPage={pagingController.rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+      />
     </Container>
   );
 };

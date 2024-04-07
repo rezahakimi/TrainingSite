@@ -49,7 +49,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
   let articlesCount = await Article.count({});
   const myArticles = await Article.find({})
     //.sort({ id: 1 })
-    .skip((pageNumber - 1) * pageSize)
+    .skip(pageNumber * pageSize)
     .limit(pageSize)
     .populate({
       path: "createdUser",
@@ -84,7 +84,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
 
     res
       .status(200)
-      .json({ articlesData: myArticlesReturn, artilesCount: articlesCount });
+      .json({ articlesData: myArticlesReturn, artilcesCount: articlesCount });
   } else {
     res.status(404);
     throw new Error("Users not found");
