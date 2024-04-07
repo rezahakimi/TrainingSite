@@ -26,6 +26,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
   //const { title, content, userid, categories } = req.body;
   const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+  const search = req.query.search;
 
   /* const articles = await Article.aggregate([
     {
@@ -47,7 +48,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
     */
 
   let articlesCount = await Article.count({});
-  const myArticles = await Article.find({})
+  const myArticles = await Article.find({ search })
     //.sort({ id: 1 })
     .skip(pageNumber * pageSize)
     .limit(pageSize)

@@ -21,19 +21,19 @@ const ArticleList = ({ catId }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [noMoreResults, setNoMoreResults] = useState(false);
   const [pagingController, setPagingController] = useState({
     page: 0,
-    rowsPerPage: 2,
-    count: 0,
+    pageSize: 2,
+    count: 5,
   });
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
   //   artilesCount: 5,
   // });
 
-  console.log(pagingController.page);
+  //console.log(pagingController.page);
   let pageNumber = pagingController.page;
+  let pageSize = pagingController.pageSize;
 
   const {
     data,
@@ -43,7 +43,7 @@ const ArticleList = ({ catId }) => {
     error: getUserError,
     isFetching: isGetFetching,
   } = useGetAllArticlesQuery(
-    { catId: catId, pageNumber: pageNumber }
+    { catId: catId, pageNumber: pageNumber, pageSize: pageSize }
     // ,
     // {
     //   skip: noMoreResults,
@@ -61,7 +61,7 @@ const ArticleList = ({ catId }) => {
     if (data)
       setPagingController({
         ...pagingController,
-        count: data.artilesCount,
+        count: data.artilcesCount,
       });
   }, [data]);
 
@@ -88,16 +88,18 @@ const ArticleList = ({ catId }) => {
   const handleChangeRowsPerPage = (event) => {
     setPagingController({
       ...pagingController,
-      rowsPerPage: parseInt(event.target.value, 2),
-      page: 1,
+      pageSize: parseInt(event.target.value, 10),
+      page: 0,
     });
   };
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
-  //console.log(data);
-  console.log(data.articlesData);
-  console.log(data.artilesCount);
+  console.log(pagingController.page);
+  console.log(pagingController.pageSize);
+  console.log(pagingController.count);
+  //console.log(data.articlesData);
+  //console.log(data.artilcesCount);
 
   const renderProducts = data.articlesData.map((a) => {
     return (
@@ -166,8 +168,9 @@ const ArticleList = ({ catId }) => {
             : pagingController.page
         }
         count={pagingController.count || 0}
-        rowsPerPage={pagingController.rowsPerPage}
+        rowsPerPage={pagingController.pageSize}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[2, 4, 6, 8, { value: -1, label: "All" }]}
       />
     </Container>
   );
