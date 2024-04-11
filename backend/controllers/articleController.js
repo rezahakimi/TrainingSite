@@ -52,7 +52,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
     $or: [
       /*{},*/
       {
-        title: search,
+        title: "/.*" + search + ".*/",
       },
       {
         abstract: search,
