@@ -1,11 +1,11 @@
-import { Box, Typography, Stack, Chip } from "@mui/material";
+import { Box, Typography, Stack, Chip, Button } from "@mui/material";
 import {
   useGetArticleByIdQuery,
   useGetUserLikeArticleQuery,
   useILikeArticleMutation,
   useIDisLikeArticleMutation,
 } from "../../slices/articleApiSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ const ArticleDetails = ({ articleId, userId }) => {
 
   const [iLikeArticle] = useILikeArticleMutation();
   const [iDisLikeArticle] = useIDisLikeArticleMutation();
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     setILikedArticle((iliked) => false);
@@ -75,7 +77,7 @@ const ArticleDetails = ({ articleId, userId }) => {
         <Chip icon={<FavoriteIcon />} onClick={handleClick} label="With Icon" />
       );
   }
-  console.log(iWriteArticle);
+  // console.log(iWriteArticle);
 
   //console.log(iLikedArticle);
   return (
@@ -92,6 +94,9 @@ const ArticleDetails = ({ articleId, userId }) => {
           }, */
       }}
     >
+      <Button variant="text" onClick={() => navigate(-1)}>
+        Back
+      </Button>
       <Stack direction="row" spacing={1}>
         {article.categories.map((cat, index) => {
           return (

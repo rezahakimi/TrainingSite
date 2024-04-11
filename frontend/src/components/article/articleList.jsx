@@ -111,6 +111,10 @@ const ArticleList = ({ catId }) => {
     const data = new FormData(event.currentTarget);
     const txtSearch = data.get("txtSearch");
     setSearchContent(txtSearch);
+    setPagingController({
+      ...pagingController,
+      page: 0,
+    });
   };
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
