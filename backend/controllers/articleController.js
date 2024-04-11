@@ -47,7 +47,17 @@ const getAllArticles = asyncHandler(async (req, res) => {
     
     */
 
-  let articlesCount = await Article.count({});
+  let articlesCount = await Article.count({
+    $or: [
+      /*{},*/
+      {
+        title: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+      {
+        abstract: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+    ],
+  });
   const myArticles = await Article.find({
     $or: [
       /*{},*/

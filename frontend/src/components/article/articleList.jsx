@@ -7,6 +7,7 @@ import {
   Container,
   TablePagination,
   TextField,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useGetAllArticlesQuery } from "../../slices/articleApiSlice";
@@ -27,7 +28,9 @@ const ArticleList = ({ catId }) => {
     pageSize: 2,
     count: 5,
   });
+
   const [searchContent, setSearchContent] = useState("");
+
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
   //   artilesCount: 5,
@@ -100,16 +103,21 @@ const ArticleList = ({ catId }) => {
     });
   };
 
-  function something(value) {
-    setSearchContent(JSON.stringify(value));
-  }
-
+  /*   function handleSearchTextBoxChanged(value) {
+    setSearchTextBoxContent(value);
+  } */
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const txtSearch = data.get("txtSearch");
+    setSearchContent(txtSearch);
+  };
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
 
-  console.log(pagingController.page);
-  console.log(pagingController.pageSize);
+  //console.log(pagingController.page);
+  //console.log(pagingController.pageSize);
   console.log(pagingController.count);
   //console.log(data.articlesData);
   //console.log(data.artilcesCount);
@@ -152,44 +160,50 @@ const ArticleList = ({ catId }) => {
 
   return (
     <Container>
-      <TextField
-        onChange={(e) => {
-          something(e.target.value);
+      <Box
+        component="form"
+        sx={{
+          p: { xs: 4, md: 10 },
+          pt: 12,
+          pb: 12,
+          fontSize: { xs: "12px", md: "14px" },
         }}
-      />
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        justifyContent="center"
-        sx={{ margin: `20px 4px 10px 4px` }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
+        onSubmit={handleSearch}
       >
-        {renderProducts}
-      </Grid>
-      {/* <AppPagination setProducts={(p) => SetProducts(p)}></AppPagination> */}
-      <button
-        onClick={() =>
-          setPagingController({
-            ...pagingController,
-            page: pagingController.page + 1,
-          })
-        }
-      >
-        Next
-      </button>
-      <TablePagination
-        component="div"
-        onPageChange={handlePageChange}
-        page={
-          !pagingController.count || pagingController.count <= 0
-            ? 1
-            : pagingController.page
-        }
-        count={pagingController.count || 0}
-        rowsPerPage={pagingController.pageSize}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[2, 4, 6, 8, { value: -1, label: "All" }]}
-      />
+        <TextField
+          id="txtSearch"
+          name="txtSearch"
+          variant="standard"
+          label="Search"
+        />
+        <Button type="submit" variant="contained">
+          Search
+        </Button>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          justifyContent="center"
+          sx={{ margin: `20px 4px 10px 4px` }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {renderProducts}
+        </Grid>
+        {/* <AppPagination setProducts={(p) => SetProducts(p)}></AppPagination> */}
+
+        <TablePagination
+          component="div"
+          onPageChange={handlePageChange}
+          page={
+            !pagingController.count || pagingController.count <= 0
+              ? 1
+              : pagingController.page
+          }
+          count={pagingController.count || 0}
+          rowsPerPage={pagingController.pageSize}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[2, 4, 6, 8, { value: -1, label: "All" }]}
+        />
+      </Box>
     </Container>
   );
 };
