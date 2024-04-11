@@ -137,14 +137,20 @@ const getAllArticlesByCategory = asyncHandler(async (req, res) => {
   });
 
   const myArticles = await Article.find({
-    categories: new mongoose.Types.ObjectId(req.params.id),
-    $or: [
-      /*{},*/
+    $and: [
       {
-        title: { $regex: ".*" + search + ".*", $options: "i" },
+        categories: new mongoose.Types.ObjectId(req.params.id),
       },
       {
-        abstract: { $regex: ".*" + search + ".*", $options: "i" },
+        $or: [
+          /*{},*/
+          {
+            title: { $regex: ".*" + search + ".*", $options: "i" },
+          },
+          {
+            abstract: { $regex: ".*" + search + ".*", $options: "i" },
+          },
+        ],
       },
     ],
   })
