@@ -55,7 +55,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
         title: { $regex: ".*" + search + ".*" },
       },
       {
-        abstract: search,
+        abstract: { $regex: ".*" + search + ".*" },
       },
     ],
   })
