@@ -49,7 +49,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
 
   let articlesCount = await Article.count({});
   const myArticles = await Article.find({
-    $or: [
+    /*  $or: [
       {},
       {
         title: search,
@@ -57,7 +57,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
       {
         abstract: search,
       },
-    ],
+    ], */
   })
     //.sort({ id: 1 })
     .skip(pageNumber * pageSize)
