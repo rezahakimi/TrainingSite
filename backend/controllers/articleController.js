@@ -113,38 +113,9 @@ const getAllArticles = asyncHandler(async (req, res) => {
 });
 
 const getAllArticlesByCategory = asyncHandler(async (req, res) => {
-  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
-  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
-  const search = req.query.search;
-
-  let articlesCount = await Article.count({
+  const articles = await Article.find({
     categories: new mongoose.Types.ObjectId(req.params.id),
-    $or: [
-      /*{},*/
-      {
-        title: { $regex: ".*" + search + ".*", $options: "i" },
-      },
-      {
-        abstract: { $regex: ".*" + search + ".*", $options: "i" },
-      },
-    ],
-  });
-
-  const myArticles = await Article.find({
-    categories: new mongoose.Types.ObjectId(req.params.id),
-    $or: [
-      /*{},*/
-      {
-        title: { $regex: ".*" + search + ".*", $options: "i" },
-      },
-      {
-        abstract: { $regex: ".*" + search + ".*", $options: "i" },
-      },
-    ],
   })
-    //.sort({ id: 1 })
-    .skip(pageNumber * pageSize)
-    .limit(pageSize)
     .populate({
       path: "createdUser",
       match: {},
@@ -156,8 +127,8 @@ const getAllArticlesByCategory = asyncHandler(async (req, res) => {
       select: "title _id",
     })
     .exec();
-  if (myArticles) {
-    const myArticlesReturn = myArticles.map((a) => {
+  if (articles) {
+    const myArticles = articles.map((a) => {
       return {
         id: a._id,
         title: a.title,
@@ -176,9 +147,7 @@ const getAllArticlesByCategory = asyncHandler(async (req, res) => {
       };
     });
 
-    res
-      .status(200)
-      .json({ articlesData: myArticlesReturn, artilcesCount: articlesCount });
+    res.status(200).json(myArticles);
   } else {
     res.status(404);
     throw new Error("Users not found");
