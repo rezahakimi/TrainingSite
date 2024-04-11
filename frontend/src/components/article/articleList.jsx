@@ -18,7 +18,7 @@ import { border } from "polished";
 const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
-  //console.log(catId);
+  console.log(catId);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
