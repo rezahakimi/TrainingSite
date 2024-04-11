@@ -8,7 +8,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       query: ({ catId, pageNumber, pageSize, search }) => {
         if (catId) {
           return {
-            url: `${ARTICLE_URL}/cat/${catId}`,
+            url: `${ARTICLE_URL}/cat/${catId}?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
             method: "GET",
           };
         } else {
