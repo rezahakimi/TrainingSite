@@ -50,6 +50,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
   let articlesCount = await Article.count({});
   const myArticles = await Article.find({
     $or: [
+      {},
       {
         title: search,
       },
