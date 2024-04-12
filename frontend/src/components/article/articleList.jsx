@@ -15,6 +15,7 @@ import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";
+import { useGetArticleCatByIdQuery } from "../../slices/articleCatApiSlice";
 const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
@@ -45,7 +46,7 @@ const ArticleList = ({ catId }) => {
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
     isError: isGetError,
-    error: getUserError,
+    error: getGetArtilesError,
     isFetching: isGetFetching,
   } = useGetAllArticlesQuery(
     {
@@ -59,6 +60,8 @@ const ArticleList = ({ catId }) => {
     //   skip: noMoreResults,
     // }
   );
+
+  const { data: articleCat } = useGetArticleCatByIdQuery(catId);
 
   useEffect(() => {
     //   //   //setPassengersList(data.data);
@@ -119,10 +122,16 @@ const ArticleList = ({ catId }) => {
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
+  if (isGetFetching) {
+    return <div>Fetching...</div>;
+  }
+  if (isGetError) {
+    return <div>Message: {getGetArtilesError}</div>;
+  }
 
   //console.log(pagingController.page);
   //console.log(pagingController.pageSize);
-  console.log(pagingController.count);
+  //console.log(pagingController.count);
   //console.log(data.articlesData);
   //console.log(data.artilcesCount);
 
@@ -161,7 +170,7 @@ const ArticleList = ({ catId }) => {
       </Grid>
     );
   });
-
+  //console.log(articleCat);
   return (
     <Container>
       <Box
@@ -174,6 +183,14 @@ const ArticleList = ({ catId }) => {
         }}
         onSubmit={handleSearch}
       >
+        {articleCat && (
+          <Box sx={{ width: "100%", maxWidth: 500 }}>
+            <Typography variant="h3" gutterBottom>
+              # {articleCat.title}
+            </Typography>
+          </Box>
+        )}
+
         <TextField
           id="txtSearch"
           name="txtSearch"

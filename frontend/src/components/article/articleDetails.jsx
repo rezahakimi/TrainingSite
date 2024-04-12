@@ -1,4 +1,4 @@
-import { Box, Typography, Stack, Chip, Button } from "@mui/material";
+import { Box, Typography, Stack, Chip, Button, Container } from "@mui/material";
 import {
   useGetArticleByIdQuery,
   useGetUserLikeArticleQuery,
@@ -74,7 +74,7 @@ const ArticleDetails = ({ articleId, userId }) => {
     );
     if (iLikedArticle)
       renderLikedIcon = (
-        <Chip icon={<FavoriteIcon />} onClick={handleClick} label="With Icon" />
+        <Chip icon={<FavoriteIcon />} onClick={handleClick} label="i like" />
       );
   }
   // console.log(iWriteArticle);
@@ -109,6 +109,14 @@ const ArticleDetails = ({ articleId, userId }) => {
       <Typography variant={"h5"} lineHeight={2}>
         <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
       </Typography>
+      <Stack direction="row" spacing={2}>
+        <NavLink to={`/users/${article.createdUserId}/`}>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {article.createdUser}
+          </Typography>
+        </NavLink>
+        <Typography sx={{ fontSize: 14 }}>{article.createdDate}</Typography>
+      </Stack>
       <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
       <Stack direction="row" spacing={1}>
         {renderLikedIcon}

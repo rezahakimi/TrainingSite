@@ -48,9 +48,9 @@ const ArtilesPage = () => {
           <div>1</div>
         </Grid>
         <Grid item container direction="column" xs={8} spacing={2}>
-          <Grid item xs>
+          {/* <Grid item xs>
             <div>2</div>
-          </Grid>
+          </Grid> */}
           <Grid item xs>
             {articlesRender}
           </Grid>
