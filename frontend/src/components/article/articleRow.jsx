@@ -60,7 +60,7 @@ const ArticleRow = ({ article, matches }) => {
             <Stack direction="row" spacing={1}>
               {article.categories.map((cat, index) => (
                 <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
-                  <Chip variant="outlined" label={cat.title} clickable />
+                  <Chip variant="outlined" label={"#" + cat.title} clickable />
                 </NavLink>
               ))}
             </Stack>

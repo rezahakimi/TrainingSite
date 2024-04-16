@@ -53,6 +53,11 @@ const UserSchema = mongoose.Schema(
         },
       },
     ],
+    comments: [
+      {
+        commentId: { type: mongoose.Types.ObjectId, ref: "ArticleComment" },
+      },
+    ],
   },
   {
     timestamps: true,

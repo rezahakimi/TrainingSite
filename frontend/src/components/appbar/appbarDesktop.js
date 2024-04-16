@@ -16,7 +16,11 @@ import {
   AppbarHeader,
   MyList,
 } from "../../styles/appbar";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import PersonIcon from "@mui/icons-material/Person";
+import HomeIcon from "@mui/icons-material/Home";
+import ArticleIcon from "@mui/icons-material/Article";
+import CategoryIcon from "@mui/icons-material/Category";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -39,19 +43,19 @@ export default function AppbarDesktop({ matches }) {
       <MyList type="row">
         <ListItem>
           <ListItemIcon>
-            <PersonIcon />
+            <HomeIcon />
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/">Home</NavLink>} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <PersonIcon />
+            <ArticleIcon />
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/articles">Articles</NavLink>} />
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <PersonIcon />
+            <CategoryIcon />
           </ListItemIcon>
           <ListItemText
             primary={<NavLink to="/articles/?cat=all">Categories</NavLink>}
@@ -59,7 +63,7 @@ export default function AppbarDesktop({ matches }) {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <PersonIcon />
+            <AdminPanelSettingsIcon />
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/useradmin">Admin</NavLink>} />
         </ListItem>

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const ArticleCommentSchema = mongoose.Schema(
   {
     articleId: { type: mongoose.Types.ObjectId, ref: "Article" },
-    comments: [
+    userId: { type: mongoose.Types.ObjectId, ref: "User" },
+    /* comments: [
       {
         commentId: {
           type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +14,10 @@ const ArticleCommentSchema = mongoose.Schema(
           type: String,
         },
       },
-    ],
+    ], */
+    comment: {
+      type: String,
+    },
     commentCreatedDate: { type: Date },
     accept: {
       type: Boolean,

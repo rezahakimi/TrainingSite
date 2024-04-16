@@ -87,17 +87,31 @@ const ArticleDetails = ({ articleId, userId }) => {
         padding: 4,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         /* bgcolor: 'primary.main',
           '&:hover': {
             bgcolor: 'primary.dark',
           }, */
       }}
     >
-      <Button variant="text" onClick={() => navigate(-1)}>
-        Back
-      </Button>
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" justifyContent="start">
+        <Button variant="text" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+      </Stack>
+      <Stack direction="row" spacing={2} justifyContent="center">
+        <Typography variant={"h5"} lineHeight={2}>
+          <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
+        </Typography>
+      </Stack>
+      <Stack direction="row" spacing={2} justifyContent="center">
+        <NavLink to={`/users/${article.createdUserId}/`}>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {article.createdUser}
+          </Typography>
+        </NavLink>
+        <Typography sx={{ fontSize: 14 }}>{article.createdDate}</Typography>
+      </Stack>
+      <Stack direction="row" spacing={1} justifyContent="center">
         {article.categories.map((cat, index) => {
           return (
             <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
@@ -105,17 +119,6 @@ const ArticleDetails = ({ articleId, userId }) => {
             </NavLink>
           );
         })}
-      </Stack>
-      <Typography variant={"h5"} lineHeight={2}>
-        <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
-      </Typography>
-      <Stack direction="row" spacing={2}>
-        <NavLink to={`/users/${article.createdUserId}/`}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {article.createdUser}
-          </Typography>
-        </NavLink>
-        <Typography sx={{ fontSize: 14 }}>{article.createdDate}</Typography>
       </Stack>
       <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
       <Stack direction="row" spacing={1}>

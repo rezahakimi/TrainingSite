@@ -45,7 +45,7 @@ const ArtilesPage = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item xs={2}>
-          <div>1</div>
+          {/* <div>1</div> */}
         </Grid>
         <Grid item container direction="column" xs={8} spacing={2}>
           {/* <Grid item xs>
@@ -56,7 +56,7 @@ const ArtilesPage = () => {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          <div>4</div>
+          {/* <div>4</div> */}
         </Grid>
       </Grid>
     </ThemeProvider>

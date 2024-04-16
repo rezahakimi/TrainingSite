@@ -16,6 +16,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";
 import { useGetArticleCatByIdQuery } from "../../slices/articleCatApiSlice";
+import SearchIcon from "@mui/icons-material/Search";
+
 const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
@@ -190,16 +192,18 @@ const ArticleList = ({ catId }) => {
             </Typography>
           </Box>
         )}
-
-        <TextField
-          id="txtSearch"
-          name="txtSearch"
-          variant="standard"
-          label="Search"
-        />
-        <Button type="submit" variant="contained">
-          Search
-        </Button>
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <TextField
+            id="txtSearch"
+            name="txtSearch"
+            variant="standard"
+            label="Search"
+          />
+          {/* <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} /> */}
+          <Button type="submit" variant="contained" endIcon={<SearchIcon />}>
+            Search
+          </Button>
+        </Box>
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
