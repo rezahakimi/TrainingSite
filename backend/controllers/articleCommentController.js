@@ -13,7 +13,7 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       id: ac._id,
       articleId: ac.articleId,
       userId: ac.userId,
-      createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+      createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comments: ac.comments,
     };
 
