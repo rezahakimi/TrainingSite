@@ -7,7 +7,16 @@ const ArticleComment = db.articleComment;
 
 const getArticleCommentById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
-  const ac = await ArticleComment.findById(req.params.id).exec();
+  const ac = await ArticleComment.findById(req.params.id)
+    .populate({
+      path: "articleId",
+      populate: {
+        path: "createdUser", // in blogs, populate comments
+        match: {},
+        select: "firstname lastname _id", //"name -_id",
+      },
+    })
+    .exec();
   if (ac) {
     const myArticleComment = {
       id: ac._id,
@@ -49,7 +58,7 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       articleId: ac.articleId,
       userId: ac.userId,
       articlecreatedUser:
-        a.createdUser.firstname + " " + a.createdUser.lastname,
+        ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comments: ac.comments,
     };
 
