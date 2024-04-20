@@ -44,7 +44,7 @@ app.use(
 );
 app.use("/api/articles", articleRoutes);
 app.use("/api/articlecats", articleCatRoutes);
-app.use("/api/articlecom", articleCommenrRoutes);
+app.use("/api/articlecomments", articleCommenrRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use(express.static("public"));

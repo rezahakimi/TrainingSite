@@ -1,18 +1,46 @@
 import asyncHandler from "express-async-handler";
 import db from "../models/index.js";
 import Article from "../models/articleModel.js";
+import User from "../models/userModel.js";
 
 const ArticleComment = db.articleComment;
+
+const getArticleCommentById = asyncHandler(async (req, res) => {
+  //console.log(req.params.id);
+  const a = await ArticleComment.findById(req.params.id).exec();
+  if (a) {
+    const myArticleComment = {
+      id: ac._id,
+      articleId: ac.articleId,
+      userId: ac.userId,
+      createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+      comments: ac.comments,
+    };
+
+    res.status(200).json(myArticleComment);
+  } else {
+    res.status(404);
+    throw new Error("ArticleComment not found");
+  }
+});
 
 const getArticleComentByArticleId = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const ac = await ArticleComment.find({
     articleId: req.params.articleid,
-  }).exec();
+  })
+    .populate({
+      path: "userId",
+      match: {},
+      select: "firstname lastname _id", //"name -_id",
+    })
+    .exec();
   if (ac) {
     const myArticleComment = {
       id: ac._id,
       articleId: ac.articleId,
+      userId: ac.userId,
+      createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
       comments: ac.comments,
     };
 
@@ -25,46 +53,63 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
 
 const createArticleComment = asyncHandler(async (req, res) => {
   try {
-    const { articleId, commentId, comment } = req.body;
+    const { articleId, userId, comment } = req.body;
     const article = await Article.findById(articleId);
+    const user = await User.findById(userId);
 
     if (!article) {
       res.status(404);
       throw new Error("Article not found");
     }
-    if (commentId) {
-    } else {
-      const articleComment = new ArticleComment({
-        articleId,
-        comments: [comment],
-        commentCreatedDate: Date.now(),
-        accept: false,
-      });
-      await articleComment.save();
-      article.comments.push(articleComment);
-      await article.save();
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
     }
+
+    const articleComment = new ArticleComment({
+      articleId,
+      userId,
+      commentCreatedDate: Date.now(),
+      accept: false,
+    });
+    await articleComment.save();
+    article.comments.push(articleComment);
+    await article.save();
+    user.comments.push(articleComment);
+    await user.save();
+
     res.send({ message: "ArticleComment was Added successfully!" });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
   }
 });
 
-/* const updateArticleCat = asyncHandler(async (req, res) => {
-  const { id, title } = req.body;
-  const articleCat = await ArticleCat.findById(id);
+const updateArticleComment = asyncHandler(async (req, res) => {
+  try {
+    const { articleCommentId, accept } = req.body;
+    const articleComment = await ArticleComment.findById(articleCommentId);
 
-  if (!articleCat) {
-    res.status(404);
-    throw new Error("ArticleCat not found");
+    if (!articleComment) {
+      res.status(404);
+      throw new Error("ArticleComment not found");
+    }
+
+    if (articleComment) {
+      articleComment.accept = accept;
+    }
+
+    await articleComment.save();
+
+    res.send({ message: "ArticleComment was Update successfully!" });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
   }
+});
 
-  if (articleCat) {
-    articleCat.title = title;
-    articleCat.save().then((a) => {
-      res.send({ message: "ArticleCat was updated successfully!" });
-    });
-  }
-}); */
-
-export { createArticleComment, getArticleComentByArticleId };
+export {
+  createArticleComment,
+  updateArticleComment,
+  getArticleCommentById,
+  getArticleComentByArticleId,
+};
