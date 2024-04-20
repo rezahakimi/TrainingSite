@@ -7,8 +7,8 @@ const ArticleComment = db.articleComment;
 
 const getArticleCommentById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
-  const a = await ArticleComment.findById(req.params.id).exec();
-  if (a) {
+  const ac = await ArticleComment.findById(req.params.id).exec();
+  if (ac) {
     const myArticleComment = {
       id: ac._id,
       articleId: ac.articleId,
