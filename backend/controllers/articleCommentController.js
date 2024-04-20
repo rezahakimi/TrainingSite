@@ -70,6 +70,7 @@ const createArticleComment = asyncHandler(async (req, res) => {
     const articleComment = new ArticleComment({
       articleId,
       userId,
+      comment,
       commentCreatedDate: Date.now(),
       accept: false,
     });
