@@ -34,13 +34,19 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       match: {},
       select: "firstname lastname _id", //"name -_id",
     })
+    .populate({
+      path: "createdUser",
+      match: {},
+      select: "firstname lastname _id", //"name -_id",
+    })
     .exec();
   if (ac) {
     const myArticleComment = {
       id: ac._id,
       articleId: ac.articleId,
       userId: ac.userId,
-      createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+      articlecreatedUser:
+        a.createdUser.firstname + " " + a.createdUser.lastname,
       comments: ac.comments,
     };
 
