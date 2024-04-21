@@ -13,7 +13,7 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       populate: {
         path: "createdUser", // in blogs, populate comments
         match: {},
-        select: "firstname lastname _id", //"name -_id",
+        //select: "firstname lastname _id", //"name -_id",
       },
     })
     .exec();
@@ -22,8 +22,9 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       id: ac._id,
       articleId: ac.articleId,
       userId: ac.userId,
-      createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
+      //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comments: ac.comments,
+      ac,
     };
 
     res.status(200).json(myArticleComment);
