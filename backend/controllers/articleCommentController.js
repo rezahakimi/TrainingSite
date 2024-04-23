@@ -10,10 +10,11 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
   const ac = await ArticleComment.findById(req.params.id)
     .populate({
       path: "articleId",
+      //select: "",
       populate: {
         path: "createdUser", // in blogs, populate comments
         match: {},
-        //select: "firstname lastname _id", //"name -_id",
+        select: "firstname lastname _id", //"name -_id",
       },
     })
     .exec();
