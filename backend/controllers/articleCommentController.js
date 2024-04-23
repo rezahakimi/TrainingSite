@@ -24,7 +24,7 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       userId: ac.userId,
       //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comments: ac.comments,
-      fullName: ac.createdUser,
+      fullName: ac.createdUser.firstname,
     };
 
     res.status(200).json(myArticleComment);
