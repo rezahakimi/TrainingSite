@@ -48,7 +48,7 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const acs = await ArticleComment.find({
     articleId: req.params.articleid,
-    accept: { $eq: req.body.accept },
+    accept: { $eq: req.query.accept },
   })
     .populate({
       path: "articleId",
@@ -81,7 +81,7 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json(myArticleComments);
+    res.status(200).json({ articlePostsData: myArticleComments });
   } else {
     res.status(404);
     throw new Error("ArticleComment not found");

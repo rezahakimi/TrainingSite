@@ -9,6 +9,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useEffect, useState } from "react";
+import ArtilePosts from "./articlePosts";
 
 const ArticleDetails = ({ articleId, userId }) => {
   const { data: article, error, isLoading } = useGetArticleByIdQuery(articleId);
@@ -81,50 +82,57 @@ const ArticleDetails = ({ articleId, userId }) => {
 
   //console.log(iLikedArticle);
   return (
-    <Box
-      sx={{
-        borderRadius: 1,
-        padding: 4,
-        display: "flex",
-        flexDirection: "column",
-        /* bgcolor: 'primary.main',
+    <>
+      <Box
+        sx={{
+          borderRadius: 1,
+          padding: 4,
+          display: "flex",
+          flexDirection: "column",
+          /* bgcolor: 'primary.main',
           '&:hover': {
             bgcolor: 'primary.dark',
           }, */
-      }}
-    >
-      <Stack direction="row" justifyContent="start">
-        <Button variant="text" onClick={() => navigate(-1)}>
-          Back
-        </Button>
-      </Stack>
-      <Stack direction="row" spacing={2} justifyContent="center">
-        <Typography variant={"h5"} lineHeight={2}>
-          <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
-        </Typography>
-      </Stack>
-      <Stack direction="row" spacing={2} justifyContent="center">
-        <NavLink to={`/users/${article.createdUserId}/`}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {article.createdUser}
+        }}
+      >
+        <Stack direction="row" justifyContent="start">
+          <Button variant="text" onClick={() => navigate(-1)}>
+            Back
+          </Button>
+        </Stack>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Typography variant={"h5"} lineHeight={2}>
+            <div dangerouslySetInnerHTML={{ __html: article.title }}></div>
           </Typography>
-        </NavLink>
-        <Typography sx={{ fontSize: 14 }}>{article.createdDate}</Typography>
-      </Stack>
-      <Stack direction="row" spacing={1} justifyContent="center">
-        {article.categories.map((cat, index) => {
-          return (
-            <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
-              <Chip variant="outlined" label={cat.title} clickable />
-            </NavLink>
-          );
-        })}
-      </Stack>
-      <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
-      <Stack direction="row" spacing={1}>
-        {renderLikedIcon}
-      </Stack>
-    </Box>
+        </Stack>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <NavLink to={`/users/${article.createdUserId}/`}>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {article.createdUser}
+            </Typography>
+          </NavLink>
+          <Typography sx={{ fontSize: 14 }}>{article.createdDate}</Typography>
+        </Stack>
+        <Stack direction="row" spacing={1} justifyContent="center">
+          {article.categories.map((cat, index) => {
+            return (
+              <NavLink key={cat.id} to={`/articles/?cat=${cat.id}/`}>
+                <Chip variant="outlined" label={cat.title} clickable />
+              </NavLink>
+            );
+          })}
+        </Stack>
+        <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
+        <Stack direction="row" spacing={1}>
+          {renderLikedIcon}
+        </Stack>
+      </Box>
+      <ArtilePosts articleId={article.id}></ArtilePosts>
+    </>
   );
 };
 

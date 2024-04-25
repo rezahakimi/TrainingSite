@@ -63,7 +63,9 @@ const ArticleList = ({ catId }) => {
     // }
   );
 
-  const { data: articleCat } = useGetArticleCatByIdQuery(catId);
+  const { data: articleCat } = useGetArticleCatByIdQuery(catId, {
+    skip: catId === undefined,
+  });
 
   useEffect(() => {
     //   //   //setPassengersList(data.data);
