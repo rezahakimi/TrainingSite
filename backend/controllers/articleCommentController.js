@@ -70,10 +70,10 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       // userId: ac.userId._id,
       //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comment: ac.comment,
-      commentCreateFullName:
-        ac.articleId.createdUser.firstname +
-        " " +
-        ac.articleId.createdUser.lastname,
+      //commentCreateFullName:
+      //   ac.articleId.createdUser.firstname +
+      //   " " +
+      //   ac.articleId.createdUser.lastname,
       articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
     };
 
