@@ -8,6 +8,11 @@ import {
   TablePagination,
   TextField,
   Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
 } from "@mui/material";
 import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
@@ -28,6 +33,7 @@ const ArtilePosts = ({ articleId }) => {
     isFetching: isGetFetching,
   } = useGetAllArticlePostsByArticleIdQuery({
     articleId: articleId,
+    accept: true,
   });
 
   useEffect(() => {
@@ -51,7 +57,7 @@ const ArtilePosts = ({ articleId }) => {
   }
   console.log(data);
 
-  /*   const renderArticlePosts = data.articlePostsData.map((ap) => {
+  const renderArticlePosts = data.articlePostsData.map((ap) => {
     return (
       <Grid
         item
@@ -70,22 +76,61 @@ const ArtilePosts = ({ articleId }) => {
             background: "#fff",
           }}
         >
-          {matches ? <div>sdfsdf</div> : <div>{ap.id}</div>}
+          {matches ? (
+            <div>sdfsdf</div>
+          ) : (
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              </ListItemAvatar>
+              <ListItemText
+                primary={ap.commentCreateFullName}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {ap.comment}
+                    </Typography>
+                    {" more ..."}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          )}
         </Container>
       </Grid>
     );
-  }); */
+  });
   return (
     <Container>
       {/* <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        justifyContent="center"
+        justifyContent="flex-start"
         sx={{ margin: `20px 4px 10px 4px` }}
         columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-          {renderArticlePosts} 
-      </Grid> */}
+      > */}
+
+      <Box sx={{ width: "100%", maxWidth: 500 }}>
+        <Typography variant="h4" gutterBottom>
+          Comments
+        </Typography>
+      </Box>
+      <TextField
+        id="outlined-multiline-flexible"
+        label="Add to the discussion"
+        multiline
+        fullWidth
+        maxRows={4}
+      />
+      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        {renderArticlePosts}
+      </List>
+      {/* </Grid> */}
     </Container>
   );
 };

@@ -5,16 +5,18 @@ const ARTICLEPOST_URL = "/articlecomments";
 export const articlePostApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllArticlePostsByArticleId: builder.query({
-      query: ({ articleId }) => ({
-        url: `${ARTICLEPOST_URL}/article/${articleId}`,
-        body: { accept: true },
+      query: ({ articleId, accept }) => ({
+        url: `${ARTICLEPOST_URL}/article/${articleId}/?accept=${accept}`,
         method: "GET",
       }),
       // providesTags: ["User"],
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "ArticlePost", id })),
+              ...result.articlePostsData.map(({ id }) => ({
+                type: "ArticlePost",
+                id,
+              })),
               "ArticlePost",
             ]
           : ["ArticlePost"],
