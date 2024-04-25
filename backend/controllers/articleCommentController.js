@@ -62,17 +62,17 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
     // })
     .exec();
   if (ac) {
-    const myArticleComment = {
-      id: ac._id,
-      articleId: ac.articleId._id,
-      userId: ac.userId._id,
-      //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
-      comment: ac.comment,
-      fullName:
-        ac.articleId.createdUser.firstname +
-        " " +
-        ac.articleId.createdUser.lastname,
-    };
+    //   const myArticleComment = {
+    //     id: ac._id,
+    //     articleId: ac.articleId._id,
+    //     userId: ac.userId._id,
+    //     //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
+    //     comment: ac.comment,
+    //     fullName:
+    //       ac.articleId.createdUser.firstname +
+    //       " " +
+    //       ac.articleId.createdUser.lastname,
+    //   };
 
     res.status(200).json(ac);
   } else {
