@@ -74,7 +74,7 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
         ac.articleId.createdUser.lastname,
     };
 
-    res.status(200).json(myArticleComment);
+    res.status(200).json(ac);
   } else {
     res.status(404);
     throw new Error("ArticleComment not found");
