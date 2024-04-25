@@ -25,7 +25,10 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       userId: ac.userId._id,
       //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
       comment: ac.comment,
-      fullName: ac.articleId.createdUser.firstname,
+      fullName:
+        ac.articleId.createdUser.firstname +
+        " " +
+        ac.articleId.createdUser.lastname,
     };
 
     res.status(200).json(myArticleComment);
@@ -41,27 +44,34 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
     articleId: req.params.articleid,
   })
     .populate({
-      path: "userId",
-      match: {},
-      select: "firstname lastname _id", //"name -_id",
-    })
-    .populate({
       path: "articleId",
+      //select: "",
       populate: {
         path: "createdUser", // in blogs, populate comments
         match: {},
         select: "firstname lastname _id", //"name -_id",
       },
     })
+    // .populate({
+    //   path: "articleId",
+    //   populate: {
+    //     path: "createdUser", // in blogs, populate comments
+    //     match: {},
+    //     select: "firstname lastname _id", //"name -_id",
+    //   },
+    // })
     .exec();
   if (ac) {
     const myArticleComment = {
       id: ac._id,
-      articleId: ac.articleId,
-      userId: ac.userId,
-      articlecreatedUser:
-        ac.createdUser.firstname + " " + ac.createdUser.lastname,
-      comments: ac.comments,
+      articleId: ac.articleId._id,
+      userId: ac.userId._id,
+      //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
+      comment: ac.comment,
+      fullName:
+        ac.articleId.createdUser.firstname +
+        " " +
+        ac.articleId.createdUser.lastname,
     };
 
     res.status(200).json(myArticleComment);
