@@ -69,17 +69,16 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
         id: ac._id,
         articleId: ac.articleId._id,
         userId: ac.userId._id,
-        comment: ac[0].comment,
+        comment: ac.comment,
         commentCreateFullName:
           ac.articleId.createdUser.firstname +
           " " +
           ac.articleId.createdUser.lastname,
-        articleCreateFullName:
-          ac[0].userId.firstname + " " + ac[0].userId.lastname,
+        articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
       };
     });
 
-    res.status(200).json(ac);
+    res.status(200).json(myArticleComment);
   } else {
     res.status(404);
     throw new Error("ArticleComment not found");
