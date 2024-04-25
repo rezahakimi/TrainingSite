@@ -45,7 +45,7 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
 
 const getArticleComentByArticleId = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
-  const ac = await ArticleComment.find({
+  const acs = await ArticleComment.find({
     articleId: req.params.articleid,
   })
     .populate({
@@ -63,8 +63,8 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       select: "firstname lastname _id", //"name -_id",
     })
     .exec();
-  if (ac) {
-    const myArticleComment = ac.map((a) => {
+  if (acs) {
+    const myArticleComments = acs.map((ac) => {
       return {
         id: ac._id,
         articleId: ac.articleId._id,
@@ -78,7 +78,7 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
       };
     });
 
-    res.status(200).json(myArticleComment);
+    res.status(200).json(myArticleComments);
   } else {
     res.status(404);
     throw new Error("ArticleComment not found");
