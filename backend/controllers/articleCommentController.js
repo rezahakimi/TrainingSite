@@ -17,6 +17,11 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
         select: "firstname lastname _id", //"name -_id",
       },
     })
+    .populate({
+      path: "userId",
+      match: {},
+      select: "firstname lastname _id", //"name -_id",
+    })
     .exec();
   if (ac) {
     const myArticleComment = {
@@ -59,17 +64,18 @@ const getArticleComentByArticleId = asyncHandler(async (req, res) => {
     })
     .exec();
   if (ac) {
-    //   const myArticleComment = {
-    //     id: ac._id,
-    //     articleId: ac.articleId._id,
-    //     userId: ac.userId._id,
-    //     //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
-    //     comment: ac.comment,
-    //     fullName:
-    //       ac.articleId.createdUser.firstname +
-    //       " " +
-    //       ac.articleId.createdUser.lastname,
-    //   };
+    const myArticleComment = {
+      id: ac._id,
+      articleId: ac.articleId._id,
+      userId: ac.userId._id,
+      //createdUser: ac.createdUser.firstname + " " + ac.createdUser.lastname,
+      comment: ac.comment,
+      commentCreateFullName:
+        ac.articleId.createdUser.firstname +
+        " " +
+        ac.articleId.createdUser.lastname,
+      articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
+    };
 
     res.status(200).json(ac);
   } else {
