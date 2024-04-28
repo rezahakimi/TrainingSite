@@ -562,6 +562,7 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
 export {
   createArticle,
   deleteArticle,
+  getAllArticles,
   getAllArticlesWithSearch,
   getArticleById,
   updateArticle,
