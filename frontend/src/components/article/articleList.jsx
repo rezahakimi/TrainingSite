@@ -10,12 +10,12 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useGetAllArticlesQuery } from "../../slices/articleApiSlice";
 import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";
 import { useGetArticleCatByIdQuery } from "../../slices/articleCatApiSlice";
+import { useGetAllArticlesWithSearchQuery } from "../../slices/articleApiSlice";
 import SearchIcon from "@mui/icons-material/Search";
 
 const pagesize = 3;
@@ -50,7 +50,7 @@ const ArticleList = ({ catId }) => {
     isError: isGetError,
     error: getGetArtilesError,
     isFetching: isGetFetching,
-  } = useGetAllArticlesQuery(
+  } = useGetAllArticlesWithSearchQuery(
     {
       catId: catId,
       pageNumber: pageNumber,

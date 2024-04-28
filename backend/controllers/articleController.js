@@ -23,6 +23,48 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
+  const myArticles = await Article.find({})
+    .populate({
+      path: "createdUser",
+      match: {},
+      select: "firstname lastname _id",
+    })
+    .populate({
+      path: "categories",
+      match: {},
+      select: "title _id",
+    })
+    .exec();
+  if (myArticles) {
+    const myArticlesReturn = myArticles.map((a) => {
+      return {
+        id: a._id,
+        title: a.title,
+        content: a.content,
+        abstract: a.abstract,
+        createdDate: a.createdDate,
+        lastModifyDate: a.lastModifyDate,
+        createdUserId: a.createdUser._id,
+        createdUser: a.createdUser.firstname + " " + a.createdUser.lastname,
+        categories: a.categories.map((c) => {
+          return {
+            id: c._id,
+            title: c.title,
+          };
+        }),
+      };
+    });
+
+    res
+      .status(200)
+      .json({ articlesData: myArticlesReturn, artilcesCount: articlesCount });
+  } else {
+    res.status(404);
+    throw new Error("Users not found");
+  }
+});
+
+const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   //const { title, content, userid, categories } = req.body;
   const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
@@ -112,7 +154,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllArticlesByCategory = asyncHandler(async (req, res) => {
+const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
   const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const search = req.query.search;
@@ -520,10 +562,10 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
 export {
   createArticle,
   deleteArticle,
-  getAllArticles,
+  getAllArticlesWithSearch,
   getArticleById,
   updateArticle,
-  getAllArticlesByCategory,
+  getAllArticlesByCategoryWithSearch,
   iLikeArticle,
   iDisLikeArticle,
   getUsersLikeArticle,

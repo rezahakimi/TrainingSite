@@ -4,16 +4,16 @@ const ARTICLE_URL = "/articles";
 
 export const articleApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllArticles: builder.query({
+    getAllArticlesWithSearch: builder.query({
       query: ({ catId, pageNumber, pageSize, search }) => {
         if (catId) {
           return {
-            url: `${ARTICLE_URL}/cat/${catId}?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
+            url: `${ARTICLE_URL}/cat/search/${catId}?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
             method: "GET",
           };
         } else {
           return {
-            url: `${ARTICLE_URL}/?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
+            url: `${ARTICLE_URL}/search/?page=${pageNumber}&pageSize=${pageSize}&search=${search}`,
             //url: `${ARTICLE_URL}/`,
             method: "GET",
           };
@@ -28,7 +28,17 @@ export const articleApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "Article", id: "PARTIAL-LIST" }],
     }),
-
+    getAllArticles: builder.query({
+      query: () => ({
+        url: `${ARTICLE_URL}/`,
+        method: "GET",
+      }),
+      // providesTags: ["User"],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: "Article", id })), "Article"]
+          : ["Article"],
+    }),
     getAllArticlesByCategory: builder.query({
       query: (catid) => ({
         url: `${ARTICLE_URL}/cat/${catid}`,
@@ -123,6 +133,7 @@ export const articleApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetAllArticlesWithSearchQuery,
   useGetAllArticlesQuery,
   useGetAllArticlesByCategoryQuery,
   useCreateArticleMutation,

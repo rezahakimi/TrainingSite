@@ -2,8 +2,9 @@ import express from "express";
 import {
   createArticle,
   deleteArticle,
+  getAllArticlesWithSearch,
   getAllArticles,
-  getAllArticlesByCategory,
+  getAllArticlesByCategoryWithSearch,
   getArticleById,
   updateArticle,
   iLikeArticle,
@@ -16,9 +17,10 @@ import {
 
 const router = express.Router();
 
-router.route("/cat/:id").get(getAllArticlesByCategory);
+router.route("/cat/search/:id").get(getAllArticlesByCategoryWithSearch);
 router.route("/:id").get(getArticleById);
 router.route("/").get(getAllArticles);
+router.route("/search/").get(getAllArticlesWithSearch);
 router.route("/").post(createArticle);
 router.route("/").patch(updateArticle);
 router.route("/:id").delete(deleteArticle);

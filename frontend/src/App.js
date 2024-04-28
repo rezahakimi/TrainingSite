@@ -41,7 +41,7 @@ function App() {
   const { userInfo: user } = useSelector((state) => state.auth);
 
   let apppbar;
-  //console.log(user)
+  console.log(user);
   //if (user) {
   apppbar = (
     <>
