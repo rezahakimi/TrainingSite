@@ -69,7 +69,7 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const search = req.query.search;
-
+  console.log(pageSize);
   /* const articles = await Article.aggregate([
     {
       $facet: {
