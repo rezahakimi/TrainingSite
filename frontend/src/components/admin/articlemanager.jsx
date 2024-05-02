@@ -23,13 +23,20 @@ import ArticlemanagerDialog from "./articlemanagerDialog";
 
 const ArticleManager = () => {
   // const childRef = useRef(null);
-  const { data: articles = [] } = useGetAllArticlesQuery();
+  const {
+    data: articles = [],
+    isLoading: isGetLoading,
+    isSuccess: isGetSuccess,
+    isError: isGetError,
+    error: getGetArtilesError,
+    isFetching: isGetFetching,
+  } = useGetAllArticlesQuery();
   const [deleteArticle] = useDeleteArticleMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
   const [id, setId] = useState("");
   //const [fetchArticleMain, setFetchArticleMain] = useState(true);
-  //console.log(user)
+  //console.log(openModal);
 
   const columns = [
     {
@@ -96,7 +103,16 @@ const ArticleManager = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
+  if (isGetLoading && !articles) {
+    return <div>Loading...</div>;
+  }
+  if (isGetFetching) {
+    return <div>Fetching...</div>;
+  }
+  if (isGetError) {
+    return <div>Message: {getGetArtilesError}</div>;
+  }
+  //console.log(articles.articlesData);
   return (
     <>
       <div style={{ height: 700, width: "100%" }}>
@@ -111,7 +127,7 @@ const ArticleManager = () => {
             </Button>
           </Stack>
           <DataGrid
-            rows={articles}
+            rows={articles.articlesData}
             columns={columns}
             pageSize={4}
             rowsPerPageOptions={[4]}

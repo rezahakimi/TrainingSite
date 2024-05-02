@@ -45,7 +45,7 @@ const initialArticleState = {
   createdDate: "",
   lastModifyDate: "",
   createdUserId: "",
-  createdUser: "",
+  //createdUser: "",
   categories: [],
 };
 
@@ -63,17 +63,23 @@ const ArticlemanagerDialog = ({
   const [updateArticle] = useUpdateArticleMutation();
   const { data: users = [] } = useGetAllUsersQuery();
 
-  const { data: articleCats = [], isLoading: isArticleCatLoading } =
-    useGetAllArticleCatsQuery();
+  const {
+    data: articleCats = [],
+    isLoading: isArticleCatLoading,
+    isFetching: isArticleCatFetching,
+  } = useGetAllArticleCatsQuery();
 
   const {
     data: article,
     isLoading: isArticleLoading,
+    isFetching: isArticleFetching,
     isSuccess: isGetSuccess,
     isError: isGetError,
     error: getError,
     isFetching: isGetFetching,
-  } = useGetArticleByIdQuery(idProp, { pollingInterval: 3000 }); //, { skip: fetchArticle });
+  } = useGetArticleByIdQuery(idProp, {
+    skip: !openModalProp,
+  }); //, { skip: fetchArticle });
 
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
@@ -107,14 +113,13 @@ const ArticlemanagerDialog = ({
             categories: article.categories,
           })
         ); */
-      // console.log(article.categories);
       setDisplayArticleModal({
         id: article.id,
         title: article.title,
         createdDate: article.createdDate,
         lastModifyDate: article.lastModifyDate,
         createdUserId: article.createdUserId,
-        createdUser: article.createdUser,
+        //createdUser: article.createdUser,
         categories: article.categories,
       });
       setEditorAbstract(article.abstract);
@@ -130,7 +135,7 @@ const ArticlemanagerDialog = ({
 
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
-      // console.log(articleDisplayModal);
+      //console.log(articleDisplayModal);
 
       const res = await updateArticle({
         id: articleDisplayModal.id,
@@ -171,46 +176,56 @@ const ArticlemanagerDialog = ({
   if (isArticleCatLoading)
     return <Button variant="text">isArticleCatLoading -----------</Button>;
   if (!article) return <Button variant="text">Article -----------</Button>;
+  if (isArticleFetching)
+    return <Button variant="text">isArticleFetching -----------</Button>;
+  if (isArticleCatFetching)
+    return <Button variant="text">isArticleCatFetching -----------</Button>;
 
   let renderSelectedArticleCats;
-  let selectedArticleCats = [];
+  //let selectedArticleCats = [];
   //console.log(articleDisplayModal?.categories);
 
-  if (
+  /*  if (
     articleDisplayModal.categories !== undefined &&
     articleDisplayModal.categories.length > 0
   ) {
     selectedArticleCats = articleCats.filter((ac) =>
-      articleDisplayModal.categories.some((item) => item === ac.id)
-    );
-    //.map(i=>i.id);
-    console.log(selectedArticleCats);
-  }
+      articleDisplayModal.categories.some((item) => item.id === ac.id)
+    ); */
+  //.map(i=>i.id);
+  //console.log(selectedArticleCats);
+  //}
 
   //if (selectedArticleCats?.length > 0) {
+  console.log(articleDisplayModal);
+  //console.log(articleCats);
+  //  console.log(selectedArticleCats);
+
   renderSelectedArticleCats = (
     <Autocomplete
       sx={{ mt: 2 }}
       multiple
       id="tags-filled"
       options={articleCats}
-      value={selectedArticleCats || null}
+      value={articleDisplayModal.categories || null}
       freeSolo
-      renderTags={(value, getTagProps) =>
-        value.map((option, index) => (
+      isOptionEqualToValue={(option, val) => option.id === val.id}
+      renderTags={(value, getTagProps) => {
+        return value.map((option, index) => (
           <Chip
             variant="outlined"
             label={option.title}
             {...getTagProps({ index })}
           />
-        ))
-      }
+        ));
+      }}
       getOptionLabel={(option) => option.title || ""}
       onChange={(event, newValue) => {
+        //console.log(newValue);
         setDisplayArticleModal((prevPostsData) => {
           return {
             ...prevPostsData,
-            categories: newValue.map((nv) => nv.id),
+            categories: newValue.map((nv) => nv),
           };
         });
       }}
