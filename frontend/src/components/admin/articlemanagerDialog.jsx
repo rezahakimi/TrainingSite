@@ -135,7 +135,7 @@ const ArticlemanagerDialog = ({
 
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
-      //console.log(articleDisplayModal);
+      console.log(articleDisplayModal);
 
       const res = await updateArticle({
         id: articleDisplayModal.id,
@@ -143,7 +143,11 @@ const ArticlemanagerDialog = ({
         abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
-        categories: articleDisplayModal.categories,
+        categories: [] /*articleDisplayModal.categories.map((c) => {
+          return {
+            id: c.id,
+          };
+        }), */,
       }).unwrap();
       //console.log(articleDisplayModal);
 
@@ -197,7 +201,7 @@ const ArticlemanagerDialog = ({
   //}
 
   //if (selectedArticleCats?.length > 0) {
-  console.log(articleDisplayModal);
+  //console.log(articleDisplayModal);
   //console.log(articleCats);
   //  console.log(selectedArticleCats);
 

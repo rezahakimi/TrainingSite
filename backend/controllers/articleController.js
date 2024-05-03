@@ -324,7 +324,7 @@ const updateArticle = asyncHandler(async (req, res) => {
     throw new Error("Article not found");
   }
 
-  const user = await User.findById(article.createdUser);
+  const user = await User.findById(userid);
   if (!user) {
     res.status(404);
     throw new Error("User not found");
@@ -334,7 +334,7 @@ const updateArticle = asyncHandler(async (req, res) => {
     article.title = title;
     article.content = content;
     article.abstract = abstract;
-    article.createdUser = user._id;
+    article.createdUser = userid;
     article.categories = categories;
 
     const oldcategories = article.categories;
