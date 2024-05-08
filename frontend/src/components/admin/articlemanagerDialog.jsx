@@ -135,20 +135,20 @@ const ArticlemanagerDialog = ({
 
   const handleSubmmit = async () => {
     if (modalModeProp === "update") {
-      console.log(articleDisplayModal);
-
-      const res = await updateArticle({
+      let xx = {
         id: articleDisplayModal.id,
         title: articleDisplayModal.title,
         abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
-        categories: [] /*articleDisplayModal.categories.map((c) => {
+        categories: articleDisplayModal.categories.map((c) => {
           return {
             id: c.id,
           };
-        }), */,
-      }).unwrap();
+        }),
+      };
+      console.log(xx);
+      const res = await updateArticle(xx).unwrap();
       //console.log(articleDisplayModal);
 
       if (res) {

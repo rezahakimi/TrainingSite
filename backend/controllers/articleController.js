@@ -331,26 +331,33 @@ const updateArticle = asyncHandler(async (req, res) => {
   }
 
   if (article) {
+    const oldcategories = article.categories;
     article.title = title;
     article.content = content;
     article.abstract = abstract;
     article.createdUser = userid;
     article.categories = categories;
 
-    const oldcategories = article.categories;
-
     await article.save();
 
-    const added = difference(categories, oldcategories);
-    const removed = difference(oldcategories, categories);
-    await ArticleCat.updateMany(
-      { _id: added },
-      { $addToSet: { articles: article._id } }
-    );
-    await ArticleCat.updateMany(
-      { _id: removed },
-      { $pull: { articles: article._id } }
-    );
+    if (oldcategories.length > 0) {
+      const added = difference(categories, oldcategories);
+      const removed = difference(oldcategories, categories);
+
+      await ArticleCat.updateMany(
+        { _id: added },
+        { $addToSet: { articles: article._id } }
+      );
+      await ArticleCat.updateMany(
+        { _id: removed },
+        { $pull: { articles: article._id } }
+      );
+    } else {
+      await ArticleCat.updateMany(
+        { _id: categories },
+        { $addToSet: { articles: article._id } }
+      );
+    }
 
     res.send({ message: "Article was updated successfully!" });
   }
