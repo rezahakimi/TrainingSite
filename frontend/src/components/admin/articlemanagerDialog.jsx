@@ -142,9 +142,7 @@ const ArticlemanagerDialog = ({
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
         categories: articleDisplayModal.categories.map((c) => {
-          return {
-            id: c.id,
-          };
+          return c.id;
         }),
       };
       console.log(xx);
