@@ -352,10 +352,10 @@ const updateArticle = asyncHandler(async (req, res) => {
         { $pull: { articles: article._id } }
       ); */
     } else {
-      await ArticleCat.updateMany(
+      /* await ArticleCat.updateMany(
         { _id: categories },
         { $addToSet: { articles: article._id } }
-      );
+      ); */
     }
 
     res.send({ message: "Article was updated successfully!" });
