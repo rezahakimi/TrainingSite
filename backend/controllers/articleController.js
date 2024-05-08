@@ -340,10 +340,10 @@ const updateArticle = asyncHandler(async (req, res) => {
 
     await article.save();
 
-    if (oldcategories?.length > 0) {
-      // const added = difference(categories, oldcategories);
-      // const removed = difference(oldcategories, categories);
-      /*  await ArticleCat.updateMany(
+    // if (oldcategories?.length > 0) {
+    // const added = difference(categories, oldcategories);
+    // const removed = difference(oldcategories, categories);
+    /*  await ArticleCat.updateMany(
         { _id: added },
         { $addToSet: { articles: article._id } }
       );11111111111
@@ -351,12 +351,12 @@ const updateArticle = asyncHandler(async (req, res) => {
         { _id: removed },
         { $pull: { articles: article._id } }
       ); */
-    } else {
-      /* await ArticleCat.updateMany(
+    //  } else {
+    /* await ArticleCat.updateMany(
         { _id: categories },
         { $addToSet: { articles: article._id } }
       ); */
-    }
+    // }
 
     res.send({ message: "Article was updated successfully!" });
   }
