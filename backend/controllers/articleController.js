@@ -340,7 +340,7 @@ const updateArticle = asyncHandler(async (req, res) => {
 
     await article.save();
 
-    if (oldcategories.length > 0) {
+    if (oldcategories?.length > 0) {
       // const added = difference(categories, oldcategories);
       // const removed = difference(oldcategories, categories);
       /*  await ArticleCat.updateMany(
