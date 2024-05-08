@@ -344,14 +344,14 @@ const updateArticle = asyncHandler(async (req, res) => {
       const added = difference(categories, oldcategories);
       const removed = difference(oldcategories, categories);
 
-      await ArticleCat.updateMany(
+      /*  await ArticleCat.updateMany(
         { _id: added },
         { $addToSet: { articles: article._id } }
       );
       await ArticleCat.updateMany(
         { _id: removed },
         { $pull: { articles: article._id } }
-      );
+      ); */
     } else {
       await ArticleCat.updateMany(
         { _id: categories },
