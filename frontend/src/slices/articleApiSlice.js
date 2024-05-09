@@ -33,14 +33,20 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         url: `${ARTICLE_URL}/`,
         method: "GET",
       }),
-      // providesTags: ["User"],
-      providesTags: (result, error, arg) =>
-        result
+      providesTags: ["Article"],
+      /* providesTags: (result, error, arg) => {
+        console.log(
+          result
+            ? result.articlesData.map(({ id }) => ({ type: "Article", id }))
+            : ["Article"]
+        );
+        return result.articlesData
           ? [
               ...result.articlesData.map(({ id }) => ({ type: "Article", id })),
               "Article",
             ]
-          : ["Article"],
+          : ["Article"];
+      }, */
     }),
     getAllArticlesByCategory: builder.query({
       query: (catid) => ({
@@ -71,6 +77,10 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      /* invalidatesTags: (result, error, arg) => {
+        console.log(arg.id);
+        return [{ type: "Article", id: arg.id }];
+      }, */
       invalidatesTags: ["Article"],
     }),
     deleteArticle: builder.mutation({
@@ -86,7 +96,9 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       query: (id) => ({
         url: `${ARTICLE_URL}/${id}`,
         method: "GET",
-        providesTags: ["Article"],
+        query: (id) => `post/${id}`,
+        invalidatesTags: ["Article"],
+        //providesTags: (result, error, id) => [{ type: "Article", id }],
       }),
     }),
     iLikeArticle: builder.mutation({

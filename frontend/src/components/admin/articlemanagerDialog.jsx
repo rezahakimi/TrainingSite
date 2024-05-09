@@ -76,11 +76,14 @@ const ArticlemanagerDialog = ({
     isSuccess: isGetSuccess,
     isError: isGetError,
     error: getError,
-    isFetching: isGetFetching,
-  } = useGetArticleByIdQuery(idProp, {
+  } = useGetArticleByIdQuery(
+    idProp /* {
     skip: !openModalProp,
-  }); //, { skip: fetchArticle });
-
+  } */
+    // { refetchOnMountOrArgChange: true }
+  ); //, { skip: fetchArticle });
+  console.log(idProp);
+  console.log(article);
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
 
@@ -89,6 +92,7 @@ const ArticlemanagerDialog = ({
 
   useEffect(() => {
     if (modalModeProp === "update" && article) {
+      // console.log(article);
       const x = {
         id: article.id,
         title: article.title,
@@ -145,7 +149,7 @@ const ArticlemanagerDialog = ({
           return c.id;
         }),
       };
-      console.log(xx);
+      //console.log(xx);
       const res = await updateArticle(xx).unwrap();
       //console.log(articleDisplayModal);
 
@@ -209,7 +213,7 @@ const ArticlemanagerDialog = ({
       multiple
       id="tags-filled"
       options={articleCats}
-      value={articleDisplayModal.categories || null}
+      value={articleDisplayModal.categories || []}
       freeSolo
       isOptionEqualToValue={(option, val) => option.id === val.id}
       renderTags={(value, getTagProps) => {

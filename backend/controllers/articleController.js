@@ -239,6 +239,7 @@ const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
 
 const getArticleById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
+  if (!req.params.id) res.send("Params Empty!");
   const a = await Article.findById(req.params.id)
     .populate({
       path: "createdUser",
