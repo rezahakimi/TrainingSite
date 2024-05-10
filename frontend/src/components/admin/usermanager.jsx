@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useGetAllUsersQuery, useDeleteUserMutation } from "../../slices/userApiSlice";
+import {
+  useGetAllUsersQuery,
+  useDeleteUserMutation,
+} from "../../slices/userApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -19,8 +22,15 @@ import AddIcon from "@mui/icons-material/Add";
 import UsermanagerDialog from "./usermanagerDialog";
 
 const UserManager = () => {
- // const childRef = useRef(null);
-  const { data: users = [] } = useGetAllUsersQuery();
+  // const childRef = useRef(null);
+  const {
+    data: users = [],
+    isLoading: isGetUsersLoading,
+    isSuccess: isGetUsersSuccess,
+    isError: isGetUsersError,
+    error: getGetUsersError,
+    isFetching: isGetUsersFetching,
+  } = useGetAllUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
@@ -89,14 +99,14 @@ const UserManager = () => {
           <Tooltip title="jbjb" arrow>
             <IconButton
               color="primary"
-               onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)} 
+              onClick={(e) => onDisplayUpdateModalButtonClick(e, params.row)}
             >
               <EditIcon />
             </IconButton>
           </Tooltip>
           <IconButton
             color="primary"
-            onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)} 
+            onClick={(e) => onDisplayDeleteModalButtonClick(e, params.row)}
           >
             <DeleteIcon />
           </IconButton>
@@ -105,13 +115,12 @@ const UserManager = () => {
     },
   ];
 
-  useEffect(() => {
-    }, [id]);
+  useEffect(() => {}, [id]);
 
   const onDisplayUpdateModalButtonClick = async (e, row) => {
     e.stopPropagation();
     setModalMode("update");
-     setId(row.id);
+    setId(row.id);
     //console.log(id)
     /* userService
       .get(row._id)
@@ -129,8 +138,8 @@ const UserManager = () => {
           gender: user.gender,
         }); */
 
-        setOpenModal(true);
-     /*  })
+    setOpenModal(true);
+    /*  })
       .catch(function (error) {
         console.log(error);
       }); */
@@ -149,7 +158,15 @@ const UserManager = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
+  if (isGetUsersLoading && !users) {
+    return <div>Loading...</div>;
+  }
+  if (isGetUsersFetching) {
+    return <div>Fetching...</div>;
+  }
+  if (isGetUsersError) {
+    return <div>Message: {getGetUsersError}</div>;
+  }
   return (
     /*     <h2>
       {user.map((item) => (

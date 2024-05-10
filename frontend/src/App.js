@@ -41,7 +41,7 @@ function App() {
   const { userInfo: user } = useSelector((state) => state.auth);
 
   let apppbar;
-  console.log(user);
+  //console.log(user);
   //if (user) {
   apppbar = (
     <>
@@ -72,17 +72,6 @@ function App() {
        </ProtectedRoute>
       }
      /> */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute
-                isAllowed={!!user && user.roles.includes("ROLE_ADMIN")}
-                redirectTo="/home"
-              >
-                <AdminPage />
-              </ProtectedRoute>
-            }
-          />
           {/* <Route
       path='/config'
       element={
@@ -92,6 +81,17 @@ function App() {
       }
      /> */}
         </Route>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute
+              isAllowed={!!user && user.roles.includes("ROLE_ADMIN")}
+              redirectTo="/home"
+            >
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/useradmin" element={<UserAdminPage />}></Route>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/changepassword" element={<ChangePassword />} />

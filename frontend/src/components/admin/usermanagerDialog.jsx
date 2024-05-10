@@ -69,7 +69,7 @@ const UsermanagerDialog =
         isError: isGetError,
         error: getError,
         isFetching: isGetFetching,
-      } = useGetUserByIdQuery(idProp, { pollingInterval: 3000 }); // ?? skipToken);
+      } = useGetUserByIdQuery(idProp); // ?? skipToken);
 
       const [userDisplayModal, setDisplayUserModal] =
         useState(initialFormState);

@@ -79,11 +79,11 @@ const ArticlemanagerDialog = ({
   } = useGetArticleByIdQuery(
     idProp /* {
     skip: !openModalProp,
-  } */
-    // { refetchOnMountOrArgChange: true }
+  } */,
+    { refetchOnMountOrArgChange: true }
   ); //, { skip: fetchArticle });
-  console.log(idProp);
-  console.log(article);
+  //console.log(idProp);
+  //console.log(article);
   const [articleDisplayModal, setDisplayArticleModal] =
     useState(initialArticleState);
 
