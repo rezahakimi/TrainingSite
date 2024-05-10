@@ -32,11 +32,13 @@ const UserAdminPage = () => {
             <div>2</div>
           </Grid>
           <Grid item xs>
+            <div>Friends Request</div>
             <FriendsRequestList userId={userInfo.id}></FriendsRequestList>
           </Grid>
+          <div>Articles</div>
         </Grid>
         <Grid item xs={2}>
-          jhj
+          <div>Friends</div>
         </Grid>
       </Grid>
     </ThemeProvider>

@@ -161,12 +161,7 @@ const FriendsRequestList = ({ userId }) => {
     });
   }
 
-  return (
-    <>
-      <div>Friends</div>
-      {friendsRender}
-    </>
-  );
+  return <>{friendsRender}</>;
 };
 
 export default FriendsRequestList;

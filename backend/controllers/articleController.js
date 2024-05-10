@@ -23,7 +23,9 @@ function difference(A, B) {
 }
 
 const getAllArticles = asyncHandler(async (req, res) => {
-  const myArticles = await Article.find({})
+  const myArticles = await Article.find(
+    req.query.userid ? { createdUser: req.query.userid } : {}
+  )
     .populate({
       path: "createdUser",
       match: {},
