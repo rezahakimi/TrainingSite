@@ -29,10 +29,19 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           : [{ type: "Article", id: "PARTIAL-LIST" }],
     }),
     getAllArticles: builder.query({
-      query: () => ({
-        url: `${ARTICLE_URL}/`,
-        method: "GET",
-      }),
+      query: ({ userId }) => {
+        if (userId) {
+          return {
+            url: `${ARTICLE_URL}/?userid=${userId}`,
+            method: "GET",
+          };
+        } else {
+          return {
+            url: `${ARTICLE_URL}/`,
+            method: "GET",
+          };
+        }
+      },
       providesTags: ["Article"],
       /* providesTags: (result, error, arg) => {
         console.log(

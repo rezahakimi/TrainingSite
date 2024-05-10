@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ArticlemanagerDialog from "./articlemanagerDialog";
 
-const ArticleManager = () => {
+const ArticleManager = ({ userId }) => {
   // const childRef = useRef(null);
   const {
     data: articles = [],
@@ -30,7 +30,7 @@ const ArticleManager = () => {
     isError: isGetError,
     error: getGetArtilesError,
     isFetching: isGetFetching,
-  } = useGetAllArticlesQuery();
+  } = useGetAllArticlesQuery(userId);
   const [deleteArticle] = useDeleteArticleMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
