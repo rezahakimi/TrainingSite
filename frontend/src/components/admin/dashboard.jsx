@@ -20,9 +20,10 @@ import UserManager from "./usermanager";
 import ArticleManager from "./articlemanager";
 import ArticleCatManager from "./articleCatmanager";
 
-const Dashboard = () => {
+const Dashboard = ({ userId }) => {
+  //console.log(userId);
+
   const drawerWidth = 240;
-  const { userInfo } = useSelector((state) => state.auth);
   const [component, setComponent] = useState("user");
 
   return (
@@ -52,30 +53,30 @@ const Dashboard = () => {
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-              <ListItem disablePadding  onClick={() => setComponent("user")}>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <InboxIcon /> 
-                  </ListItemIcon>
-                  <ListItemText primary="UserManager" />
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding  onClick={() => setComponent("article")}>
-                <ListItemButton>
-                  <ListItemIcon>
-                     <MailIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Article" />
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding  onClick={() => setComponent("articlecat")}>
-                <ListItemButton>
-                  <ListItemIcon>
-                     <MailIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Article Category" />
-                </ListItemButton>
-              </ListItem>
+            <ListItem disablePadding onClick={() => setComponent("user")}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary="UserManager" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setComponent("article")}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Article" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setComponent("articlecat")}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Article Category" />
+              </ListItemButton>
+            </ListItem>
           </List>
           <Divider />
           <List>

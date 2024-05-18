@@ -21,8 +21,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ArticlemanagerDialog from "./articlemanagerDialog";
 
-const ArticleManager = ({ userId }) => {
+const ArticleManager = ({ userInfo }) => {
   // const childRef = useRef(null);
+  //console.log(userId);
+  let userId = userInfo.id;
   const {
     data: articles = [],
     isLoading: isGetLoading,
@@ -30,7 +32,7 @@ const ArticleManager = ({ userId }) => {
     isError: isGetError,
     error: getGetArtilesError,
     isFetching: isGetFetching,
-  } = useGetAllArticlesQuery(userId);
+  } = useGetAllArticlesQuery({ userId });
   const [deleteArticle] = useDeleteArticleMutation();
   const [openModal, setOpenModal] = useState(false);
   const [modalMode, setModalMode] = useState("");
@@ -112,7 +114,7 @@ const ArticleManager = ({ userId }) => {
   if (isGetError) {
     return <div>Message: {getGetArtilesError}</div>;
   }
-  //console.log(articles.articlesData);
+  console.log(articles.articlesData);
   return (
     <>
       <div style={{ height: 700, width: "100%" }}>
@@ -146,7 +148,7 @@ const ArticleManager = ({ userId }) => {
         modalModeProp={modalMode}
         handleCloseModalProp={handleCloseModal}
         idProp={id}
-        /* fetchArticle={fetchArticleMain} */
+        userInfo={userInfo}
         /* ref={childRef} */
       ></ArticlemanagerDialog>
     </>

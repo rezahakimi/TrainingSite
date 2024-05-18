@@ -54,10 +54,11 @@ const ArticlemanagerDialog = ({
   modalModeProp,
   handleCloseModalProp,
   idProp,
-  //fetchArticle,
+  userInfo,
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
+  //isAllowed={!!user && user.roles.includes("ROLE_ADMIN")}
 
   const [createArticle] = useCreateArticleMutation();
   const [updateArticle] = useUpdateArticleMutation();
@@ -246,6 +247,56 @@ const ArticlemanagerDialog = ({
   // console.log(articleDisplayModal.title);
   // console.log(articleDisplayModal);
 
+  let renderSelectedUser = null;
+  if (!!userInfo && userInfo.roles.includes("ROLE_ADMIN")) {
+    renderSelectedUser = (
+      <Autocomplete
+        id="user-select"
+        sx={{ mt: 2 }}
+        value={
+          users.find((u) => u.id === articleDisplayModal.createdUserId) || {}
+        }
+        freeSolo={true}
+        onChange={(event, newValue) => {
+          setDisplayArticleModal((prevPostsData) => {
+            return {
+              ...prevPostsData,
+              createdUserId: newValue.id,
+            };
+          });
+        }}
+        options={users}
+        autoHighlight
+        getOptionLabel={(option) => option.firstname + option.lastname || ""}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            {...props}
+          >
+            {/* <img
+        loading="lazy"
+        width="20"
+        srcSet={`https://flagcdn.com/w40/${option.id.toLowerCase()}.png 2x`}
+        src={`https://flagcdn.com/w20/${option.id.toLowerCase()}.png`}
+        alt=""
+      /> */}
+            {option.firstname + " "} {option.lastname}
+          </Box>
+        )}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Choose a user"
+            inputProps={{
+              ...params.inputProps,
+              autoComplete: "new-password", // disable autocomplete and autofill
+            }}
+          />
+        )}
+      />
+    );
+  }
   return (
     <>
       <Dialog open={openModalProp} onClose={handleCloseModalProp} fullScreen>
@@ -254,55 +305,8 @@ const ArticlemanagerDialog = ({
           <DialogContentText>Insert article details.</DialogContentText>
 
           {renderSelectedArticleCats}
+          {renderSelectedUser}
 
-          <Autocomplete
-            id="user-select"
-            sx={{ mt: 2 }}
-            value={
-              users.find((u) => u.id === articleDisplayModal.createdUserId) ||
-              {}
-            }
-            freeSolo={true}
-            onChange={(event, newValue) => {
-              setDisplayArticleModal((prevPostsData) => {
-                return {
-                  ...prevPostsData,
-                  createdUserId: newValue.id,
-                };
-              });
-            }}
-            options={users}
-            autoHighlight
-            getOptionLabel={(option) =>
-              option.firstname + option.lastname || ""
-            }
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-              >
-                {/* <img
-                  loading="lazy"
-                  width="20"
-                  srcSet={`https://flagcdn.com/w40/${option.id.toLowerCase()}.png 2x`}
-                  src={`https://flagcdn.com/w20/${option.id.toLowerCase()}.png`}
-                  alt=""
-                /> */}
-                {option.firstname + " "} {option.lastname}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Choose a user"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
-          />
           <TextField
             sx={{ mt: 2 }}
             autoFocus
