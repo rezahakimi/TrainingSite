@@ -29,7 +29,7 @@ import ProfileManage from "../components/user/profileManage";
 const UserAdminPage = () => {
   const drawerWidth = 240;
   const { userInfo } = useSelector((state) => state.auth);
-  const [component, setComponent] = useState("article");
+  const [component, setComponent] = useState("profile");
 
   return (
     <ThemeProvider theme={theme}>
@@ -98,7 +98,7 @@ const UserAdminPage = () => {
                 ) : null}
                 {component === "friends" ? (
                   <>
-                    <h3>My Friends</h3>
+                    <h3>My Friends Request</h3>
                     <FriendsRequestList
                       userId={userInfo.id}
                     ></FriendsRequestList>
@@ -106,7 +106,7 @@ const UserAdminPage = () => {
                 ) : null}
                 {component === "article" ? (
                   <>
-                    <h3>My Articles</h3>
+                    <h3>My Articles Manager</h3>
                     <ArticleManager userInfo={userInfo} />
                   </>
                 ) : null}

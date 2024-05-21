@@ -288,7 +288,7 @@ const getArticleById = asyncHandler(async (req, res) => {
 
 const createArticle = asyncHandler(async (req, res) => {
   try {
-    const { title, content, userid, categories } = req.body;
+    const { title, abstract, content, userid, categories } = req.body;
 
     const user = await User.findById(userid);
     if (!user) {

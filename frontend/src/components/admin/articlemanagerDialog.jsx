@@ -131,6 +131,7 @@ const ArticlemanagerDialog = ({
       setEditorContent(article.content);
       //console.log(article);
     } else {
+      initialArticleState.createdUserId = userInfo.id;
       setDisplayArticleModal(initialArticleState);
       setEditorAbstract("");
       setEditorContent("");
@@ -139,6 +140,7 @@ const ArticlemanagerDialog = ({
   // [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
+    console.log(articleDisplayModal.createdUserId);
     if (modalModeProp === "update") {
       let xx = {
         id: articleDisplayModal.id,
@@ -161,13 +163,15 @@ const ArticlemanagerDialog = ({
         handleCloseModalProp();
       }
     } else if (modalModeProp === "add") {
-      const res = await createArticle({
+      let xxx = {
         title: articleDisplayModal.title,
         abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
         categories: articleDisplayModal.categories,
-      }).unwrap();
+      };
+      console.log(xxx);
+      const res = await createArticle(xxx).unwrap();
 
       if (res) {
         setDisplayArticleModal(initialArticleState);

@@ -21,7 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const pagesize = 3;
 
 const ArticleList = ({ catId }) => {
-  console.log(catId);
+  //console.log(catId);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -69,7 +69,7 @@ const ArticleList = ({ catId }) => {
 
   useEffect(() => {
     //   //   //setPassengersList(data.data);
-    //   console.log(data);
+    // console.log(data);
     //   if (data) {
     //     setUsers({ ...articlesData, ...data });
     //   } else if (pagingController.page > 1) {
