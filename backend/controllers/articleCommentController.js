@@ -44,7 +44,7 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
   }
 });
 
-const getArticleComentByArticleId = asyncHandler(async (req, res) => {
+const getArticleComentsByArticleId = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const acs = await ArticleComment.find({
     articleId: req.params.articleid,
@@ -149,5 +149,5 @@ export {
   createArticleComment,
   updateArticleComment,
   getArticleCommentById,
-  getArticleComentByArticleId,
+  getArticleComentsByArticleId,
 };

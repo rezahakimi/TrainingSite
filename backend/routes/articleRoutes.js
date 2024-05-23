@@ -12,6 +12,7 @@ import {
   getUsersLikeArticle,
   getUsersDisLikeArticle,
   getUserLikeArticle,
+  getArticlesWithNotAcceptPost,
   //getAllArticleCats,
 } from "../controllers/articleController.js";
 
@@ -29,5 +30,6 @@ router.route("/dislike/:id").patch(iDisLikeArticle);
 router.route("/like/:id").get(getUsersLikeArticle);
 router.route("/dislike/:id").get(getUsersDisLikeArticle);
 router.route("/like/:articleid/:userid").get(getUserLikeArticle);
+router.route("/newpost/:userid").get(getArticlesWithNotAcceptPost);
 
 export default router;

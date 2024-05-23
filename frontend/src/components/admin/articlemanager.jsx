@@ -114,7 +114,7 @@ const ArticleManager = ({ userInfo }) => {
   if (isGetError) {
     return <div>Message: {getGetArtilesError}</div>;
   }
-  console.log(articles.articlesData);
+
   return (
     <>
       <div style={{ height: 700, width: "100%" }}>

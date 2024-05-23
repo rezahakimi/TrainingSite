@@ -18,9 +18,12 @@ import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import SearchIcon from "@mui/icons-material/Search";
-import { useGetAllArticlePostsByArticleIdQuery } from "../../slices/articlePostApiSlice.js";
+import {
+  useCreateArticlePostMutation,
+  useGetAllArticlePostsByArticleIdQuery,
+} from "../../slices/articlePostApiSlice.js";
 
-const ArtilePosts = ({ articleId }) => {
+const ArtilePosts = ({ articleId, userId }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -35,7 +38,8 @@ const ArtilePosts = ({ articleId }) => {
     articleId: articleId,
     accept: true,
   });
-
+  const [createArticlePost] = useCreateArticlePostMutation();
+  const [postText, setPostText] = useState("");
   useEffect(() => {
     //   //   //setPassengersList(data.data);
     //   console.log(data);
@@ -46,6 +50,19 @@ const ArtilePosts = ({ articleId }) => {
     //   }
   }, []);
 
+  const handleSendPost = async () => {
+    console.log(userId);
+    const res = await createArticlePost({
+      articleId: articleId,
+      userId: userId,
+      comment: postText,
+    }).unwrap();
+
+    if (res) {
+      setPostText("");
+    }
+  };
+
   if (isGetLoading && !data) {
     return <div>Loading...</div>;
   }
@@ -55,7 +72,6 @@ const ArtilePosts = ({ articleId }) => {
   if (isGetError) {
     return <div>Message: {getGetArtilePostsError}</div>;
   }
-  console.log(data);
 
   const renderArticlePosts = data.articlePostsData.map((ap) => {
     return (
@@ -126,7 +142,9 @@ const ArtilePosts = ({ articleId }) => {
         multiline
         fullWidth
         maxRows={4}
+        onChange={(e) => setPostText(e.target.value)}
       />
+      <Button onClick={handleSendPost}>Send</Button>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         {renderArticlePosts}
       </List>

@@ -21,6 +21,20 @@ export const articlePostApiSlice = apiSlice.injectEndpoints({
             ]
           : ["ArticlePost"],
     }),
+    getArticlePostById: builder.query({
+      query: (id) => ({
+        url: `${ARTICLEPOST_URL}/${id}`,
+        method: "GET",
+      }),
+      // providesTags: ["User"],
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "ArticlePost", id })),
+              "ArticlePost",
+            ]
+          : ["ArticlePost"],
+    }),
     createArticlePost: builder.mutation({
       query: (data) => ({
         url: `${ARTICLEPOST_URL}/`,
@@ -29,7 +43,7 @@ export const articlePostApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["ArticlePost"],
     }),
-    updateArticleCat: builder.mutation({
+    updateArticlePost: builder.mutation({
       query: (data) => ({
         url: `${ARTICLEPOST_URL}/`,
         method: "PATCH",
@@ -37,28 +51,12 @@ export const articlePostApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["ArticlePost"],
     }),
-    deleteArticleCat: builder.mutation({
-      query: (id) => ({
-        url: `${ARTICLEPOST_URL}/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "ArticlePost", id: arg.id },
-      ],
-    }),
-    // getArticleCatById: builder.query({
-    //   query: (id) => ({
-    //     url: `${ARTICLECAT_URL}/${id}`,
-    //     method: "GET",
-    //   }),
-    // }),
   }),
 });
 
 export const {
   useGetAllArticlePostsByArticleIdQuery,
-  //useCreateArticlePostMutation,
-  //useUpdateArticlePostMutation,
-  //useDeleteArticlePostMutation,
-  //useGetArticlePostByIdQuery,
+  useCreateArticlePostMutation,
+  useUpdateArticlePostMutation,
+  useGetArticlePostByIdQuery,
 } = articlePostApiSlice;

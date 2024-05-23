@@ -131,7 +131,7 @@ const ArticleDetails = ({ articleId, userId }) => {
           {renderLikedIcon}
         </Stack>
       </Box>
-      <ArtilePosts articleId={article.id}></ArtilePosts>
+      <ArtilePosts articleId={article.id} userId={userId}></ArtilePosts>
     </>
   );
 };

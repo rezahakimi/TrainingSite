@@ -42,20 +42,20 @@ export const articleApiSlice = apiSlice.injectEndpoints({
           };
         }
       },
-      providesTags: ["Article"],
-      /* providesTags: (result, error, arg) => {
-        console.log(
+      //providesTags: ["Article"],
+      providesTags: (result, error, arg) => {
+        /*  console.log(
           result
             ? result.articlesData.map(({ id }) => ({ type: "Article", id }))
             : ["Article"]
-        );
+        );*/
         return result.articlesData
           ? [
               ...result.articlesData.map(({ id }) => ({ type: "Article", id })),
               "Article",
             ]
           : ["Article"];
-      }, */
+      },
     }),
     getAllArticlesByCategory: builder.query({
       query: (catid) => ({
@@ -74,11 +74,11 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      // invalidatesTags: ["Article"],
-      invalidatesTags: (result, error, id) => [
+      invalidatesTags: ["Article"],
+      /*  invalidatesTags: (result, error, id) => [
         { type: "Article", id },
         { type: "Article", id: "PARTIAL-LIST" },
-      ],
+      ], */
     }),
     updateArticle: builder.mutation({
       query: (data) => ({

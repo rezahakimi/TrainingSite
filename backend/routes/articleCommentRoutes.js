@@ -1,14 +1,14 @@
 import express from "express";
 import {
   createArticleComment,
-  getArticleComentByArticleId,
+  getArticleComentsByArticleId,
   updateArticleComment,
   getArticleCommentById,
 } from "../controllers/articleCommentController.js";
 
 const router = express.Router();
 
-router.route("/article/:articleid").get(getArticleComentByArticleId);
+router.route("/article/:articleid").get(getArticleComentsByArticleId);
 router.route("/:id").get(getArticleCommentById);
 router.route("/").post(createArticleComment);
 router.route("/").patch(updateArticleComment);

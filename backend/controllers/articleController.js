@@ -5,6 +5,7 @@ import db from "../models/index.js";
 import User from "../models/userModel.js";
 import ArticleCat from "../models/articleCatModel.js";
 import mongoose from "mongoose";
+import ArticleComment from "../models/articleCommentModel.js";
 
 const Article = db.article;
 
@@ -567,6 +568,34 @@ const getUserLikeArticle = asyncHandler(async (req, res) => {
   res.status(200).json(articleiLikes.iLikes);
 });
 
+const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
+  const userId = req.params.userid;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const articles = await Article.find({ createdUser: userId });
+
+  const myUsersDisLike = await Promise.all(
+    articles.map(async (a) => {
+      a.comments.map(async (c) => {
+        const ac = await ArticleComment.findById(c.commentId)
+          // .select("_id firstname lastname email phone profileImg")
+          .exec();
+        if (ac.accept === false)
+          return {
+            id: ac._id,
+          };
+      });
+    })
+  ).then((values) => values.filter((v) => v));
+
+  res.status(200).json(myUsersDisLike);
+});
+
 export {
   createArticle,
   deleteArticle,
@@ -580,4 +609,5 @@ export {
   getUsersLikeArticle,
   getUsersDisLikeArticle,
   getUserLikeArticle,
+  getArticlesWithNotAcceptPost,
 };

@@ -22,9 +22,10 @@ import {
   MenuItem,
   Chip,
   useMediaQuery,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { green } from "@mui/material/colors";
 import { useTheme } from "@mui/material/styles";
 import {
   useCreateArticleMutation,
@@ -91,6 +92,9 @@ const ArticlemanagerDialog = ({
   const [editorAbstract, setEditorAbstract] = useState("");
   const [editorContent, setEditorContent] = useState("");
 
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [btnSuccess, setBtnSuccess] = useState(false);
+
   useEffect(() => {
     if (modalModeProp === "update" && article) {
       // console.log(article);
@@ -140,7 +144,10 @@ const ArticlemanagerDialog = ({
   // [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
-    console.log(articleDisplayModal.createdUserId);
+    if (!btnLoading) {
+      setBtnSuccess(false);
+      setBtnLoading(true);
+    }
     if (modalModeProp === "update") {
       let xx = {
         id: articleDisplayModal.id,
@@ -168,9 +175,11 @@ const ArticlemanagerDialog = ({
         abstract: editorAbstract,
         content: editorContent,
         userid: articleDisplayModal.createdUserId,
-        categories: articleDisplayModal.categories,
+        categories: articleDisplayModal.categories.map((c) => {
+          return c.id;
+        }),
       };
-      console.log(xxx);
+      //console.log(xxx);
       const res = await createArticle(xxx).unwrap();
 
       if (res) {
@@ -178,6 +187,8 @@ const ArticlemanagerDialog = ({
         setEditorAbstract("");
         setEditorContent("");
         handleCloseModalProp();
+        setBtnSuccess(true);
+        setBtnLoading(false);
       }
     }
   };
@@ -389,7 +400,22 @@ const ArticlemanagerDialog = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModalProp}>Cancel</Button>
-          <Button onClick={handleSubmmit}>Save</Button>
+          <Button disabled={btnLoading} onClick={handleSubmmit}>
+            Save
+          </Button>
+          {btnLoading && (
+            <CircularProgress
+              size={24}
+              sx={{
+                color: green[500],
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                marginTop: "-12px",
+                marginLeft: "-12px",
+              }}
+            />
+          )}
         </DialogActions>
       </Dialog>
     </>
