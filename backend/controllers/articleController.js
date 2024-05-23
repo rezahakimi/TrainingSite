@@ -585,10 +585,10 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
         const ac = await ArticleComment.findById(c.commentId)
           // .select("_id firstname lastname email phone profileImg")
           .exec();
-        if (ac.accept === false)
-          return {
-            id: ac._id,
-          };
+        //if (ac.accept === false)
+        return {
+          id: ac._id,
+        };
       });
     })
   ).then((values) => values.filter((v) => v));
