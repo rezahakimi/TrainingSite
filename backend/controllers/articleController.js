@@ -581,15 +581,14 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
 
   const myUsersDisLike = await Promise.all(
     articles.map(async (a) => {
-      a.comments.map(async (c) => {
-        const ac = await ArticleComment.findById(c.commentId)
-          // .select("_id firstname lastname email phone profileImg")
-          .exec();
-        //if (ac.accept === false)
-        return {
-          id: ac._id,
-        };
-      });
+      // a.comments.map(async (c) => {
+      //   const ac = await ArticleComment.findById(c.commentId)
+      // .exec();
+      //if (ac.accept === false)
+      return {
+        id: a._id,
+      };
+      //  });
     })
   ).then((values) => values.filter((v) => v));
 
