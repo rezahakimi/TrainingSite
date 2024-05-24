@@ -587,8 +587,14 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
           const ac = await ArticleComment.findById(c._id).exec();
           if (ac.accept === true)
             return {
-              id: ac,
+              id: ac._id,
+              articleId: a._id,
+              articleTitle: a.title,
+              Comment: ac.content,
+              commentCreatedDate: ac.commentCreatedDate,
+              accept: ac.accept,
             };
+          else return null;
         })
       );
     })
