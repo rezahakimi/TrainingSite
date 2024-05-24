@@ -598,7 +598,7 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
               accept: ac.accept,
             };
         })
-      );
+      ).then((values) => values.filter((v) => v));
     })
   ).then((values) => values.filter((v) => v));
 
