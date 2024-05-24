@@ -588,15 +588,15 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
             _id: c._id,
             accept: true,
           }).exec();
-          //if (ac.accept === true)
-          return {
-            id: ac._id,
-            articleId: a._id,
-            articleTitle: a.title,
-            Comment: ac.content,
-            commentCreatedDate: ac.commentCreatedDate,
-            accept: ac.accept,
-          };
+          if (ac)
+            return {
+              id: ac._id,
+              articleId: a._id,
+              articleTitle: a.title,
+              Comment: ac.content,
+              commentCreatedDate: ac.commentCreatedDate,
+              accept: ac.accept,
+            };
         })
       );
     })
