@@ -584,17 +584,19 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
       //const mya = await Article.findById(a.id)
       return await Promise.all(
         a.comments.map(async (c) => {
-          const ac = await ArticleComment.findById(c._id).exec();
-          if (ac.accept === true)
-            return {
-              id: ac._id,
-              articleId: a._id,
-              articleTitle: a.title,
-              Comment: ac.content,
-              commentCreatedDate: ac.commentCreatedDate,
-              accept: ac.accept,
-            };
-          else return null;
+          const ac = await ArticleComment.findOne({
+            _id: c._id,
+            accept: true,
+          }).exec();
+          //if (ac.accept === true)
+          return {
+            id: ac._id,
+            articleId: a._id,
+            articleTitle: a.title,
+            Comment: ac.content,
+            commentCreatedDate: ac.commentCreatedDate,
+            accept: ac.accept,
+          };
         })
       );
     })
