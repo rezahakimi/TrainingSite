@@ -586,21 +586,21 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
         articleId: a._id,
         articleTitle: a.title,
         comments: await Promise.all(
-        a.comments.map(async (c) => {
-          const ac = await ArticleComment.findOne({
-            _id: c._id,
-            accept: false,
-          }).exec();
-          if (ac)
-            return {
-              id: ac._id,
-              Comment: ac.content,
-              commentCreatedDate: ac.commentCreatedDate,
-              accept: ac.accept,
-            };
-        })
-      ).then((values) => values.filter((v) => v));
-    }
+          a.comments.map(async (c) => {
+            const ac = await ArticleComment.findOne({
+              _id: c._id,
+              accept: false,
+            }).exec();
+            if (ac)
+              return {
+                id: ac._id,
+                Comment: ac.content,
+                commentCreatedDate: ac.commentCreatedDate,
+                accept: ac.accept,
+              };
+          })
+        ).then((values) => values.filter((v) => v)),
+      };
     })
   ).then((values) => values.filter((v) => v));
 
