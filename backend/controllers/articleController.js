@@ -586,7 +586,7 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
         a.comments.map(async (c) => {
           const ac = await ArticleComment.findOne({
             _id: c._id,
-            accept: true,
+            accept: false,
           }).exec();
           if (ac)
             return {
