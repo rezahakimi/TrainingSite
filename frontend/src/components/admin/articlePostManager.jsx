@@ -3,6 +3,8 @@ import {
   useGetAllArticleCatsQuery,
   useDeleteArticleCatMutation,
 } from "../../slices/articleCatApiSlice";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -18,6 +20,7 @@ import {
   useMediaQuery,
   Grid,
   Container,
+  Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -25,6 +28,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArticleCatmanagerDialog from "./articleCatmanagerDialog";
 import { useGetArticlesNewPostByUserIdQuery } from "../../slices/articleApiSlice";
 import { useTheme } from "@emotion/react";
+import { useUpdateArticlePostMutation } from "../../slices/articlePostApiSlice";
 
 const ArticlePostManager = ({ userInfo }) => {
   const theme = useTheme();
@@ -41,12 +45,22 @@ const ArticlePostManager = ({ userInfo }) => {
   } = useGetArticlesNewPostByUserIdQuery({
     userid,
   });
+  const [updateArticlePost] = useUpdateArticlePostMutation();
 
   useEffect(() => {}, []);
 
   const onDisplayAddModalButtonClick = (e) => {};
 
-  const handleCloseModal = () => {};
+  const handleUpdateArticlePost = async (e, articleCommentId) => {
+    const res = await updateArticlePost({
+      articleCommentId: articleCommentId,
+      accept: true,
+    }).unwrap();
+
+    if (res) {
+      // setILikedArticle((iliked) => true);
+    }
+  };
 
   if (isGetArticlesNewPostsLoading && !articleWithPosts) {
     return <div>Loading...</div>;
@@ -83,7 +97,18 @@ const ArticlePostManager = ({ userInfo }) => {
           >
             {matches ? <div>sdfsdf</div> : <div>{a.articleTitle}</div>}
             {a.comments.map((ac) => {
-              return matches ? <div>xxxxxx</div> : <div>{ac.id}</div>;
+              return matches ? (
+                <div>xxxxxx</div>
+              ) : (
+                <div key={ac.id}>
+                  {ac.Comment}
+                  <Chip
+                    icon={<FavoriteIcon />}
+                    onClick={(e) => handleUpdateArticlePost(e, ac.id)}
+                    label="Accept"
+                  />
+                </div>
+              );
             })}
           </Container>
         </Grid>

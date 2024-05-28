@@ -159,7 +159,10 @@ export const articleApiSlice = apiSlice.injectEndpoints({
         url: `${ARTICLE_URL}/newpost/${userid}`,
         method: "GET",
       }),
-      providesTags: ["Article"],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.map(({ id }) => ({ type: "ArticlePost", id })), "Post"]
+          : ["ArticlePost"],
     }),
   }),
 });
