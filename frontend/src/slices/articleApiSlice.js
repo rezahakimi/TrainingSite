@@ -105,10 +105,11 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       query: (id) => ({
         url: `${ARTICLE_URL}/${id}`,
         method: "GET",
-        query: (id) => `post/${id}`,
-        invalidatesTags: ["Article"],
+        //query: (id) => `post/${id}`,
+        //invalidatesTags: ["Article"],
         //providesTags: (result, error, id) => [{ type: "Article", id }],
       }),
+      providesTags: ["Article"],
     }),
     iLikeArticle: builder.mutation({
       query: (data) => {
@@ -153,6 +154,13 @@ export const articleApiSlice = apiSlice.injectEndpoints({
       },
       transformResponse: (response) => response,
     }),
+    getArticlesNewPostByUserId: builder.query({
+      query: ({ userid }) => ({
+        url: `${ARTICLE_URL}/newpost/${userid}`,
+        method: "GET",
+      }),
+      providesTags: ["Article"],
+    }),
   }),
 });
 
@@ -167,4 +175,5 @@ export const {
   useGetUserLikeArticleQuery,
   useILikeArticleMutation,
   useIDisLikeArticleMutation,
+  useGetArticlesNewPostByUserIdQuery,
 } = articleApiSlice;

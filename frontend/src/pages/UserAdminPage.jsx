@@ -25,6 +25,7 @@ import FriendsList from "../components/user/friendsList";
 import FriendsRequestList from "../components/user/friendsRequestList";
 import ArticleManager from "../components/admin/articlemanager";
 import ProfileManage from "../components/user/profileManage";
+import ArticlePostManager from "../components/admin/articlePostManager";
 
 const UserAdminPage = () => {
   const drawerWidth = 240;
@@ -81,6 +82,14 @@ const UserAdminPage = () => {
                   <ListItemText primary="Friends" />
                 </ListItemButton>
               </ListItem>
+              <ListItem disablePadding onClick={() => setComponent("newposts")}>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New Posts" />
+                </ListItemButton>
+              </ListItem>
             </List>
           </Box>
           {/* </Drawer> */}
@@ -108,6 +117,12 @@ const UserAdminPage = () => {
                   <>
                     <h3>My Articles Manager</h3>
                     <ArticleManager userInfo={userInfo} />
+                  </>
+                ) : null}
+                {component === "newposts" ? (
+                  <>
+                    <h3>My Articles Manager</h3>
+                    <ArticlePostManager userInfo={userInfo} />
                   </>
                 ) : null}
               </main>
