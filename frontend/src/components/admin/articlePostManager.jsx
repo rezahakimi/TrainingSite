@@ -4,7 +4,8 @@ import {
   useDeleteArticleCatMutation,
 } from "../../slices/articleCatApiSlice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -51,10 +52,10 @@ const ArticlePostManager = ({ userInfo }) => {
 
   const onDisplayAddModalButtonClick = (e) => {};
 
-  const handleUpdateArticlePost = async (e, articleCommentId) => {
+  const handleUpdateArticlePost = async (e, articleCommentId, actionType) => {
     const res = await updateArticlePost({
       articleCommentId: articleCommentId,
-      accept: true,
+      accept: actionType,
     }).unwrap();
 
     if (res) {
@@ -103,8 +104,13 @@ const ArticlePostManager = ({ userInfo }) => {
                 <div key={ac.id}>
                   {ac.Comment}
                   <Chip
-                    icon={<FavoriteIcon />}
-                    onClick={(e) => handleUpdateArticlePost(e, ac.id)}
+                    icon={<CheckCircleIcon />}
+                    onClick={(e) => handleUpdateArticlePost(e, ac.id, true)}
+                    label="Accept"
+                  />
+                  <Chip
+                    icon={<CancelIcon />}
+                    onClick={(e) => handleUpdateArticlePost(e, ac.id, false)}
                     label="Accept"
                   />
                 </div>

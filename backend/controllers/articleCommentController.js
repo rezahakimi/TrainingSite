@@ -35,6 +35,8 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
         ac.articleId.createdUser.lastname,
       articleCreateUserId: ac.userId._id,
       articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
+      accept: ac.accept,
+      deleted: ac.deleted,
     };
 
     res.status(200).json(myArticleComment);
@@ -78,6 +80,8 @@ const getArticleComentsByArticleId = asyncHandler(async (req, res) => {
           ac.articleId.createdUser.lastname,
         articleCreateUserId: ac.userId._id,
         articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
+        accept: ac.accept,
+        deleted: ac.deleted,
       };
     });
 
@@ -110,6 +114,7 @@ const createArticleComment = asyncHandler(async (req, res) => {
       comment,
       commentCreatedDate: Date.now(),
       accept: false,
+      deleted: false,
     });
     await articleComment.save();
     article.comments.push(articleComment);
@@ -125,7 +130,7 @@ const createArticleComment = asyncHandler(async (req, res) => {
 
 const updateArticleComment = asyncHandler(async (req, res) => {
   try {
-    const { articleCommentId, accept } = req.body;
+    const { articleCommentId, accept, deleted } = req.body;
     const articleComment = await ArticleComment.findById(articleCommentId);
 
     if (!articleComment) {
@@ -135,6 +140,7 @@ const updateArticleComment = asyncHandler(async (req, res) => {
 
     if (articleComment) {
       articleComment.accept = accept;
+      articleComment.deleted = deleted;
     }
 
     await articleComment.save();

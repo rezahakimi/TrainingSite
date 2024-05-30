@@ -22,6 +22,9 @@ const ArticleCommentSchema = mongoose.Schema(
     accept: {
       type: Boolean,
     },
+    deleted: {
+      type: Boolean,
+    },
   },
 
   {

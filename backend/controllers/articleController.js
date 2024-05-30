@@ -579,7 +579,7 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
 
   const articles = await Article.find({ createdUser: userId });
 
-  const myUsersDisLike = await Promise.all(
+  const myNotAcceptPost = await Promise.all(
     articles.map(async (a) => {
       //const mya = await Article.findById(a.id)
       return {
@@ -590,6 +590,7 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
             const ac = await ArticleComment.findOne({
               _id: c._id,
               accept: false,
+              deleted: false,
             }).exec();
             if (ac)
               return {
@@ -604,7 +605,7 @@ const getArticlesWithNotAcceptPost = asyncHandler(async (req, res) => {
     })
   ).then((values) => values.filter((v) => v));
 
-  res.status(200).json(myUsersDisLike);
+  res.status(200).json(myNotAcceptPost);
 });
 
 export {
