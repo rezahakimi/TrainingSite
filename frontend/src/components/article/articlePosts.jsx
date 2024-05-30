@@ -22,6 +22,7 @@ import {
   useCreateArticlePostMutation,
   useGetAllArticlePostsByArticleIdQuery,
 } from "../../slices/articlePostApiSlice.js";
+import MyButton from "../myBase/myButton.jsx";
 
 const ArtilePosts = ({ articleId, userId }) => {
   const theme = useTheme();
@@ -144,7 +145,7 @@ const ArtilePosts = ({ articleId, userId }) => {
         maxRows={4}
         onChange={(e) => setPostText(e.target.value)}
       />
-      <Button onClick={handleSendPost}>Send</Button>
+      <MyButton onClick={handleSendPost}>Send</MyButton>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         {renderArticlePosts}
       </List>

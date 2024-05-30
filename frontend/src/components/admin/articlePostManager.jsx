@@ -52,10 +52,16 @@ const ArticlePostManager = ({ userInfo }) => {
 
   const onDisplayAddModalButtonClick = (e) => {};
 
-  const handleUpdateArticlePost = async (e, articleCommentId, actionType) => {
+  const handleUpdateArticlePost = async (
+    e,
+    articleCommentId,
+    acceptValue,
+    deletedValue
+  ) => {
     const res = await updateArticlePost({
       articleCommentId: articleCommentId,
-      accept: actionType,
+      accept: acceptValue,
+      deleted: deletedValue,
     }).unwrap();
 
     if (res) {
@@ -105,12 +111,16 @@ const ArticlePostManager = ({ userInfo }) => {
                   {ac.Comment}
                   <Chip
                     icon={<CheckCircleIcon />}
-                    onClick={(e) => handleUpdateArticlePost(e, ac.id, true)}
+                    onClick={(e) =>
+                      handleUpdateArticlePost(e, ac.id, true, false)
+                    }
                     label="Accept"
                   />
                   <Chip
                     icon={<CancelIcon />}
-                    onClick={(e) => handleUpdateArticlePost(e, ac.id, false)}
+                    onClick={(e) =>
+                      handleUpdateArticlePost(e, ac.id, false, true)
+                    }
                     label="Accept"
                   />
                 </div>
