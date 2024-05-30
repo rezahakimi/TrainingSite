@@ -28,13 +28,13 @@ const getArticleCommentById = asyncHandler(async (req, res) => {
       id: ac._id,
       articleId: ac.articleId._id,
       comment: ac.comment,
-      commentCreateUserId: ac.articleId.createdUser._id,
-      commentCreateFullName:
+      articleCreateUserId: ac.articleId.createdUser._id,
+      articleCreateFullName:
         ac.articleId.createdUser.firstname +
         " " +
         ac.articleId.createdUser.lastname,
-      articleCreateUserId: ac.userId._id,
-      articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
+      commentCreateUserId: ac.userId._id,
+      commentCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
       accept: ac.accept,
       deleted: ac.deleted,
     };
@@ -73,13 +73,13 @@ const getArticleComentsByArticleId = asyncHandler(async (req, res) => {
         id: ac._id,
         articleId: ac.articleId._id,
         comment: ac.comment,
-        commentCreateUserId: ac.articleId.createdUser._id,
-        commentCreateFullName:
+        articleCreateUserId: ac.articleId.createdUser._id,
+        articleCreateFullName:
           ac.articleId.createdUser.firstname +
           " " +
           ac.articleId.createdUser.lastname,
-        articleCreateUserId: ac.userId._id,
-        articleCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
+        commentCreateUserId: ac.userId._id,
+        commentCreateFullName: ac.userId.firstname + " " + ac.userId.lastname,
         accept: ac.accept,
         deleted: ac.deleted,
       };
