@@ -20,7 +20,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const pagesize = 3;
 
-const ArticleList = ({ catId }) => {
+const ArticleList = ({ catId, displayType }) => {
   //console.log(catId);
 
   const theme = useTheme();
@@ -28,7 +28,7 @@ const ArticleList = ({ catId }) => {
 
   const [pagingController, setPagingController] = useState({
     page: 0,
-    pageSize: 2,
+    pageSize: 5,
     count: 5,
   });
 
@@ -45,17 +45,18 @@ const ArticleList = ({ catId }) => {
 
   const {
     data,
-    isLoading: isGetLoading,
-    isSuccess: isGetSuccess,
-    isError: isGetError,
-    error: getGetArtilesError,
-    isFetching: isGetFetching,
+    isLoading: isGetArtilesLoading,
+    isSuccess: isGetArtilesSuccess,
+    isError: isGetArtilesError,
+    error: getArtilesError,
+    isFetching: isGetArtilesFetching,
   } = useGetAllArticlesWithSearchQuery(
     {
       catId: catId,
       pageNumber: pageNumber,
       pageSize: pageSize,
       search: searchContent,
+      displayType: displayType,
     }
     // ,
     // {
@@ -123,16 +124,18 @@ const ArticleList = ({ catId }) => {
       page: 0,
     });
   };
-  if (isGetLoading && !data) {
+  if (isGetArtilesLoading && !data) {
     return <div>Loading...</div>;
   }
-  if (isGetFetching) {
+  if (isGetArtilesFetching) {
     return <div>Fetching...</div>;
   }
-  if (isGetError) {
-    return <div>Message: {getGetArtilesError}</div>;
+  if (isGetArtilesError) {
+    return <div>Erroring...</div>;
   }
-
+  if (getArtilesError) {
+    return <div>Message: {getArtilesError}</div>;
+  }
   //console.log(pagingController.page);
   //console.log(pagingController.pageSize);
   //console.log(pagingController.count);
