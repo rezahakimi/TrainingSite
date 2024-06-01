@@ -77,7 +77,7 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   if (displayType === "latest") {
     cSort = { createdDate: -1 };
   } else if (displayType === "top") {
-    cSort = { iLikes: 1 };
+    cSort = { iLikes: -1 };
   }
   //console.log(pageSize);
   /* const articles = await Article.aggregate([
@@ -152,6 +152,7 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
             title: c.title,
           };
         }),
+        iLikesCount: a.iLikes.length,
       };
     });
 
@@ -171,9 +172,9 @@ const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
   const displayType = req.query.displayType;
   var cSort = {};
   if (displayType === "latest") {
-    cSort = { createdDate: 1 };
+    cSort = { createdDate: -1 };
   } else if (displayType === "top") {
-    cSort = { iLikes: 1 };
+    cSort = { iLikes: -1 };
   }
   let articlesCount = await Article.count({
     $and: [
@@ -243,6 +244,7 @@ const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
             title: c.title,
           };
         }),
+        iLikesCount: a.iLikes.length,
       };
     });
 
