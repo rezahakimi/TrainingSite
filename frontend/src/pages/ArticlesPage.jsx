@@ -43,9 +43,19 @@ const ArtilesPage = () => {
         if (component === "all") {
           articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
         } else if (component === "latest") {
-          articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+          articlesRender = (
+            <ArticleList
+              catId={articleCatQuery}
+              displayType="latest"
+            ></ArticleList>
+          );
         } else if (component === "top") {
-          articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+          articlesRender = (
+            <ArticleList
+              catId={articleCatQuery}
+              displayType="latest"
+            ></ArticleList>
+          );
         }
       }
     } else {

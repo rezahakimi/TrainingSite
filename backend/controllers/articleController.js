@@ -67,7 +67,7 @@ const getAllArticles = asyncHandler(async (req, res) => {
 
 const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   //const { title, content, userid, categories } = req.body;
-  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 5;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const search = req.query.search;
   const displayType = req.query.displayType;
@@ -165,7 +165,7 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
 });
 
 const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
-  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 2;
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 5;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const search = req.query.search;
   const displayType = req.query.displayType;
