@@ -74,9 +74,9 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   let latestOrderBy = 1;
   let topOrderBy = 1;
   var cSort = {};
-  if (displayType === "") {
+  if (displayType === "latest") {
     cSort = { createdDate: -1 };
-  } else if (displayType === "") {
+  } else if (displayType === "top") {
     cSort = { iLikes: 1 };
   }
   //console.log(pageSize);
@@ -170,9 +170,9 @@ const getAllArticlesByCategoryWithSearch = asyncHandler(async (req, res) => {
   const search = req.query.search;
   const displayType = req.query.displayType;
   var cSort = {};
-  if (displayType === "") {
+  if (displayType === "latest") {
     cSort = { createdDate: 1 };
-  } else if (displayType === "") {
+  } else if (displayType === "top") {
     cSort = { iLikes: 1 };
   }
   let articlesCount = await Article.count({
