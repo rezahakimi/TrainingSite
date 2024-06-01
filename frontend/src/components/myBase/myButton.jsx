@@ -27,7 +27,14 @@ const MyButton = ({ children, onClick }) => {
   };
 
   return (
-    <Container sx={{ m: 1, position: "relative", width: "fit-content" }}>
+    <Box
+      sx={{
+        position: "relative",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignContent: "flex-end",
+      }}
+    >
       <Button
         variant="contained"
         disabled={btnLoading}
@@ -48,7 +55,7 @@ const MyButton = ({ children, onClick }) => {
           }}
         />
       )}
-    </Container>
+    </Box>
   );
 };
 export default MyButton;

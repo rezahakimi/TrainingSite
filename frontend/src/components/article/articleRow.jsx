@@ -67,6 +67,12 @@ const ArticleRow = ({ article, matches }) => {
           </CardContent>
           <CardActions>
             <NavLink to={`/articles/${article.id}/`}>Learn More</NavLink>
+            <Chip
+              label={"likes " + article.iLikesCount}
+              variant="outlined"
+              size="small"
+              sx={{ m: 1 }}
+            />
           </CardActions>
         </Card>
       </Container>

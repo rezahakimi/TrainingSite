@@ -37,6 +37,7 @@ import { useGetAllUsersQuery } from "../../slices/userApiSlice";
 import { useGetAllArticleCatsQuery } from "../../slices/articleCatApiSlice";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import MyButton from "../myBase/myButton";
 
 const initialArticleState = {
   id: "",
@@ -92,9 +93,6 @@ const ArticlemanagerDialog = ({
   const [editorAbstract, setEditorAbstract] = useState("");
   const [editorContent, setEditorContent] = useState("");
 
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [btnSuccess, setBtnSuccess] = useState(false);
-
   useEffect(() => {
     if (modalModeProp === "update" && article) {
       // console.log(article);
@@ -144,10 +142,6 @@ const ArticlemanagerDialog = ({
   // [article, modalModeProp, fetchArticle]);
 
   const handleSubmmit = async () => {
-    if (!btnLoading) {
-      setBtnSuccess(false);
-      setBtnLoading(true);
-    }
     if (modalModeProp === "update") {
       let xx = {
         id: articleDisplayModal.id,
@@ -187,8 +181,6 @@ const ArticlemanagerDialog = ({
         setEditorAbstract("");
         setEditorContent("");
         handleCloseModalProp();
-        setBtnSuccess(true);
-        setBtnLoading(false);
       }
     }
   };
@@ -399,23 +391,8 @@ const ArticlemanagerDialog = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModalProp}>Cancel</Button>
-          <Button disabled={btnLoading} onClick={handleSubmmit}>
-            Save
-          </Button>
-          {btnLoading && (
-            <CircularProgress
-              size={24}
-              sx={{
-                color: green[500],
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                marginTop: "-12px",
-                marginLeft: "-12px",
-              }}
-            />
-          )}
+          <MyButton onClick={handleCloseModalProp}>Cancel</MyButton>
+          <MyButton onClick={handleSubmmit}>Save</MyButton>
         </DialogActions>
       </Dialog>
     </>
