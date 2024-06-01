@@ -75,7 +75,7 @@ const getAllArticlesWithSearch = asyncHandler(async (req, res) => {
   let topOrderBy = 1;
   var cSort = {};
   if (displayType === "") {
-    cSort = { createdDate: 1 };
+    cSort = { createdDate: -1 };
   } else if (displayType === "") {
     cSort = { iLikes: 1 };
   }

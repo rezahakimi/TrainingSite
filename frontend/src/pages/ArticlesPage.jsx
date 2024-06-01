@@ -41,7 +41,12 @@ const ArtilesPage = () => {
         articlesRender = <ArticleCatList></ArticleCatList>;
       } else {
         if (component === "all") {
-          articlesRender = <ArticleList catId={articleCatQuery}></ArticleList>;
+          articlesRender = (
+            <ArticleList
+              catId={articleCatQuery}
+              displayType="all"
+            ></ArticleList>
+          );
         } else if (component === "latest") {
           articlesRender = (
             <ArticleList
@@ -53,13 +58,19 @@ const ArtilesPage = () => {
           articlesRender = (
             <ArticleList
               catId={articleCatQuery}
-              displayType="latest"
+              displayType="top"
             ></ArticleList>
           );
         }
       }
     } else {
-      articlesRender = <ArticleList></ArticleList>;
+      if (component === "all") {
+        articlesRender = <ArticleList displayType="all"></ArticleList>;
+      } else if (component === "top") {
+        articlesRender = <ArticleList displayType="top"></ArticleList>;
+      } else if (component === "latest") {
+        articlesRender = <ArticleList displayType="latest"></ArticleList>;
+      }
     }
   }
   return (

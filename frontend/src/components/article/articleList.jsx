@@ -231,7 +231,7 @@ const ArticleList = ({ catId, displayType }) => {
           count={pagingController.count || 0}
           rowsPerPage={pagingController.pageSize}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          rowsPerPageOptions={[2, 4, 6, 8, { value: -1, label: "All" }]}
+          /* rowsPerPageOptions={[2, 4, 6, 8, { value: -1, label: "All" }]} */
         />
       </Box>
     </Container>
