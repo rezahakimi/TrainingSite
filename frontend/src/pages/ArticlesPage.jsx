@@ -27,7 +27,7 @@ const ArtilesPage = () => {
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
-  console.log(articleCatQuery);
+
   if (articleid) {
     articlesRender = (
       <ArticleDetails

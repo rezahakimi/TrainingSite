@@ -31,7 +31,13 @@ const UserAdminPage = () => {
   const drawerWidth = 240;
   const { userInfo } = useSelector((state) => state.auth);
   const [component, setComponent] = useState("profile");
-
+  let adminRender;
+  if (component === "profile") {
+    adminRender = <></>;
+  } else if (component === "article") {
+  } else if (component === "friends") {
+  } else if (component === "newposts") {
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -98,35 +104,28 @@ const UserAdminPage = () => {
           <Grid item xs>
             <h1>Settings</h1>
           </Grid>
-          <Grid item xs>
-            <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
-              <Toolbar />
-              <main>
-                {component === "profile" ? (
-                  <ProfileManage userId={userInfo.id}></ProfileManage>
-                ) : null}
-                {component === "friends" ? (
-                  <>
-                    <h3>My Friends Request</h3>
-                    <FriendsRequestList
-                      userId={userInfo.id}
-                    ></FriendsRequestList>
-                  </>
-                ) : null}
-                {component === "article" ? (
-                  <>
-                    <h3>My Articles Manager</h3>
-                    <ArticleManager userInfo={userInfo} />
-                  </>
-                ) : null}
-                {component === "newposts" ? (
-                  <>
-                    <h3>My Articles Manager</h3>
-                    <ArticlePostManager userInfo={userInfo} />
-                  </>
-                ) : null}
-              </main>
-            </Box>
+          <Grid item xs style={{ top: "0px" }}>
+            {component === "profile" ? (
+              <ProfileManage userId={userInfo.id}></ProfileManage>
+            ) : null}
+            {component === "friends" ? (
+              <>
+                <h3>My Friends Request</h3>
+                <FriendsRequestList userId={userInfo.id}></FriendsRequestList>
+              </>
+            ) : null}
+            {component === "article" ? (
+              <>
+                <h3>My Articles Manager</h3>
+                <ArticleManager userInfo={userInfo} />
+              </>
+            ) : null}
+            {component === "newposts" ? (
+              <>
+                <h3>My Articles Manager</h3>
+                <ArticlePostManager userInfo={userInfo} />
+              </>
+            ) : null}
           </Grid>
         </Grid>
         <Grid item xs={2}>

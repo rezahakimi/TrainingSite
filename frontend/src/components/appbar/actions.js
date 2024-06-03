@@ -128,7 +128,7 @@ export default function Actions({ matches }) {
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: "45px" }}
+                  sx={{ mt: "45px", zIndex: 1500 }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
                   anchorOrigin={
@@ -152,6 +152,7 @@ export default function Actions({ matches }) {
                     horizontal: "right",
                   }}
                   open={Boolean(anchorElUser)}
+                  onClose={(event) => handleCloseMenu("")}
                 >
                   <MenuItem>
                     <Typography textAlign="center">

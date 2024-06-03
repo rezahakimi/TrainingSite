@@ -21,6 +21,7 @@ import ChangePassword from "./pages/ChangePassword";
 import UserPage from "./pages/UserPage";
 import UserAdminPage from "./pages/UserAdminPage";
 import UsersPage from "./pages/UsersPage";
+import InaccessibilityPage from "./pages/InaccessibilityPage";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -87,7 +88,7 @@ function App() {
           element={
             <ProtectedRoute
               isAllowed={!!user && user.roles.includes("ROLE_ADMIN")}
-              redirectTo="/home"
+              redirectTo="/inaccessibility"
             >
               <AdminPage />
             </ProtectedRoute>
@@ -98,6 +99,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/inaccessibility" element={<InaccessibilityPage />} />
       </Routes>
     </BrowserRouter>
   );
