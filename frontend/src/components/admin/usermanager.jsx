@@ -36,7 +36,7 @@ const UserManager = () => {
   const [modalMode, setModalMode] = useState("");
   const [id, setId] = useState("");
 
-  //console.log(user)
+  console.log(users);
 
   const columns = [
     /* {

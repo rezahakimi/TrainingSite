@@ -24,7 +24,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.articlesData.map(({ id }) => ({ type: "User", id })),
+              ...result.usresData.map(({ id }) => ({ type: "User", id })),
               { type: "User", id: "PARTIAL-LIST" },
             ]
           : [{ type: "User", id: "PARTIAL-LIST" }],

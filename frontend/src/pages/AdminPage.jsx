@@ -6,7 +6,7 @@ import Dashboard from "../components/admin/dashboard";
 
 const AdminPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo);
+  //console.log(userInfo);
   return (
     <ThemeProvider theme={theme}>
       <Container

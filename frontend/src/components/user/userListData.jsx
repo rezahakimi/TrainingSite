@@ -11,6 +11,7 @@ import {
   Link,
   Chip,
   Stack,
+  Avatar,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
@@ -43,6 +44,7 @@ const UserListData = ({ user, matches }) => {
       >
         <Card sx={{ sx: 1.0 }}>
           <CardContent>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
             <NavLink to={`/users/${user.id}/`}>
               <Typography
                 sx={{ fontSize: 14 }}
@@ -52,21 +54,21 @@ const UserListData = ({ user, matches }) => {
                 {user.firstname + " " + user.lastname}
               </Typography>
             </NavLink>
+            <Chip
+              label={"friends " + user.friendsCount}
+              variant="outlined"
+              size="small"
+              sx={{ m: 1 }}
+            />
+            <Chip
+              label={"articles " + user.articlesCount}
+              variant="outlined"
+              size="small"
+              sx={{ m: 1 }}
+            />
           </CardContent>
           <CardActions>
             <NavLink to={`/users/${user.id}/`}>More info</NavLink>
-            <Chip
-              label={"friends " + user.iLikesCount}
-              variant="outlined"
-              size="small"
-              sx={{ m: 1 }}
-            />
-            <Chip
-              label={"articles " + user.iLikesCount}
-              variant="outlined"
-              size="small"
-              sx={{ m: 1 }}
-            />
           </CardActions>
         </Card>
       </Container>

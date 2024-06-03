@@ -64,16 +64,17 @@ export default function AppbarDesktop({ matches }) {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <AdminPanelSettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary={<NavLink to="/useradmin">Admin</NavLink>} />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/users">Users</NavLink>} />
         </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <AdminPanelSettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={<NavLink to="/useradmin">Admin</NavLink>} />
+        </ListItem>
+
         <ListItemButton onClick={() => dispatch(setShowSearchBox(true))}>
           <ListItemIcon>
             <SearchIcon />

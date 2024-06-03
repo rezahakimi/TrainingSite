@@ -177,8 +177,7 @@ const UsermanagerDialog =
             "roles[]",
             userDisplayModal.roles.filter((i) => i.selected).map((i) => i.name)
           );
-          //console.log(selectedBlobImage);
-          // console.log(selectedImage);
+
           if (selectedBlobImage != null && selectedImage != null)
             payload.append("image", selectedImage);
           else if (selectedBlobImage == null && selectedImage == null) {

@@ -19,7 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useGetAllUsersWithSearchQuery } from "../../slices/userApiSlice";
 import UserListData from "./userListData";
 
-const pagesize = 3;
+const pagesize = 6;
 
 const UsersList = ({ displayType }) => {
   //console.log(catId);
@@ -29,7 +29,7 @@ const UsersList = ({ displayType }) => {
 
   const [pagingController, setPagingController] = useState({
     page: 0,
-    pageSize: 5,
+    pageSize: 6,
     count: 5,
   });
 
@@ -37,7 +37,7 @@ const UsersList = ({ displayType }) => {
 
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
-  //   artilesCount: 5,
+  //   usersCount: 5,
   // });
 
   //console.log(pagingController.page);
@@ -46,11 +46,11 @@ const UsersList = ({ displayType }) => {
 
   const {
     data,
-    isLoading: isGetArtilesLoading,
-    isSuccess: isGetArtilesSuccess,
-    isError: isGetArtilesError,
-    error: getArtilesError,
-    isFetching: isGetArtilesFetching,
+    isLoading: isGetUsersLoading,
+    isSuccess: isGetUsersSuccess,
+    isError: isGetUsersError,
+    error: getUsersError,
+    isFetching: isGetUsersFetching,
   } = useGetAllUsersWithSearchQuery(
     {
       pageNumber: pageNumber,
@@ -120,17 +120,17 @@ const UsersList = ({ displayType }) => {
       page: 0,
     });
   };
-  if (isGetArtilesLoading && !data) {
+  if (isGetUsersLoading && !data) {
     return <div>Loading...</div>;
   }
-  if (isGetArtilesFetching) {
+  if (isGetUsersFetching) {
     return <div>Fetching...</div>;
   }
-  if (isGetArtilesError) {
+  if (isGetUsersError) {
     return <div>Erroring...</div>;
   }
-  if (getArtilesError) {
-    return <div>Message: {getArtilesError}</div>;
+  if (getUsersError) {
+    return <div>Message: {getUsersError}</div>;
   }
   //console.log(pagingController.page);
   //console.log(pagingController.pageSize);
@@ -146,9 +146,9 @@ const UsersList = ({ displayType }) => {
         /*  xs={2}
         sm={4}
         md={4} */
-        xs={12}
-        sm={12}
-        md={12}
+        xs={4}
+        sm={4}
+        md={4}
         display="flex"
         flexDirection={"column"}
         alignItems="center"
