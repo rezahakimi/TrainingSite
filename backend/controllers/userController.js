@@ -107,8 +107,8 @@ const getAllUsersWithSearch = asyncHandler(async (req, res) => {
         email: user.email,
         phone: user.phone,
         roles: user.roles.map((role) => role.name),
-        friendsCount: a.friends.length,
-        articlesCount: a.articles.length,
+        friendsCount: user.friends.length,
+        articlesCount: user.articles.length,
       };
     });
 
