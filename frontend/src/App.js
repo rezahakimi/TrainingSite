@@ -94,7 +94,7 @@ function App() {
           }
         />
         <Route path="/useradmin" element={<UserAdminPage />}></Route>
-        <Route path="/user" element={<UsersPage />}></Route>
+        <Route path="/users" element={<UsersPage />}></Route>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/login" element={<LoginPage />} />

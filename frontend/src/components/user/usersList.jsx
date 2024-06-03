@@ -21,7 +21,7 @@ import UserListData from "./userListData";
 
 const pagesize = 3;
 
-const UserList = ({ catId, displayType }) => {
+const UsersList = ({ displayType }) => {
   //console.log(catId);
 
   const theme = useTheme();
@@ -53,7 +53,6 @@ const UserList = ({ catId, displayType }) => {
     isFetching: isGetArtilesFetching,
   } = useGetAllUsersWithSearchQuery(
     {
-      catId: catId,
       pageNumber: pageNumber,
       pageSize: pageSize,
       search: searchContent,
@@ -228,4 +227,4 @@ const UserList = ({ catId, displayType }) => {
   );
 };
 
-export default UserList;
+export default UsersList;

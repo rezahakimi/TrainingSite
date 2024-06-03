@@ -8,13 +8,13 @@ import ArticleDetails from "../components/article/articleDetails";
 import UserInfo from "../components/user/userInfo";
 import { useSelector } from "react-redux";
 import FriendsList from "../components/user/friendsList";
-import UserList from "../components/user/userList";
+import UsersList from "../components/user/usersList";
 
 const UsersPage = () => {
   const { myUserInfo } = useSelector((state) => state.auth);
   let usersRender;
 
-  usersRender = <UserList></UserList>;
+  usersRender = <UsersList displayType="all"></UsersList>;
   return (
     <ThemeProvider theme={theme}>
       <Container

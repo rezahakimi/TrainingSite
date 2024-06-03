@@ -60,6 +60,8 @@ const getAllUsersWithSearch = asyncHandler(async (req, res) => {
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const search = req.query.search;
   const displayType = req.query.displayType;
+  var cSort = {};
+
   if (displayType === "latest") {
     cSort = { createdDate: -1 };
   } else if (displayType === "top") {
