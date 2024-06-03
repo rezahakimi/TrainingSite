@@ -16,6 +16,7 @@ import {
   getFriends,
   getRequestFriends,
   acceptFriend,
+  getAllUsersWithSearch,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authWithCookieMiddleware.js";
 import {
@@ -60,6 +61,7 @@ const router = express.Router();
   .route("/profile")
   .get(protect, getUserProfile)
   .patch(protect, updateUserProfile); */
+router.route("/search/").get(getAllUsersWithSearch);
 router.route("/roles").get(getAllRoles);
 router.route("/:id").get(getUserById);
 router.route("/").get(getAllUsers);

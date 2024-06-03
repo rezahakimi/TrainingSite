@@ -24,6 +24,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PeopleIcon from "@mui/icons-material/People";
 import Actions from "./actions";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowSearchBox } from "../../slices/uiSlice";
@@ -66,6 +67,12 @@ export default function AppbarDesktop({ matches }) {
             <AdminPanelSettingsIcon />
           </ListItemIcon>
           <ListItemText primary={<NavLink to="/useradmin">Admin</NavLink>} />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary={<NavLink to="/users">Users</NavLink>} />
         </ListItem>
         <ListItemButton onClick={() => dispatch(setShowSearchBox(true))}>
           <ListItemIcon>

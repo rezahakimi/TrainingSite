@@ -14,6 +14,21 @@ function providesList(resultsWithIds, tagType) {
 export const userApiSlice = apiSlice.injectEndpoints({
   tagTypes: ["User", "Friend"],
   endpoints: (builder) => ({
+    getAllUsersWithSearch: builder.query({
+      query: ({ pageNumber, pageSize, search, displayType }) => {
+        return {
+          url: `${USER_URL}/search/?page=${pageNumber}&pageSize=${pageSize}&search=${search}&displayType=${displayType}`,
+          method: "GET",
+        };
+      },
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.articlesData.map(({ id }) => ({ type: "User", id })),
+              { type: "User", id: "PARTIAL-LIST" },
+            ]
+          : [{ type: "User", id: "PARTIAL-LIST" }],
+    }),
     getAllUsers: builder.query({
       query: () => ({
         url: `${USER_URL}/`,
@@ -162,6 +177,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetAllUsersWithSearchQuery,
   useGetAllUsersQuery,
   useRegisterUserMutation,
   useUpdateUserMutation,

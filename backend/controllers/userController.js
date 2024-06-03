@@ -55,6 +55,69 @@ const getAllUsers = asyncHandler(async (req, res) => {
     throw new Error("Users not found");
   }
 });
+const getAllUsersWithSearch = asyncHandler(async (req, res) => {
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 5;
+  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+  const search = req.query.search;
+  const displayType = req.query.displayType;
+  if (displayType === "latest") {
+    cSort = { createdDate: -1 };
+  } else if (displayType === "top") {
+    cSort = { iLikes: -1 };
+  }
+  let myUsersCount = await User.count({
+    $or: [
+      /*{},*/
+      {
+        firstname: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+      {
+        lastname: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+    ],
+  });
+  const myUsers = await User.find({
+    $or: [
+      /*{},*/
+      {
+        firstname: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+      {
+        lastname: { $regex: ".*" + search + ".*", $options: "i" },
+      },
+    ],
+  })
+    .sort(cSort)
+    .skip(pageNumber * pageSize)
+    .limit(pageSize)
+    .populate({
+      path: "roles",
+      match: {},
+      select: "name -_id",
+    })
+    .exec();
+  if (myUsers) {
+    const myUserssReturn = myUsers.map((user) => {
+      return {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        phone: user.phone,
+        roles: user.roles.map((role) => role.name),
+        friendsCount: a.friends.length,
+        articlesCount: a.articles.length,
+      };
+    });
+
+    res
+      .status(200)
+      .json({ usresData: myUserssReturn, usersCount: myUsersCount });
+  } else {
+    res.status(404);
+    throw new Error("Users not found");
+  }
+});
 const getUserById = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const user = await User.findById(req.params.id)
@@ -561,6 +624,7 @@ const rejectFriend = asyncHandler(async (req, res) => {
 export {
   registerUser,
   deleteUser,
+  getAllUsersWithSearch,
   getAllUsers,
   getUserById,
   updateUser,
