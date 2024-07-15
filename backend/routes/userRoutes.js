@@ -64,7 +64,7 @@ const router = express.Router();
 router.route("/search/").get(getAllUsersWithSearch);
 router.route("/roles").get(getAllRoles);
 router.route("/:id").get(getUserById);
-router.route("/").get(getAllUsers);
+router.route("/").get(getAllUsers).get(verifyToken);
 router.route("/").post(upload.single("image"), registerUser);
 router.route("/changepassword").post(changePasswordUser);
 router.route("/").patch(upload.single("image"), updateUser);

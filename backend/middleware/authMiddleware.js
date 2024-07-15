@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import db from "../models/index.js";
 
+const ACCESS_TOKEN = {
+  secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
+};
+
 const User = db.user;
 const Role = db.role;
 
@@ -8,11 +12,13 @@ const { TokenExpiredError } = jwt;
 
 const catchError = (err, res) => {
   if (err instanceof TokenExpiredError) {
-    return res.status(401).send({ message: "Unauthorized! Access Token was expired!" });
+    return res
+      .status(401)
+      .send({ message: "Unauthorized! Access Token was expired!" });
   }
 
   return res.sendStatus(401).send({ message: "Unauthorized!" });
-}
+};
 
 const verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
@@ -21,7 +27,7 @@ const verifyToken = (req, res, next) => {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, ACCESS_TOKEN.secret, (err, decoded) => {
     if (err) {
       return catchError(err, res);
     }
@@ -58,26 +64,30 @@ const isAdmin = (req, res, next) => {
 };
 
 const isModerator = (req, res, next) => {
-  User.findById(req.userId).exec().then((user)=>{
-    Role.find(
-      {
+  User.findById(req.userId)
+    .exec()
+    .then((user) => {
+      Role.find({
         _id: { $in: user.roles },
-      }).then((roles)=>{
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === "moderator") {
-          next();
-          return;
-        }
-      }
+      })
+        .then((roles) => {
+          for (let i = 0; i < roles.length; i++) {
+            if (roles[i].name === "moderator") {
+              next();
+              return;
+            }
+          }
 
-      res.status(403).send({ message: "Require Moderator Role!" });
-      return;
-    }).catch((err) => {
+          res.status(403).send({ message: "Require Moderator Role!" });
+          return;
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err });
+        });
+    })
+    .catch((err) => {
       res.status(500).send({ message: err });
     });
-  }).catch((err) => {
-    res.status(500).send({ message: err });
-  });
 };
 
 export { verifyToken, isAdmin, isModerator };

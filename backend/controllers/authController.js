@@ -1,8 +1,8 @@
 import asyncHandler from "express-async-handler";
 //import User from "../models/userModel.js";
 import {
-  generateToken,
-  generateTokenWithCookie,
+  generateAccessToken,
+  generateAccessTokenWithCookie,
 } from "../utils/generateToken.js";
 //import Role from "../models/roleModel.js";
 import db from "../models/index.js";
@@ -90,7 +90,7 @@ const signinCookie = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    generateTokenWithCookie(res, user._id);
+    generateAccessTokenWithCookie(res, user._id);
 
     res.json({
       _id: user._id,
@@ -125,7 +125,7 @@ const signin = asyncHandler(async (req, res) => {
         )
           .exec()
           .then(() => {
-            const token = generateToken(res, user._id);
+            const token = generateAccessToken(res, user._id);
             RefreshToken.createToken(user).then((refreshToken) => {
               var authorities = [];
 
@@ -185,7 +185,7 @@ const refreshToken = async (req, res) => {
         });
     }
 
-    let newAccessToken = generateToken(refreshToken.user._id);
+    let newAccessToken = generateAccessToken(refreshToken.user._id);
     //jwt.sign({ id: refreshToken.user._id }, config.secret, {
     //  expiresIn: config.jwtExpiration,
     //});
