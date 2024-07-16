@@ -1,11 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import mongoose from "mongoose";
 
-const REFRESH_TOKEN = {
-  secret: process.env.AUTH_REFRESH_TOKEN_SECRET,
-  expiry: process.env.AUTH_REFRESH_TOKEN_EXPIRY,
-};
-
 const RefreshTokenSchema = new mongoose.Schema({
   token: String,
   user: {
@@ -18,7 +13,9 @@ const RefreshTokenSchema = new mongoose.Schema({
 RefreshTokenSchema.statics.createToken = async function (user) {
   let expiredAt = new Date();
 
-  expiredAt.setSeconds(expiredAt.getSeconds() + REFRESH_TOKEN.expiry);
+  expiredAt.setSeconds(
+    expiredAt.getSeconds() + process.env.AUTH_REFRESH_TOKEN_EXPIRY
+  );
 
   let _token = uuidv4();
 

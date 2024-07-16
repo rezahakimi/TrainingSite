@@ -1,10 +1,5 @@
 import jwt from "jsonwebtoken";
 
-const ACCESS_TOKEN = {
-  secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
-  expiry: process.env.AUTH_ACCESS_TOKEN_EXPIRY,
-};
-
 const generateAccessTokenWithCookie = (res, userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "30d",
@@ -19,10 +14,10 @@ const generateAccessTokenWithCookie = (res, userId) => {
 };
 
 const generateAccessToken = (res, userId) => {
-  const token = jwt.sign({ userId }, ACCESS_TOKEN.secret, {
+  const token = jwt.sign({ userId }, process.env.AUTH_ACCESS_TOKEN_SECRET, {
     algorithm: "HS256",
     allowInsecureKeySizes: true,
-    expiresIn: ACCESS_TOKEN.expiry,
+    expiresIn: process.env.AUTH_ACCESS_TOKEN_EXPIRY,
   });
   return token;
 };
