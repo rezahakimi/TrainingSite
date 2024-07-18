@@ -6,6 +6,7 @@ import {
 } from "../utils/generateToken.js";
 //import Role from "../models/roleModel.js";
 import db from "../models/index.js";
+import jwt from "jsonwebtoken";
 
 const User = db.user;
 const Role = db.role;
@@ -176,21 +177,32 @@ const refreshToken = async (req, res) => {
   const cookies = req.cookies;
   const authHeader = req.header("Authorization");
 
-  if (!cookies["refreshToken"]) {
-    return res.status(404).send({ message: "Refresh Token is missing!" });
-  }
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(404).send({ message: "access token error" });
   }
   const accessTokenParts = authHeader.split(" ");
   const staleAccessTkn = accessTokenParts[1];
-  /* const decodedExpiredAccessTkn = await jwt.verify(
+  const decodedExpiredAccessTkn = await jwt.verify(
     staleAccessTkn,
     process.env.AUTH_ACCESS_TOKEN_SECRET,
     {
       ignoreExpiration: true,
     }
-  ); */
+  );
+
+  if (!cookies["refreshToken"]) {
+    RefreshToken.findOneAndRemove({
+      user: decodedExpiredAccessTkn.userId,
+    })
+      .exec()
+      .then(() => {
+        res.status(404).json({
+          message: "Refresh Token is missing!",
+        });
+      });
+    return;
+    //return res.status(404).send({ message: "Refresh Token is missing!" });
+  }
   const requestToken = cookies["refreshToken"];
 
   //try {
