@@ -1,9 +1,6 @@
 import jwt from "jsonwebtoken";
 import db from "../models/index.js";
-
-const ACCESS_TOKEN = {
-  secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
-};
+import RefreshToken from "../models/refreshTokenModel.js";
 
 const User = db.user;
 const Role = db.role;
@@ -21,18 +18,30 @@ const catchError = (err, res) => {
 };
 
 const verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+  //let token = req.headers["x-access-token"];
+  const authHeader = req.header("Authorization");
+  if (!authHeader?.startsWith("Bearer "))
+    return res.status(401).send({ message: "bearer token is not valid." });
 
+  const accessTokenParts = authHeader.split(" ");
+  const token = accessTokenParts[1];
   if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
+    return res.status(401).send({ message: "No token provided!" });
   }
 
-  jwt.verify(token, ACCESS_TOKEN.secret, (err, decoded) => {
+  jwt.verify(token, process.env.AUTH_ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
       return catchError(err, res);
     }
-    req.userId = decoded.userId;
-    next();
+    RefreshToken.findOne({ user: decoded.userId }).then((refreshToken) => {
+      if (refreshToken == null) {
+        return res
+          .status(401)
+          .send({ message: "Unauthorized! Not refresh token" });
+      }
+      req.userId = decoded.userId;
+      next();
+    });
   });
 };
 

@@ -1,19 +1,20 @@
-import express from 'express';
+import express from "express";
 import {
-    signup,
-    signin,
+  signup,
+  signin,
   logoutUser,
-  signinCookie,
+  //signinCookie,
   refreshToken,
-  revokeToken
-} from '../controllers/authController.js';
+  revokeToken,
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.post('/signup', signup);
-router.post('/signincookie', signinCookie);
-router.post('/signin', signin);
-router.post('/logout', revokeToken);
+router.post("/signup", signup);
+//router.post('/signincookie', signinCookie);
+router.post("/signin", signin);
+router.post("/signout", logoutUser);
+router.post("/logout", revokeToken);
 router.post("/refreshtoken", refreshToken);
 router.post("/revoketoken", revokeToken);
 

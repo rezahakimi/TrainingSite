@@ -132,21 +132,31 @@ const signin = asyncHandler(async (req, res) => {
               for (let i = 0; i < user.roles.length; i++) {
                 authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
               }
-              res.status(200).send({
-                id: user._id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                phone: user.phone,
-                roles: authorities,
-                accessToken: token,
-                refreshToken: refreshToken,
-                profileImg: user.profileImg,
-              });
+
+              res
+                .status(200)
+                .cookie("refreshToken", refreshToken, {
+                  httpOnly: false,
+                  sameSite: "None",
+                  secure: true,
+                  maxAge:
+                    parseInt(process.env.AUTH_REFRESH_TOKEN_EXPIRY) * 1000, //24 * 60 * 60 * 1000,
+                })
+                .json({
+                  id: user._id,
+                  firstname: user.firstname,
+                  lastname: user.lastname,
+                  email: user.email,
+                  phone: user.phone,
+                  roles: authorities,
+                  accessToken: token,
+                  //refreshToken: refreshToken,
+                  profileImg: user.profileImg,
+                });
             });
           });
       } else {
-        return res.status(401).send({
+        return res.status(401).json({
           accessToken: null,
           message: "Invalid Password!",
         });
@@ -158,45 +168,68 @@ const signin = asyncHandler(async (req, res) => {
 });
 
 const refreshToken = async (req, res) => {
-  const { refreshToken: requestToken } = req.body;
+  // const { refreshToken: requestToken } = req.body;
 
-  if (requestToken == null) {
-    return res.status(403).json({ message: "Refresh Token is required!" });
+  //if (requestToken == null) {
+  //  return res.status(403).json({ message: "Refresh Token is required!" });
+  //}
+  const cookies = req.cookies;
+  const authHeader = req.header("Authorization");
+
+  if (!cookies["refreshToken"]) {
+    return res.status(404).send({ message: "Refresh Token is missing!" });
   }
-  try {
-    let refreshToken = await RefreshToken.findOne({ token: requestToken });
-
-    if (!refreshToken) {
-      res.status(403).json({ message: "Refresh token is not in database!" });
-      return;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(404).send({ message: "access token error" });
+  }
+  const accessTokenParts = authHeader.split(" ");
+  const staleAccessTkn = accessTokenParts[1];
+  /* const decodedExpiredAccessTkn = await jwt.verify(
+    staleAccessTkn,
+    process.env.AUTH_ACCESS_TOKEN_SECRET,
+    {
+      ignoreExpiration: true,
     }
+  ); */
+  const requestToken = cookies["refreshToken"];
 
-    if (RefreshToken.verifyExpiration(refreshToken)) {
-      RefreshToken.findByIdAndRemove(refreshToken._id, {
-        useFindAndModify: false,
-      })
-        .exec()
-        .then(() => {
-          res.status(403).json({
-            message:
-              "Refresh token was expired. Please make a new signin request",
-          });
-          return;
+  //try {
+  let refreshToken = await RefreshToken.findOne({ token: requestToken });
+
+  if (!refreshToken) {
+    res.status(403).json({ message: "Refresh token is not in database!" });
+    return;
+  }
+
+  if (RefreshToken.verifyExpiration(refreshToken)) {
+    RefreshToken.findByIdAndRemove(refreshToken._id, {
+      useFindAndModify: false,
+    })
+      .exec()
+      .then(() => {
+        res.status(403).json({
+          message:
+            "Refresh token was expired. Please make a new signin request",
         });
-    }
+        return;
+      });
+  }
 
-    let newAccessToken = generateAccessToken(refreshToken.user._id);
-    //jwt.sign({ id: refreshToken.user._id }, config.secret, {
-    //  expiresIn: config.jwtExpiration,
-    //});
+  let newAccessToken = generateAccessToken(refreshToken.user._id);
+  //jwt.sign({ id: refreshToken.user._id }, config.secret, {
+  //  expiresIn: config.jwtExpiration,
+  //});
 
-    return res.status(200).json({
+  return res
+    .status(201)
+    .set({ "Cache-Control": "no-store", Pragma: "no-cache" })
+    .json({
       accessToken: newAccessToken,
       refreshToken: refreshToken.token,
     });
-  } catch (err) {
-    return res.status(500).send({ message: err });
-  }
+  //} catch (err) {
+  //  return res.status(500).send({ message: err });
+  // }
 };
 
 const revokeToken = async (req, res) => {
@@ -236,12 +269,34 @@ const logoutUserCookie = (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-const logoutUser = (req, res) => {
-  res.cookie("jwt", "", {
+const logoutUser = async (req, res) => {
+  const cookies = req.cookies;
+  const refreshTokenCookie = cookies["refreshToken"];
+  if (refreshTokenCookie == null) {
+    return res.status(403).json({ message: "Refresh Token is required!" });
+  }
+  const refreshToken = await RefreshToken.findOne({
+    token: refreshTokenCookie,
+  });
+  if (!refreshToken) {
+    res.status(403).json({ message: "Refresh token is not in database!" });
+    return;
+  }
+
+  RefreshToken.findByIdAndRemove(refreshToken._id, {
+    useFindAndModify: false,
+  })
+    .exec()
+    .then(() => {
+      res.clearCookie("refreshToken", { httpOnly: true });
+
+      res.status(200).json({ message: "Logged out successfully" });
+    });
+
+  /* res.cookie("refreshToken", "", {
     httpOnly: true,
     expires: new Date(0),
-  });
-  res.status(200).json({ message: "Logged out successfully" });
+  }); */
 };
 
-export { signup, signin, refreshToken, revokeToken, logoutUser, signinCookie };
+export { signup, signin, refreshToken, revokeToken, logoutUser };

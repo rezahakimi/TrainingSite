@@ -11,10 +11,11 @@ const RefreshTokenSchema = new mongoose.Schema({
 });
 
 RefreshTokenSchema.statics.createToken = async function (user) {
+  //.toLocaleString()
   let expiredAt = new Date();
 
   expiredAt.setSeconds(
-    expiredAt.getSeconds() + process.env.AUTH_REFRESH_TOKEN_EXPIRY
+    expiredAt.getSeconds() + parseInt(process.env.AUTH_REFRESH_TOKEN_EXPIRY)
   );
 
   let _token = uuidv4();
