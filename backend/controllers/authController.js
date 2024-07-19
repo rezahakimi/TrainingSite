@@ -285,7 +285,7 @@ const logoutUser = async (req, res) => {
   const cookies = req.cookies;
   const refreshTokenCookie = cookies["refreshToken"];
   if (refreshTokenCookie == null) {
-    return res.status(403).json({ message: "Refresh Token is required!" });
+    return res.status(200).json({ message: "Refresh Token is required!" });
   }
   const refreshToken = await RefreshToken.findOne({
     token: refreshTokenCookie,

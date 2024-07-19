@@ -14,7 +14,7 @@ router.post("/signup", signup);
 //router.post('/signincookie', signinCookie);
 router.post("/signin", signin);
 router.post("/signout", logoutUser);
-router.post("/logout", revokeToken);
+//router.post("/logout", revokeToken);
 router.post("/refreshtoken", refreshToken);
 router.post("/revoketoken", revokeToken);
 
