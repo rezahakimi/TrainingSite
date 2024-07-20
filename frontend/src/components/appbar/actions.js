@@ -60,9 +60,9 @@ export default function Actions({ matches }) {
     if (menuType === "profile") {
       navigate("/profile");
     } else if (menuType === "logout") {
-      const refreshToken = userInfo.refreshToken;
-      console.log(refreshToken);
-      await logoutApiCall({ refreshToken }).unwrap();
+      // const refreshToken = userInfo.refreshToken;
+      // console.log(refreshToken);
+      await logoutApiCall().unwrap();
       dispatch(logout());
       setAnchorElUser(null);
       navigate("/login");

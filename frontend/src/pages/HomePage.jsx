@@ -10,7 +10,8 @@ import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  //console.log(userInfo);
+
+  //console.log(uInfo.accessToken);
   let friendsListRender = null;
   if (userInfo != null)
     friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;

@@ -34,6 +34,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/`,
         method: "GET",
       }),
+
       // providesTags: ["User"],
       providesTags: (result, error, arg) =>
         result
