@@ -196,7 +196,7 @@ const refreshToken = async (req, res) => {
     })
       .exec()
       .then(() => {
-        res.status(404).json({
+        res.status(401).json({
           message: "Refresh Token is missing!",
         });
       });
@@ -209,9 +209,10 @@ const refreshToken = async (req, res) => {
   let refreshToken = await RefreshToken.findOne({ token: requestToken });
 
   if (!refreshToken) {
-    res.status(403).json({ message: "Refresh token is not in database!" });
+    res.status(401).json({ message: "Refresh token is not in database!" });
     return;
   }
+  //console.log(refreshToken);
 
   if (RefreshToken.verifyExpiration(refreshToken)) {
     RefreshToken.findByIdAndRemove(refreshToken._id, {
@@ -219,7 +220,7 @@ const refreshToken = async (req, res) => {
     })
       .exec()
       .then(() => {
-        res.status(403).json({
+        res.status(401).json({
           message:
             "Refresh token was expired. Please make a new signin request",
         });
@@ -227,17 +228,18 @@ const refreshToken = async (req, res) => {
       });
   }
 
-  let newAccessToken = generateAccessToken(refreshToken.user._id);
+  const newAccessToken = generateAccessToken(res, refreshToken.user._id);
   //jwt.sign({ id: refreshToken.user._id }, config.secret, {
   //  expiresIn: config.jwtExpiration,
   //});
+  // console.log(newAccessToken);
 
   return res
     .status(201)
     .set({ "Cache-Control": "no-store", Pragma: "no-cache" })
     .json({
       accessToken: newAccessToken,
-      refreshToken: refreshToken.token,
+      // refreshToken: refreshToken.token,
     });
   //} catch (err) {
   //  return res.status(500).send({ message: err });
