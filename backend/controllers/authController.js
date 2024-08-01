@@ -196,12 +196,11 @@ const refreshToken = async (req, res) => {
     })
       .exec()
       .then(() => {
-        res.status(401).json({
+        res.status(403).json({
           message: "Refresh Token is missing!",
         });
       });
     return;
-    //return res.status(404).send({ message: "Refresh Token is missing!" });
   }
   const requestToken = cookies["refreshToken"];
 
@@ -209,7 +208,7 @@ const refreshToken = async (req, res) => {
   let refreshToken = await RefreshToken.findOne({ token: requestToken });
 
   if (!refreshToken) {
-    res.status(401).json({ message: "Refresh token is not in database!" });
+    res.status(403).json({ message: "Refresh token is not in database!" });
     return;
   }
   //console.log(refreshToken);
@@ -220,7 +219,7 @@ const refreshToken = async (req, res) => {
     })
       .exec()
       .then(() => {
-        res.status(401).json({
+        res.status(403).json({
           message:
             "Refresh token was expired. Please make a new signin request",
         });

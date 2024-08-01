@@ -29,6 +29,10 @@ const verifyToken = (req, res, next) => {
     return res.status(401).send({ message: "No token provided!" });
   }
 
+  const cookies = req.cookies;
+  if (!cookies["refreshToken"]) {
+    return res.status(403).send({ message: "No refresh token provided!" });
+  }
   jwt.verify(token, process.env.AUTH_ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
       return catchError(err, res);
@@ -36,9 +40,14 @@ const verifyToken = (req, res, next) => {
     RefreshToken.findOne({ user: decoded.userId }).then((refreshToken) => {
       if (refreshToken == null) {
         return res
-          .status(401)
+          .status(403)
           .send({ message: "Unauthorized! Not refresh token" });
       }
+      User.findById(decoded.userId).then((user) => {
+        if (!user) {
+          res.status(403).send({ message: "Unauthorized! User not found" });
+        }
+      });
       req.userId = decoded.userId;
       next();
     });
