@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 /* const ProtectedRoute = ({children}) => {
@@ -14,12 +15,11 @@ return children
 }; */
 
 function ProtectedRoute({ isAllowed, redirectTo = "/login", children }) {
-  const uInfo = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(uInfo);
-  if (!uInfo) {
+  const { userInfo } = useSelector((state) => state.auth);
+  if (!userInfo) {
     return <Navigate to="/login" />;
   }
-  if (uInfo.accessToken == "") return <Navigate to="/login" />;
+  if (userInfo.accessToken == "") return <Navigate to="/login" />;
   //console.log(redirectTo)
   if (!isAllowed) {
     return <Navigate to={redirectTo} />;

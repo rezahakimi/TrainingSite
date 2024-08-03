@@ -6,18 +6,21 @@ import { setToken, logout } from "./authSlice";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3000/api",
   //baseUrl: "https://rezahakimi-api.onrender.com/api",
-
-  prepareHeaders: (headers) => {
+  //method: "POST",
+  prepareHeaders: (headers, { getState }) => {
     // this method should retrieve the token without a hook
-    //const token = getAccessToken();
-    let uInfo = JSON.parse(localStorage.getItem("userInfo"));
-    //console.log(uInfo);
+    const uInfo = getState().auth.userInfo.accessToken;
+    //console.log(getState().auth.userInfo.accessToken);
     //console.log(uInfo.accessToken);
     if (uInfo && uInfo.accessToken) {
       headers.set("Authorization", `Bearer ${uInfo.accessToken}`);
     }
     return headers;
   },
+  /* body: JSON.stringify({
+      username: username,
+      password: password
+    }) */
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
@@ -46,6 +49,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 export const apiSlice = createApi({
+  reducerPath: "apiSlice",
   baseQuery: baseQueryWithReauth,
   tagTypes: ["MyApp", "User"],
   endpoints: (builder) => ({}),

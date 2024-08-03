@@ -43,7 +43,7 @@ const authSlice = createSlice({
     },
     setToken: (state, action) => {
       //state.accessToken = action.payload;
-      let uInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const uInfo = JSON.parse(localStorage.getItem("userInfo"));
       if (uInfo) {
         uInfo.accessToken = action.payload.accessToken;
         localStorage.setItem("userInfo", JSON.stringify(uInfo));

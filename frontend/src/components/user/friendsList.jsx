@@ -42,11 +42,11 @@ const FriendsList = ({ userId }) => {
   const navigate = useNavigate();
   const {
     data: friends = [],
-    isLoading: isGetLoading,
-    isSuccess: isGetSuccess,
-    isError: isGetError,
-    error: getUserError,
-    isFetching: isGetFetching,
+    isLoading: isGetFriendsLoading,
+    isSuccess: isGetFriendsSuccess,
+    isError: isGetFriendsError,
+    error: getGetFriendsError,
+    isFetching: isGetFriendsFetching,
   } = useGetFriendsQuery(userId);
 
   useEffect(() => {}, []);
@@ -55,10 +55,10 @@ const FriendsList = ({ userId }) => {
     navigate("/users/" + friendId + "/");
   };
 
-  if (getUserError) {
-    return <div>Error: {getUserError.message}</div>;
+  if (getGetFriendsError) {
+    return <div>Error: {getGetFriendsError.message}</div>;
   }
-  if (isGetLoading && !friends) {
+  if (isGetFriendsLoading && !friends) {
     return <div>Loading...</div>;
   }
 
