@@ -14,7 +14,7 @@ const HomePage = () => {
   //console.log(uInfo.accessToken);
   let friendsListRender = null;
   if (userInfo != null)
-    friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;
+    friendsListRender = <FriendsList userInfo={userInfo}></FriendsList>;
 
   return (
     <ThemeProvider theme={theme}>

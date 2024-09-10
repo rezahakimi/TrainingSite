@@ -9,7 +9,8 @@ const baseQuery = fetchBaseQuery({
   //method: "POST",
   prepareHeaders: (headers, { getState }) => {
     // this method should retrieve the token without a hook
-    const uInfo = getState().auth.userInfo.accessToken;
+
+    const uInfo = getState().auth.userInfo;
     //console.log(getState().auth.userInfo.accessToken);
     //console.log(uInfo.accessToken);
     if (uInfo && uInfo.accessToken) {

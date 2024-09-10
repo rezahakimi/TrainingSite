@@ -87,7 +87,7 @@ const ArtilesPage = () => {
         <Grid item xs={2}>
           <Toolbar />
           <Box sx={{ overflow: "auto" }}>
-            <List>
+          {!articleid ? ( <List>
               <ListItem disablePadding onClick={() => setComponent("all")}>
                 <ListItemButton>
                   <ListItemIcon>
@@ -120,7 +120,7 @@ const ArtilesPage = () => {
                   <ListItemText primary="Top" />
                 </ListItemButton>
               </ListItem>
-            </List>
+            </List>):(<div></div>)}
           </Box>
         </Grid>
         <Grid item container direction="column" xs={8} spacing={2}>
