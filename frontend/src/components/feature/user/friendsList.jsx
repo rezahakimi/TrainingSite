@@ -13,21 +13,15 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import {
-  useAcceptFriendMutation,
-  useGetRequestFriendsQuery,
-  useRemoveFriendMutation,
-} from "../../slices/userApiSlice";
+import { useGetFriendsQuery } from "../../../slices/userApiSlice";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Colors } from "../../styles/theme";
+import { Colors } from "../../../styles/theme";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useEffect, useState } from "react";
-import config from "../../config";
+import config from "../../../config";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useDispatch } from "react-redux";
-import { setCredentialsUpdate } from "../../slices/authSlice";
+import { setCredentialsUpdate } from "../../../slices/authSlice";
 import CloseIcon from "@mui/icons-material/Close";
 
 const initialFormState = {
@@ -44,18 +38,17 @@ const initialFormState = {
   ],
 };
 
-const FriendsRequestList = ({ userId }) => {
+const FriendsList = ({ userId }) => {
+
   const navigate = useNavigate();
   const {
     data: friends = [],
-    isLoading: isGetLoading,
-    isSuccess: isGetSuccess,
-    isError: isGetError,
-    error: getUserError,
-    isFetching: isGetFetching,
-  } = useGetRequestFriendsQuery(userId);
-  const [acceptFriend] = useAcceptFriendMutation();
-  const [removeFriend] = useRemoveFriendMutation();
+    isLoading: isGetFriendsLoading,
+    isSuccess: isGetFriendsSuccess,
+    isError: isGetFriendsError,
+    error: getGetFriendsError,
+    isFetching: isGetFriendsFetching,
+  } = useGetFriendsQuery(userId);
 
   useEffect(() => {}, []);
 
@@ -63,66 +56,21 @@ const FriendsRequestList = ({ userId }) => {
     navigate("/users/" + friendId + "/");
   };
 
-  const acceptRequest = async (friendId, event) => {
-    //event.preventDefault();
-    const res = await acceptFriend({
-      userId: userId,
-      friendId: friendId,
-    }).unwrap();
-
-    if (res) {
-      //setIAmmFriend((iAmFriend) => true);
-    }
-  };
-
-  const rejectRequest = async (friendId, event) => {
-    //event.preventDefault();
-    const res = await removeFriend({
-      userId: userId,
-      friendId: friendId,
-    }).unwrap();
-
-    if (res) {
-      //setIAmmFriend((iAmFriend) => true);
-    }
-  };
-
-  if (getUserError) {
-    return <div>Error: {getUserError.message}</div>;
+  if (getGetFriendsError) {
+    return <div>Error: {getGetFriendsError.message}</div>;
   }
-  if (isGetLoading && !friends) {
+  if (isGetFriendsLoading && !friends) {
     return <div>Loading...</div>;
   }
 
   let friendsRender = "";
 
   if (friends) {
-    friendsRender = friends.map((f) => {
+    friendsRender = friends.map((f, index) => {
       if (f != null) {
         let fId = f.id;
         return (
-          <ListItem
-            key={f.id}
-            alignItems="flex-start"
-            secondaryAction={
-              <>
-                <IconButton
-                  edge="end"
-                  aria-label="thumbup"
-                  onClick={() => acceptRequest(f.id)}
-                >
-                  <ThumbUpIcon />
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  aria-label="thumbdown"
-                  onClick={() => rejectRequest(f.id)}
-                >
-                  <ThumbDownIcon />
-                </IconButton>
-              </>
-            }
-          >
+          <ListItem key={index} alignItems="flex-start">
             <ListItemAvatar onClick={(event) => handleFriendClick(fId)}>
               <Avatar
                 alt="Remy Sharp"
@@ -161,7 +109,12 @@ const FriendsRequestList = ({ userId }) => {
     });
   }
 
-  return <>{friendsRender}</>;
+  return (
+    <>
+      <div>Friends</div>
+      {friendsRender}
+    </>
+  );
 };
 
-export default FriendsRequestList;
+export default FriendsList;

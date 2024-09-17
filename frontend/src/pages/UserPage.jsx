@@ -2,16 +2,17 @@ import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/article/articleList";
+import ArticleList from "../components/feature/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
-import ArticleDetails from "../components/article/articleDetails";
-import UserInfo from "../components/user/userInfo";
+import ArticleDetails from "../components/feature/article/articleDetails";
+import UserInfo from "../components/feature/user/userInfo";
 import { useSelector } from "react-redux";
-import FriendsList from "../components/user/friendsList";
+import FriendsList from "../components/feature/user/friendsList";
 
 const UserPage = () => {
   const { userid } = useParams();
-  const { myUserInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
+
   let userProfileRender;
 
   userProfileRender = <UserInfo userId={userid}></UserInfo>;
@@ -27,7 +28,7 @@ const UserPage = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item xs={2}>
-          <FriendsList userId={userid}></FriendsList>
+          <FriendsList userId={userInfo.id}></FriendsList>
         </Grid>
         <Grid item container direction="column" xs={8} spacing={2}>
           <Grid item xs>

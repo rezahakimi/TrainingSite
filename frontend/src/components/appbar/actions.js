@@ -14,7 +14,7 @@ import {
 import {
   ActionIconsContainerDesktop,
   ActionIconsContainerMobile,
-  MyList,
+  MainTopMenu,
 } from "../../styles/appbar";
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -74,7 +74,7 @@ export default function Actions({ matches }) {
 
   return (
     <Component>
-      <MyList type="row">
+      <MainTopMenu type="row">
         <ListItemButton
           sx={{
             justifyContent: "center",
@@ -204,7 +204,7 @@ export default function Actions({ matches }) {
           </ListItemButton>
         )}
         <Divider orientation="vertical" flexItem />
-      </MyList>
+      </MainTopMenu>
     </Component>
   );
 }

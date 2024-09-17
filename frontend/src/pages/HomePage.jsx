@@ -4,8 +4,8 @@ import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/article/articleList";
-import FriendsList from "../components/user/friendsList";
+import ArticleList from "../components/feature/article/articleList";
+import FriendsList from "../components/feature/user/friendsList";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
@@ -28,9 +28,9 @@ const HomePage = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item xs={2}>
-          {/* <div>1</div> */}
+          {friendsListRender}
         </Grid>
-        <Grid item container direction="column" xs={8} spacing={2}>
+        <Grid item container direction="column" xs={10} spacing={2}>
           {/* <Grid item xs>
             <div>2</div>
           </Grid> */}
@@ -38,9 +38,9 @@ const HomePage = () => {
             <ArticleList></ArticleList>
           </Grid>
         </Grid>
-        <Grid item xs={2}>
-          {friendsListRender}
-        </Grid>
+         <Grid item xs={2}>
+          right
+        </Grid> 
       </Grid>
     </ThemeProvider>
   );

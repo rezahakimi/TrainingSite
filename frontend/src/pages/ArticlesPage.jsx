@@ -14,11 +14,12 @@ import {
   List,
   Toolbar,
 } from "@mui/material";
-import ArticleList from "../components/article/articleList";
+import ArticleList from "../components/feature/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
-import ArticleDetails from "../components/article/articleDetails";
+import ArticleDetails from "../components/feature/article/articleDetails";
 import { useSelector } from "react-redux";
-import ArticleCatList from "../components/article/articleCatList";
+import ArticleCatList from "../components/feature/article/articleCatList";
+import FriendsList from "../components/feature/user/friendsList";
 
 const ArtilesPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -27,6 +28,10 @@ const ArtilesPage = () => {
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
+
+  let friendsListRender = null;
+  if (userInfo != null)
+    friendsListRender = <FriendsList userInfo={userInfo}></FriendsList>;
 
   if (articleid) {
     articlesRender = (
@@ -73,6 +78,9 @@ const ArtilesPage = () => {
       }
     }
   }
+  console.log(articleid)
+  console.log(articleCatQuery)
+
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -87,7 +95,8 @@ const ArtilesPage = () => {
         <Grid item xs={2}>
           <Toolbar />
           <Box sx={{ overflow: "auto" }}>
-          {!articleid ? ( <List>
+          {friendsListRender}
+          {articleid==null && !articleid && (articleCatQuery !== "all") ? ( <List>
               <ListItem disablePadding onClick={() => setComponent("all")}>
                 <ListItemButton>
                   <ListItemIcon>

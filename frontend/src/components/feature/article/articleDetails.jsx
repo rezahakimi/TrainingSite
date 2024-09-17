@@ -4,7 +4,7 @@ import {
   useGetUserLikeArticleQuery,
   useILikeArticleMutation,
   useIDisLikeArticleMutation,
-} from "../../slices/articleApiSlice";
+} from "../../../slices/articleApiSlice";
 import { NavLink, useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

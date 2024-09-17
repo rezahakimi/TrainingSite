@@ -21,8 +21,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   useCreateArticlePostMutation,
   useGetAllArticlePostsByArticleIdQuery,
-} from "../../slices/articlePostApiSlice.js";
-import MyButton from "../myBase/myButton.jsx";
+} from "../../../slices/articlePostApiSlice.js";
+import MyButton from "../../ui/myButton.jsx";
 
 const ArtilePosts = ({ articleId, userId }) => {
   const theme = useTheme();

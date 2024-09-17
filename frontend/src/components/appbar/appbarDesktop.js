@@ -14,7 +14,7 @@ import {
   AppbarActionIcons,
   AppbarContainer,
   AppbarHeader,
-  MyList,
+  MainTopMenu,
 } from "../../styles/appbar";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import PersonIcon from "@mui/icons-material/Person";
@@ -41,7 +41,7 @@ export default function AppbarDesktop({ matches }) {
   return (
     <AppbarContainer>
       <AppbarHeader variant="h4">ZaMi</AppbarHeader>
-      <MyList type="row">
+      <MainTopMenu type="row">
         <ListItem>
           <ListItemIcon>
             <HomeIcon />
@@ -80,7 +80,7 @@ export default function AppbarDesktop({ matches }) {
             <SearchIcon />
           </ListItemIcon>
         </ListItemButton>
-      </MyList>
+      </MainTopMenu>
       <Actions matches={matches} />
     </AppbarContainer>
   );

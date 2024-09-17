@@ -17,7 +17,7 @@ import {
   useGetFriendsQuery,
   useRequestFriendMutation,
   useRemoveFriendMutation,
-} from "../../slices/userApiSlice";
+} from "../../../slices/userApiSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";

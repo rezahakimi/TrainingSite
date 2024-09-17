@@ -17,15 +17,15 @@ import {
   useGetAllRolesQuery,
   useGetUserByIdQuery,
   useUpdateUserMutation,
-} from "../../slices/userApiSlice";
+} from "../../../slices/userApiSlice";
 import { NavLink } from "react-router-dom";
-import { Colors } from "../../styles/theme";
+import { Colors } from "../../../styles/theme";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useEffect, useState } from "react";
-import config from "../../config";
+import config from "../../../config";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
-import { setCredentialsUpdate } from "../../slices/authSlice";
+import { setCredentialsUpdate } from "../../../slices/authSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";

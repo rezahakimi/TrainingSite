@@ -10,17 +10,18 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";
-import { useGetArticleCatByIdQuery } from "../../slices/articleCatApiSlice";
-import { useGetAllArticlesWithSearchQuery } from "../../slices/articleApiSlice";
+import { useGetArticleCatByIdQuery } from "../../../slices/articleCatApiSlice";
+import { useGetAllArticlesWithSearchQuery } from "../../../slices/articleApiSlice";
 import SearchIcon from "@mui/icons-material/Search";
+import { useGetAllUsersWithSearchQuery } from "../../../slices/userApiSlice";
+import UserListData from "./userListData";
 
-const pagesize = 3;
+const pagesize = 6;
 
-const ArticleList = ({ catId, displayType }) => {
+const UsersList = ({ displayType }) => {
   //console.log(catId);
 
   const theme = useTheme();
@@ -28,7 +29,7 @@ const ArticleList = ({ catId, displayType }) => {
 
   const [pagingController, setPagingController] = useState({
     page: 0,
-    pageSize: 5,
+    pageSize: 6,
     count: 5,
   });
 
@@ -36,7 +37,7 @@ const ArticleList = ({ catId, displayType }) => {
 
   // const [articlesData, setUsers] = useState({
   //   articlesData: [],
-  //   artilesCount: 5,
+  //   usersCount: 5,
   // });
 
   //console.log(pagingController.page);
@@ -45,14 +46,13 @@ const ArticleList = ({ catId, displayType }) => {
 
   const {
     data,
-    isLoading: isGetArtilesLoading,
-    isSuccess: isGetArtilesSuccess,
-    isError: isGetArtilesError,
-    error: getArtilesError,
-    isFetching: isGetArtilesFetching,
-  } = useGetAllArticlesWithSearchQuery(
+    isLoading: isGetUsersLoading,
+    isSuccess: isGetUsersSuccess,
+    isError: isGetUsersError,
+    error: getUsersError,
+    isFetching: isGetUsersFetching,
+  } = useGetAllUsersWithSearchQuery(
     {
-      catId: catId,
       pageNumber: pageNumber,
       pageSize: pageSize,
       search: searchContent,
@@ -63,10 +63,6 @@ const ArticleList = ({ catId, displayType }) => {
     //   skip: noMoreResults,
     // }
   );
-
-  const { data: articleCat } = useGetArticleCatByIdQuery(catId, {
-    skip: catId === undefined,
-  });
 
   useEffect(() => {
     //   //   //setPassengersList(data.data);
@@ -79,7 +75,7 @@ const ArticleList = ({ catId, displayType }) => {
     if (data)
       setPagingController({
         ...pagingController,
-        count: data.artilcesCount,
+        count: data.usersCount,
       });
   }, [data]);
 
@@ -124,17 +120,17 @@ const ArticleList = ({ catId, displayType }) => {
       page: 0,
     });
   };
-  if (isGetArtilesLoading && !data) {
+  if (isGetUsersLoading && !data) {
     return <div>Loading...</div>;
   }
-  if (isGetArtilesFetching) {
+  if (isGetUsersFetching) {
     return <div>Fetching...</div>;
   }
-  if (isGetArtilesError) {
+  if (isGetUsersError) {
     return <div>Erroring...</div>;
   }
-  if (getArtilesError) {
-    return <div>Message: {getArtilesError}</div>;
+  if (getUsersError) {
+    return <div>Message: {getUsersError}</div>;
   }
   //console.log(pagingController.page);
   //console.log(pagingController.pageSize);
@@ -142,17 +138,17 @@ const ArticleList = ({ catId, displayType }) => {
   //console.log(data.articlesData);
   //console.log(data.artilcesCount);
 
-  const renderProducts = data.articlesData.map((a) => {
+  const renderUsers = data.usresData.map((u) => {
     return (
       <Grid
         item
-        key={a.id}
+        key={u.id}
         /*  xs={2}
         sm={4}
         md={4} */
-        xs={12}
-        sm={12}
-        md={12}
+        xs={4}
+        sm={4}
+        md={4}
         display="flex"
         flexDirection={"column"}
         alignItems="center"
@@ -168,7 +164,7 @@ const ArticleList = ({ catId, displayType }) => {
             <div>sdfsdf</div>
           ) : (
             /*           <div style={{border: '1px solid red'}}>
-             */ <ArticleRow article={a} matches={matches} />
+             */ <UserListData user={u} matches={matches} />
             /* </div> */
             /*           <SingleProductDesktop product={product} matches={matches} />
              */
@@ -190,13 +186,6 @@ const ArticleList = ({ catId, displayType }) => {
         }}
         onSubmit={handleSearch}
       >
-        {articleCat && (
-          <Box sx={{ width: "100%", maxWidth: 500 }}>
-            <Typography variant="h3" gutterBottom>
-              # {articleCat.title}
-            </Typography>
-          </Box>
-        )}
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <TextField
             id="txtSearch"
@@ -216,7 +205,7 @@ const ArticleList = ({ catId, displayType }) => {
           sx={{ margin: `20px 4px 10px 4px` }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {renderProducts}
+          {renderUsers}
         </Grid>
         {/* <AppPagination setProducts={(p) => SetProducts(p)}></AppPagination> */}
 
@@ -238,4 +227,4 @@ const ArticleList = ({ catId, displayType }) => {
   );
 };
 
-export default ArticleList;
+export default UsersList;

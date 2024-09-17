@@ -16,15 +16,15 @@ import {
   ListItem,
   Divider,
 } from "@mui/material";
-import ArticleList from "../components/article/articleList";
+import ArticleList from "../components/feature/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
-import ArticleDetails from "../components/article/articleDetails";
-import UserInfo from "../components/user/userInfo";
+import ArticleDetails from "../components/feature/article/articleDetails";
+import UserInfo from "../components/feature/user/userInfo";
 import { useSelector } from "react-redux";
-import FriendsList from "../components/user/friendsList";
-import FriendsRequestList from "../components/user/friendsRequestList";
+import FriendsList from "../components/feature/user/friendsList";
+import FriendsRequestList from "../components/feature/user/friendsRequestList";
 import ArticleManager from "../components/admin/articlemanager";
-import ProfileManage from "../components/user/profileManage";
+import ProfileManage from "../components/feature/user/profileManage";
 import ArticlePostManager from "../components/admin/articlePostManager";
 
 const UserAdminPage = () => {

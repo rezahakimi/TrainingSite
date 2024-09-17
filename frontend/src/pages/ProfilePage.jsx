@@ -4,8 +4,8 @@ import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/article/articleList";
-import ProfileManage from "../components/user/profileManage";
+import ArticleList from "../components/feature/article/articleList";
+import ProfileManage from "../components/feature/user/profileManage";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
