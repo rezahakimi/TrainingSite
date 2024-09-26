@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Paper, Grid, Typography, Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useGetAllArticleCatsQuery } from "../../../slices/articleCatApiSlice";
-import ArticleRow from "./articleRow";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { border } from "polished";

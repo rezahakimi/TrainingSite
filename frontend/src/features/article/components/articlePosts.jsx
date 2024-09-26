@@ -22,7 +22,7 @@ import {
   useCreateArticlePostMutation,
   useGetAllArticlePostsByArticleIdQuery,
 } from "../../../slices/articlePostApiSlice.js";
-import MyButton from "../../ui/myButton.jsx";
+import MyButton from "../../../components/ui/myButton.jsx";
 
 const ArtilePosts = ({ articleId, userId }) => {
   const theme = useTheme();

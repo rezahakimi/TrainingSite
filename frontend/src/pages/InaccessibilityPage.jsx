@@ -1,12 +1,7 @@
 import React from "react";
-import Appbar from "../components/appbar";
-import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/feature/article/articleList";
-import FriendsList from "../components/feature/user/friendsList";
-import { useSelector } from "react-redux";
 
 const InaccessibilityPage = () => {
   return (

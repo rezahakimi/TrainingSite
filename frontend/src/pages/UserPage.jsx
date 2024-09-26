@@ -2,12 +2,10 @@ import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/feature/article/articleList";
 import { useLocation, useParams } from "react-router-dom";
-import ArticleDetails from "../components/feature/article/articleDetails";
-import UserInfo from "../components/feature/user/userInfo";
+import UserInfo from "../features/user/components/userInfo";
 import { useSelector } from "react-redux";
-import FriendsList from "../components/feature/user/friendsList";
+import FriendsList from "../features/user/components/friendsList";
 
 const UserPage = () => {
   const { userid } = useParams();

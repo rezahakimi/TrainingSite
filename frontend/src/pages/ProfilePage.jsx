@@ -1,11 +1,8 @@
 import React from "react";
-import Appbar from "../components/appbar";
-import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/feature/article/articleList";
-import ProfileManage from "../components/feature/user/profileManage";
+import ProfileManage from "../features/user/components/profileManage";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {

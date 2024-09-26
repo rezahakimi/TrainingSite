@@ -4,8 +4,8 @@ import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../components/feature/article/articleList";
-import FriendsList from "../components/feature/user/friendsList";
+import ArticleList from "../features/article/components/articleList";
+import FriendsList from "../features/user/components/friendsList";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {
