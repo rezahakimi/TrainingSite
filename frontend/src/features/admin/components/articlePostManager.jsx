@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   useGetAllArticleCatsQuery,
   useDeleteArticleCatMutation,
-} from "../../slices/articleCatApiSlice";
+} from "../../../slices/articleCatApiSlice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -27,9 +27,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import ArticleCatmanagerDialog from "./articleCatmanagerDialog";
-import { useGetArticlesNewPostByUserIdQuery } from "../../slices/articleApiSlice";
+import { useGetArticlesNewPostByUserIdQuery } from "../../../slices/articleApiSlice";
 import { useTheme } from "@emotion/react";
-import { useUpdateArticlePostMutation } from "../../slices/articlePostApiSlice";
+import { useUpdateArticlePostMutation } from "../../../slices/articlePostApiSlice";
 
 const ArticlePostManager = ({ userInfo }) => {
   const theme = useTheme();

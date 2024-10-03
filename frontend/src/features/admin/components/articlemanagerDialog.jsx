@@ -31,13 +31,13 @@ import {
   useCreateArticleMutation,
   useGetArticleByIdQuery,
   useUpdateArticleMutation,
-} from "../../slices/articleApiSlice";
+} from "../../../slices/articleApiSlice";
 import { useSelector } from "react-redux";
-import { useGetAllUsersQuery } from "../../slices/userApiSlice";
-import { useGetAllArticleCatsQuery } from "../../slices/articleCatApiSlice";
+import { useGetAllUsersQuery } from "../../../slices/userApiSlice";
+import { useGetAllArticleCatsQuery } from "../../../slices/articleCatApiSlice";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import MyButton from "../ui/myButton";
+import MyButton from "../../../components/ui/myButton";
 
 const initialArticleState = {
   id: "",

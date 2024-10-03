@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   useGetAllArticlesQuery,
   useDeleteArticleMutation,
-} from "../../slices/articleApiSlice";
+} from "../../../slices/articleApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -23,7 +23,7 @@ import ArticlemanagerDialog from "./articlemanagerDialog";
 
 const ArticleManager = ({ userInfo }) => {
   // const childRef = useRef(null);
-  //console.log(userId);
+ // console.log(userInfo);
   let userId = userInfo.id;
   const {
     data: articles = [],

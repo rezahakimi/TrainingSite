@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useGetAllArticleCatsQuery, useDeleteArticleCatMutation } from "../../slices/articleCatApiSlice";
+import { useGetAllArticleCatsQuery, useDeleteArticleCatMutation } from "../../../slices/articleCatApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,

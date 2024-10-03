@@ -19,14 +19,18 @@ import {
 
 import { useSelector } from "react-redux";
 import FriendsRequestList from "../features/user/components/friendsRequestList";
-import ArticleManager from "../components/admin/articlemanager";
-import ProfileManage from "../features/user/components/profileManage";
-import ArticlePostManager from "../components/admin/articlePostManager";
+import ArticleManager from "../features/admin/components/articlemanager";
+import {ProfileManage} from "../features/user";
+import ArticlePostManager from "../features/admin/components/articlePostManager";
+import { Navigate } from "react-router-dom";
 
 const UserAdminPage = () => {
   const drawerWidth = 240;
   const { userInfo } = useSelector((state) => state.auth);
   const [component, setComponent] = useState("profile");
+  if (!userInfo) {
+    return <Navigate to="/login" />;
+  }
   let adminRender;
   if (component === "profile") {
     adminRender = <></>;

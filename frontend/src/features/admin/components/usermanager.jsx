@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   useGetAllUsersQuery,
   useDeleteUserMutation,
-} from "../../slices/userApiSlice";
+} from "../../../slices/userApiSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,

@@ -14,12 +14,10 @@ import {
   List,
   Toolbar,
 } from "@mui/material";
-import ArticleList from "../features/article/components/articleList";
+import {ArticleList, ArticleDetails, ArticleCatList} from "../features/article";
 import { useLocation, useParams } from "react-router-dom";
-import ArticleDetails from "../features/article/components/articleDetails";
 import { useSelector } from "react-redux";
-import ArticleCatList from "../features/article/components/articleCatList";
-import FriendsList from "../features/user/components/friendsList";
+import {FriendsList} from "../features/user";
 
 const ArtilesPage = () => {
   const { userInfo } = useSelector((state) => state.auth);

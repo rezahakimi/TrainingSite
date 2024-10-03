@@ -28,9 +28,9 @@ import {
   useGetUserByIdQuery,
   useUpdateUserMutation,
   useGetAllRolesQuery,
-} from "../../slices/userApiSlice";
+} from "../../../slices/userApiSlice";
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import config from "../../config/";
+import config from "../../../config";
 import { useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 

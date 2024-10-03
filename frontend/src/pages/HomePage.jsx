@@ -1,11 +1,9 @@
 import React from "react";
-import Appbar from "../components/appbar";
-import SearchBox from "../components/common/search";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { Container, Grid, Box } from "@mui/material";
-import ArticleList from "../features/article/components/articleList";
-import FriendsList from "../features/user/components/friendsList";
+import {ArticleList} from "../features/article";
+import {FriendsList} from "../features/user";
 import { useSelector } from "react-redux";
 
 const HomePage = () => {

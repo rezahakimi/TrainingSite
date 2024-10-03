@@ -2,7 +2,7 @@ import { ThemeProvider } from "@emotion/react";
 import { Container } from "@mui/material";
 import theme from "../styles/theme";
 import { useSelector } from "react-redux";
-import Dashboard from "../components/admin/dashboard";
+import Dashboard from "../features/admin/components/dashboard";
 
 const AdminPage = () => {
   const { userInfo } = useSelector((state) => state.auth);

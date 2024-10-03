@@ -21,7 +21,7 @@ import {
   useCreateArticleCatMutation,
   useGetArticleCatByIdQuery,
   useUpdateArticleCatMutation,
-} from "../../slices/articleCatApiSlice";
+} from "../../../slices/articleCatApiSlice";
 import { useSelector } from "react-redux";
 
 const initialArticleCatState = {
