@@ -14,15 +14,30 @@ return children
 
 }; */
 
-function ProtectedRoute({ isAllowed, redirectTo = "/login", children }) {
+function ProtectedRoute({ children }) {
   const { userInfo } = useSelector((state) => state.auth);
-  if (!userInfo) {
+  //  if (!userInfo) {
+  //    return <Navigate to="/login" />;
+  //  }
+  //if (userInfo.accessToken == "") return <Navigate to="/login" />;
+  const location = useLocation();
+  const { hash, pathname, search } = location;
+  const url = window.location.href;
+
+  //const history = useHistory()
+  console.log(userInfo);
+
+  if (userInfo == null) {
+    console.log("userInfo == null");
     return <Navigate to="/login" />;
   }
-  if (userInfo.accessToken == "") return <Navigate to="/login" />;
-  //console.log(redirectTo)
-  if (!isAllowed) {
-    return <Navigate to={redirectTo} />;
+  if (userInfo.accessToken == "") {
+    console.log("userInfo.accessToken !=");
+    return <Navigate to="/login" />;
+  }
+  if (!userInfo.roles.includes("ROLE_ADMIN")) {
+    console.log("ROLE_ADMIN");
+    return <Navigate to="/inaccessibility" />;
   }
   return children ? children : <Outlet />;
 }

@@ -39,13 +39,13 @@ const LoginPage = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  //const { userInfo } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate("/");
-    }
-  }, [navigate, userInfo]);
+  //useEffect(() => {
+   // if (userInfo) {
+   //   navigate("/");
+   // }
+  //}, [navigate, userInfo]);
 
   const loginHandler = async (event) => {
     event.preventDefault();

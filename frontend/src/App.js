@@ -22,6 +22,7 @@ import UserPage from "./pages/UserPage";
 import UserAdminPage from "./pages/UserAdminPage";
 import UsersPage from "./pages/UsersPage";
 import InaccessibilityPage from "./pages/InaccessibilityPage";
+import { useGetUserByIdQuery } from "./slices/userApiSlice";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -40,10 +41,16 @@ import InaccessibilityPage from "./pages/InaccessibilityPage";
 const router = createBrowserRouter(routeDefinitions); */
 
 function App() {
-  const { userInfo: user } = useSelector((state) => state.auth);
-
+  /*   const {
+    data: userOnline,
+    isLoading: isGetLoading,
+    isSuccess: isGetSuccess,
+    isError: isGetError,
+    error: getUserError,
+    isFetching: isGetFetching,
+  } = useGetUserByIdQuery(user.id);
+  console.log(userOnline); */
   let apppbar;
-  //console.log(user);
   //if (user) {
   apppbar = (
     <>
@@ -52,13 +59,13 @@ function App() {
     </>
   );
   // }
-  //console.log(user)
+
   return (
     <BrowserRouter>
       {apppbar}
       <Routes>
         <Route index element={<HomePage />} />
-        <Route element={<ProtectedRoute isAllowed={!!user} />}>
+        <Route element={<ProtectedRoute />}>
           <Route path="/articles" element={<ArtilesPage />}>
             <Route path=":articleid" element={<ArtilesPage />} />
           </Route>
@@ -86,10 +93,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute
-              isAllowed={!!user && user.roles.includes("ROLE_ADMIN")}
-              redirectTo="/inaccessibility"
-            >
+            <ProtectedRoute>
               <AdminPage />
             </ProtectedRoute>
           }
