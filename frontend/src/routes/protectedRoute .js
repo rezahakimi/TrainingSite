@@ -22,8 +22,8 @@ function ProtectedRoute({ children }) {
 if(userInfo!=null)
   userId= userInfo.id;
   //return <Navigate to="/login" />;
-console.log(userId)
-     const {
+
+  const {
     data: userOnline,
     isLoading: isGetLoading,
     isSuccess: isGetSuccess,
@@ -39,20 +39,19 @@ console.log(userId)
   const location = useLocation();
   const { hash, pathname, search } = location;
   const url = window.location.href;
-console.log(pathname)
-console.log(search)
 
   //const history = useHistory()
 
   if(isGetLoading)
     return null;
-   // console.log(userOnline); 
-  //console.log(userInfo);
 
   if (!userOnline) {
    // console.log("userInfo == null");
     return <Navigate to={`/login?pathname=${pathname}&search=${search}`} />;
   }
+
+  console.log(userInfo)
+  console.log(userOnline)
   /* if (userInfo.accessToken == "") {
     console.log("userInfo.accessToken !=");
     return <Navigate to="/login" />;

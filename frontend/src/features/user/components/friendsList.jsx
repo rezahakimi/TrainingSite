@@ -38,7 +38,7 @@ const initialFormState = {
   ],
 };
 
-const FriendsList = ({ userInfo }) => {
+const FriendsList = ({ userId }) => {
 
   const navigate = useNavigate();
   const {
@@ -48,7 +48,7 @@ const FriendsList = ({ userInfo }) => {
     isError: isGetFriendsError,
     error: getGetFriendsError,
     isFetching: isGetFriendsFetching,
-  } = useGetFriendsQuery(userInfo.id);
+  } = useGetFriendsQuery(userId);
 
   useEffect(() => {}, []);
 

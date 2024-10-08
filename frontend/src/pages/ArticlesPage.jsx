@@ -29,7 +29,7 @@ const ArtilesPage = () => {
 
   let friendsListRender = null;
   if (userInfo != null)
-    friendsListRender = <FriendsList userInfo={userInfo}></FriendsList>;
+    friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;
 
   if (articleid) {
     articlesRender = (
@@ -91,7 +91,6 @@ const ArtilesPage = () => {
         <Grid item xs={2}>
           <Toolbar />
           <Box sx={{ overflow: "auto" }}>
-          {friendsListRender}
           {articleid==null && !articleid && (articleCatQuery !== "all") ? ( <List>
               <ListItem disablePadding onClick={() => setComponent("all")}>
                 <ListItemButton>
@@ -137,7 +136,7 @@ const ArtilesPage = () => {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          {/* <div>4</div> */}
+        {friendsListRender}
         </Grid>
       </Grid>
     </ThemeProvider>

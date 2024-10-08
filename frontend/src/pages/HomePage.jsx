@@ -9,11 +9,6 @@ import { useSelector } from "react-redux";
 const HomePage = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  //console.log(userInfo);
-  let friendsListRender = null;
-  if (userInfo != null)
-    friendsListRender = <FriendsList userInfo={userInfo}></FriendsList>;
-
   return (
     <ThemeProvider theme={theme}>
       <Container
@@ -26,7 +21,6 @@ const HomePage = () => {
 
       <Grid container direction="row" spacing={2}>
         <Grid item xs={2}>
-          {friendsListRender}
         </Grid>
         <Grid item container direction="column" xs={10} spacing={2}>
           {/* <Grid item xs>
@@ -37,7 +31,7 @@ const HomePage = () => {
           </Grid>
         </Grid>
          <Grid item xs={2}>
-          right
+
         </Grid> 
       </Grid>
     </ThemeProvider>
