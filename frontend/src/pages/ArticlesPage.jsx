@@ -76,8 +76,6 @@ const ArtilesPage = () => {
       }
     }
   }
-  console.log(articleid)
-  console.log(articleCatQuery)
 
   return (
     <ThemeProvider theme={theme}>

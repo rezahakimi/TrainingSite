@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
@@ -36,6 +36,7 @@ const LoginPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -56,6 +57,10 @@ const LoginPage = () => {
       //console.log(email);
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
+      const pathname = new URLSearchParams(location.search).get("pathname");
+      if(pathname)
+        navigate(pathname);
+      else
       navigate("/");
     } catch (err) {
       //toast.error(err?.data?.message || err.error);

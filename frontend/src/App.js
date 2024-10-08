@@ -8,6 +8,7 @@ import {
   Outlet,
   Routes,
   BrowserRouter,
+  Navigate,
 } from "react-router-dom";
 import AdminPage from "./pages/AdminPage";
 import LoginPage from "./pages/LoginPage";
@@ -41,15 +42,8 @@ import { useGetUserByIdQuery } from "./slices/userApiSlice";
 const router = createBrowserRouter(routeDefinitions); */
 
 function App() {
-  /*   const {
-    data: userOnline,
-    isLoading: isGetLoading,
-    isSuccess: isGetSuccess,
-    isError: isGetError,
-    error: getUserError,
-    isFetching: isGetFetching,
-  } = useGetUserByIdQuery(user.id);
-  console.log(userOnline); */
+ 
+
   let apppbar;
   //if (user) {
   apppbar = (

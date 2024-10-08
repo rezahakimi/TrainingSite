@@ -69,7 +69,7 @@ router.route("/").post(upload.single("image"), registerUser);
 router.route("/changepassword").post(changePasswordUser);
 router.route("/").patch(upload.single("image"), updateUser);
 router.route("/:id").delete(deleteUser);
-router.route("/getfriends/:id").get(getFriends);
+router.route("/getfriends/:id").get(verifyToken, getFriends);
 router.route("/getrequestfriends/:id").get(getRequestFriends);
 router.route("/requestFriend/:id").patch(requestFriend);
 router.route("/acceptFriend/:id").patch(acceptFriend);
