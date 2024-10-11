@@ -1,37 +1,27 @@
 import {
-  Box,
-  Divider,
-  Link,
-  List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Stack,
-  Typography,
 } from "@mui/material";
 import {
-  AppbarActionIcons,
   AppbarContainer,
   AppbarHeader,
   MainTopMenu,
 } from "../../styles/appbar";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import PersonIcon from "@mui/icons-material/Person";
 import HomeIcon from "@mui/icons-material/Home";
 import ArticleIcon from "@mui/icons-material/Article";
 import CategoryIcon from "@mui/icons-material/Category";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import SearchIcon from "@mui/icons-material/Search";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PeopleIcon from "@mui/icons-material/People";
 import Actions from "./actions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setShowSearchBox } from "../../slices/uiSlice";
 import { NavLink } from "react-router-dom";
 
-export default function AppbarDesktop({ matches }) {
-  const { showSearchBox } = useSelector((state) => state.ui);
+export default function AppbarDesktop({ userInfo, matches }) {
+ // const { showSearchBox } = useSelector((state) => state.ui);
   //console.log(showSearchBox)
 
   const dispatch = useDispatch();
@@ -81,7 +71,7 @@ export default function AppbarDesktop({ matches }) {
           </ListItemIcon>
         </ListItemButton>
       </MainTopMenu>
-      <Actions matches={matches} />
+      <Actions matches={matches} userInfo={userInfo} />
     </AppbarContainer>
   );
 }

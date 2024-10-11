@@ -1,13 +1,10 @@
 import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
-import { Container, Grid, Box } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import {ArticleList} from "../features/article";
-import {FriendsList} from "../features/user";
-import { useSelector } from "react-redux";
 
 const HomePage = () => {
-  const { userInfo } = useSelector((state) => state.auth);
 
   return (
     <ThemeProvider theme={theme}>

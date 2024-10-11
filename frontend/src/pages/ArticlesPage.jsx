@@ -16,17 +16,15 @@ import {
 } from "@mui/material";
 import {ArticleList, ArticleDetails, ArticleCatList} from "../features/article";
 import { useLocation, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import {FriendsList} from "../features/user";
 
-const ArtilesPage = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+const ArtilesPage = ({userInfo}) => {
   const [component, setComponent] = useState("all");
   const { articleid } = useParams();
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
-
+console.log(articleCatQuery)
   let friendsListRender = null;
   if (userInfo != null)
     friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;

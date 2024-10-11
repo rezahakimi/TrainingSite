@@ -1,14 +1,9 @@
 import ProtectedRoute from "./routes/protectedRoute ";
 import HomePage from "./pages/HomePage";
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   Route,
-  RouterProvider,
-  Outlet,
   Routes,
   BrowserRouter,
-  Navigate,
 } from "react-router-dom";
 import AdminPage from "./pages/AdminPage";
 import LoginPage from "./pages/LoginPage";
@@ -23,7 +18,6 @@ import UserPage from "./pages/UserPage";
 import UserAdminPage from "./pages/UserAdminPage";
 import UsersPage from "./pages/UsersPage";
 import InaccessibilityPage from "./pages/InaccessibilityPage";
-import { useGetUserByIdQuery } from "./slices/userApiSlice";
 
 /* const routeDefinitions = createRoutesFromElements(
   <>
@@ -42,13 +36,14 @@ import { useGetUserByIdQuery } from "./slices/userApiSlice";
 const router = createBrowserRouter(routeDefinitions); */
 
 function App() {
- 
+  const { userInfo } = useSelector((state) => state.auth);
+
 
   let apppbar;
   //if (user) {
   apppbar = (
     <>
-      <Appbar></Appbar>
+      <Appbar userInfo={userInfo}></Appbar>
       <SearchBox></SearchBox>
     </>
   );
@@ -60,13 +55,13 @@ function App() {
       <Routes>
         <Route index element={<HomePage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/articles" element={<ArtilesPage />}>
-            <Route path=":articleid" element={<ArtilesPage />} />
+          <Route path="/articles" element={<ArtilesPage userInfo={userInfo} />}>
+            <Route path=":articleid" element={<ArtilesPage userInfo={userInfo} />} />
           </Route>
           {/*           <Route path="/?cat" element={<ArtilesPage />}></Route>
            */}{" "}
           <Route path="/profile" element={<ProfilePage />}></Route>
-          <Route path="/users/:userid" element={<UserPage />}></Route>
+          <Route path="/users/:userid" element={<UserPage userInfo={userInfo} />}></Route>
           {/*  <Route
       path='/dashboard'
       element={

@@ -1,7 +1,6 @@
 import {
   MenuItem,
   Typography,
-  Button,
   Divider,
   ListItemButton,
   ListItemIcon,
@@ -16,11 +15,10 @@ import {
   ActionIconsContainerMobile,
   MainTopMenu,
 } from "../../styles/appbar";
-import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Colors } from "../../styles/theme";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../slices/authApiSlice";
 import { logout } from "../../slices/authSlice";
@@ -29,11 +27,10 @@ import avator from "../../assets/images/avatar/2.jpg";
 import LoginIcon from "@mui/icons-material/Login";
 import config from "../../config/";
 
-export default function Actions({ matches }) {
+export default function Actions({ userInfo, matches }) {
   const Component = matches
     ? ActionIconsContainerMobile
     : ActionIconsContainerDesktop;
-  const { userInfo } = useSelector((state) => state.auth);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [selectedBlobImage, setSelectedBlobImage] = useState(avator);
 

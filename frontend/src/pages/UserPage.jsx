@@ -1,15 +1,13 @@
 import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
-import { Container, Grid, Box } from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
+import { Container, Grid } from "@mui/material";
+import { useParams } from "react-router-dom";
 import UserInfo from "../features/user/components/userInfo";
-import { useSelector } from "react-redux";
 import FriendsList from "../features/user/components/friendsList";
 
-const UserPage = () => {
+const UserPage = ({userInfo}) => {
   const { userid } = useParams();
-  const { userInfo } = useSelector((state) => state.auth);
 
   let userProfileRender;
 

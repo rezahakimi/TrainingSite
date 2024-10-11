@@ -50,8 +50,8 @@ if(userInfo!=null)
     return <Navigate to={`/login?pathname=${pathname}&search=${search}`} />;
   }
 
-  console.log(userInfo)
-  console.log(userOnline)
+  //console.log(userInfo)
+  //console.log(userOnline)
   /* if (userInfo.accessToken == "") {
     console.log("userInfo.accessToken !=");
     return <Navigate to="/login" />;

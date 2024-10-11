@@ -1,12 +1,10 @@
 import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../styles/theme";
-import { Container, Grid, Box } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Container, Grid } from "@mui/material";
 import UsersList from "../features/user/components/usersList";
 
 const UsersPage = () => {
-  const { myUserInfo } = useSelector((state) => state.auth);
   let usersRender;
 
   usersRender = <UsersList displayType="all"></UsersList>;
