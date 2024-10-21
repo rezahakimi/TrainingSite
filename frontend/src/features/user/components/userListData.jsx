@@ -32,7 +32,10 @@ export const MyArticleMetaWrapper = styled(Box)(({ theme }) => ({
   alignItems: "center",
 })); */
 
-const UserListData = ({ user, matches }) => {
+/* const UserListData = ({ user, matches, onHandleUserClick }) => {
+ */  
+  const UserListData = ({ user, matches }) => {
+
   return (
     <>
       <Container
@@ -45,7 +48,10 @@ const UserListData = ({ user, matches }) => {
         <Card sx={{ sx: 1.0 }}>
           <CardContent>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            <NavLink to={`/users/${user.id}/`}>
+
+           {/*  <Button variant="text" onClick={(event) => onHandleUserClick(user.id)}>{user.firstname + " " + user.lastname}</Button> */}
+
+             <NavLink to={`/users/${user.id}/`}>
               <Typography
                 sx={{ fontSize: 14 }}
                 color="text.secondary"
@@ -53,7 +59,7 @@ const UserListData = ({ user, matches }) => {
               >
                 {user.firstname + " " + user.lastname}
               </Typography>
-            </NavLink>
+            </NavLink> 
             <Chip
               label={"friends " + user.friendsCount}
               variant="outlined"

@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import {
   ListItem,
   ListItemButton,
@@ -20,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { setShowSearchBox } from "../../slices/uiSlice";
 import { NavLink } from "react-router-dom";
 
-export default function AppbarDesktop({ userInfo, matches }) {
+const AppbarDesktop=({ userInfo, matches }) =>{
  // const { showSearchBox } = useSelector((state) => state.ui);
   //console.log(showSearchBox)
 
@@ -75,3 +77,5 @@ export default function AppbarDesktop({ userInfo, matches }) {
     </AppbarContainer>
   );
 }
+
+export default React.memo(AppbarDesktop);

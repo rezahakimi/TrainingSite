@@ -20,7 +20,7 @@ import {
 import { useSelector } from "react-redux";
 import FriendsRequestList from "../features/user/components/friendsRequestList";
 import ArticleManager from "../features/admin/components/articlemanager";
-import {ProfileManage} from "../features/user";
+import {FriendsList, ProfileManage} from "../features/user";
 import ArticlePostManager from "../features/admin/components/articlePostManager";
 import { Navigate } from "react-router-dom";
 
@@ -100,7 +100,7 @@ const UserAdminPage = () => {
           </Box>
           {/* </Drawer> */}
         </Grid>
-        <Grid item container direction="column" xs={8} spacing={2}>
+        <Grid item container direction="column" xs={10} spacing={2}>
           <Grid item xs>
             <h1>Settings</h1>
           </Grid>
@@ -112,6 +112,7 @@ const UserAdminPage = () => {
               <>
                 <h3>My Friends Request</h3>
                 <FriendsRequestList userId={userInfo.id}></FriendsRequestList>
+                <FriendsList userId={userInfo.id}></FriendsList>
               </>
             ) : null}
             {component === "article" ? (
@@ -128,9 +129,9 @@ const UserAdminPage = () => {
             ) : null}
           </Grid>
         </Grid>
-        <Grid item xs={2}>
+       {/*  <Grid item xs={2}>
           <div>Friends</div>
-        </Grid>
+        </Grid> */}
       </Grid>
     </ThemeProvider>
   );

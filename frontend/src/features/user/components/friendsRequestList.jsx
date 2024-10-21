@@ -56,6 +56,7 @@ const FriendsRequestList = ({ userId }) => {
   } = useGetRequestFriendsQuery(userId);
   const [acceptFriend] = useAcceptFriendMutation();
   const [removeFriend] = useRemoveFriendMutation();
+  console.log(userId)
 
   useEffect(() => {}, []);
 
@@ -95,7 +96,7 @@ const FriendsRequestList = ({ userId }) => {
   }
 
   let friendsRender = "";
-
+console.log(friends)
   if (friends) {
     friendsRender = friends.map((f) => {
       if (f != null) {

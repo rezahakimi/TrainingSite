@@ -56,6 +56,10 @@ if(userInfo!=null)
     console.log("userInfo.accessToken !=");
     return <Navigate to="/login" />;
   } */
+    if (!userInfo) {
+      // console.log("userInfo == null");
+       return <Navigate to={`/login?pathname=${pathname}&search=${search}`} />;
+     }
   if (!userInfo.roles.includes("ROLE_ADMIN")) {
    // console.log("ROLE_ADMIN");
     return <Navigate to="/inaccessibility" />;

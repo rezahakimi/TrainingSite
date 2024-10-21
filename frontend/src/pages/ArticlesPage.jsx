@@ -24,7 +24,7 @@ const ArtilesPage = ({userInfo}) => {
   const location = useLocation();
   const articleCatQuery = new URLSearchParams(location.search).get("cat");
   let articlesRender;
-console.log(articleCatQuery)
+//console.log(articleCatQuery)
   let friendsListRender = null;
   if (userInfo != null)
     friendsListRender = <FriendsList userId={userInfo.id}></FriendsList>;

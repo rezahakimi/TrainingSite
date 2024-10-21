@@ -14,7 +14,6 @@ import ArtilesPage from "./pages/ArticlesPage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import ChangePassword from "./pages/ChangePassword";
-import UserPage from "./pages/UserPage";
 import UserAdminPage from "./pages/UserAdminPage";
 import UsersPage from "./pages/UsersPage";
 import InaccessibilityPage from "./pages/InaccessibilityPage";
@@ -61,7 +60,8 @@ function App() {
           {/*           <Route path="/?cat" element={<ArtilesPage />}></Route>
            */}{" "}
           <Route path="/profile" element={<ProfilePage />}></Route>
-          <Route path="/users/:userid" element={<UserPage userInfo={userInfo} />}></Route>
+          <Route path="/users" element={<UsersPage />}></Route>
+           <Route path="/users/:userid" element={<UsersPage />}></Route>
           {/*  <Route
       path='/dashboard'
       element={
@@ -88,7 +88,6 @@ function App() {
           }
         />
         <Route path="/useradmin" element={<UserAdminPage />}></Route>
-        <Route path="/users" element={<UsersPage />}></Route>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/login" element={<LoginPage />} />

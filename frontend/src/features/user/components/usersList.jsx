@@ -21,7 +21,10 @@ import UserListData from "./userListData";
 
 const pagesize = 6;
 
-const UsersList = ({ displayType }) => {
+/* const UsersList = ({ displayType, onHandleUserClick }) => {
+ */  
+  const UsersList = ({ displayType }) => {
+
   //console.log(catId);
 
   const theme = useTheme();
@@ -164,7 +167,9 @@ const UsersList = ({ displayType }) => {
             <div>sdfsdf</div>
           ) : (
             /*           <div style={{border: '1px solid red'}}>
-             */ <UserListData user={u} matches={matches} />
+             */ 
+            /* <UserListData user={u} matches={matches} onHandleUserClick={onHandleUserClick} /> */
+             <UserListData user={u} matches={matches} />
             /* </div> */
             /*           <SingleProductDesktop product={product} matches={matches} />
              */

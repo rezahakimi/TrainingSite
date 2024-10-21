@@ -58,6 +58,7 @@ const LoginPage = () => {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       const pathname = new URLSearchParams(location.search).get("pathname");
+      console.log(pathname);
       if(pathname)
         navigate(pathname);
       else
