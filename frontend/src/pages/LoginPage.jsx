@@ -10,6 +10,8 @@ import {
   Container,
   FormControlLabel,
   Checkbox,
+  Snackbar,
+  IconButton
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { Colors } from "../styles/theme";
@@ -23,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ProductDetailWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -31,6 +34,9 @@ const ProductDetailWrapper = styled(Box)(({ theme }) => ({
 
 const LoginPage = () => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const [snackbarProperty, setSnackbarProperty] = useState({SnackbarOpen: false, SnackbarText: ""});
+
+
   //const [email, setEmail] = useState("");
   //const [password, setPassword] = useState("");
 
@@ -48,6 +54,30 @@ const LoginPage = () => {
    // }
   //}, [navigate, userInfo]);
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarProperty(snackbarProperty=>({...snackbarProperty, SnackbarOpen: false}));
+  };
+
+  const renderSnackbar = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleSnackbarClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   const loginHandler = async (event) => {
     event.preventDefault();
     try {
@@ -64,7 +94,7 @@ const LoginPage = () => {
       else
       navigate("/");
     } catch (err) {
-      //toast.error(err?.data?.message || err.error);
+      setSnackbarProperty(snackbarProperty=>({SnackbarOpen: true, SnackbarText: "Login fail."}));
     }
   };
 
@@ -149,6 +179,13 @@ const LoginPage = () => {
           </Box>
         </Box>
       </Container>
+      <Snackbar
+        open={snackbarProperty.SnackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message={snackbarProperty.SnackbarText}
+        action={renderSnackbar}
+      />
     </ThemeProvider>
   );
 };
