@@ -15,7 +15,13 @@ return children
 
 }; */
 
-function ProtectedRoute({ children }) {
+const hasCommonItem = (arr1, arr2) => {
+  const map = new Map();
+  arr1.forEach(item => map.set(item, true));
+  return arr2.some(item => map.has(item));
+};
+
+function ProtectedRoute({ children, roles }) {
   const { userInfo } = useSelector((state) => state.auth);
   let userId=null;
 
@@ -60,7 +66,10 @@ if(userInfo!=null)
       // console.log("userInfo == null");
        return <Navigate to={`/login?pathname=${pathname}&search=${search}`} />;
      }
-  if (!userInfo.roles.includes("ROLE_ADMIN")) {
+     console.log(userInfo.roles)
+     console.log(roles)
+  // if (roles && !roles.map(role=>{return userInfo.roles.includes(role)})) {
+    if (roles && !hasCommonItem(roles , userInfo.roles)) {
    // console.log("ROLE_ADMIN");
     return <Navigate to="/inaccessibility" />;
   }
