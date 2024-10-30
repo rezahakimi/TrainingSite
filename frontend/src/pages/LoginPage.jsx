@@ -88,11 +88,16 @@ const LoginPage = () => {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       const pathname = new URLSearchParams(location.search).get("pathname");
-      console.log(pathname);
       if(pathname)
+      {
+        console.log(pathname);
         navigate(pathname);
+      }
       else
+      {
+        console.log("pathname");
       navigate("/");
+      }
     } catch (err) {
       setSnackbarProperty(snackbarProperty=>({SnackbarOpen: true, SnackbarText: "Login fail."}));
     }

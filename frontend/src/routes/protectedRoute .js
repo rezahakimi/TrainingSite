@@ -66,8 +66,8 @@ if(userInfo!=null)
       // console.log("userInfo == null");
        return <Navigate to={`/login?pathname=${pathname}&search=${search}`} />;
      }
-     console.log(userInfo.roles)
-     console.log(roles)
+    // console.log(userInfo.roles)
+   //  console.log(roles)
   // if (roles && !roles.map(role=>{return userInfo.roles.includes(role)})) {
     if (roles && !hasCommonItem(roles , userInfo.roles)) {
    // console.log("ROLE_ADMIN");

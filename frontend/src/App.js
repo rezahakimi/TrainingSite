@@ -53,7 +53,7 @@ function App() {
       {apppbar}
       <Routes>
         <Route index element={<HomePage />} />
-        <Route element={<ProtectedRoute roles={['ROLE_User', 'ROLE_ADMIN']} />}>
+        <Route element={<ProtectedRoute roles={['ROLE_USER', 'ROLE_ADMIN']} />}>
           <Route path="/articles" element={<ArtilesPage userInfo={userInfo} />}>
             <Route path=":articleid" element={<ArtilesPage userInfo={userInfo} />} />
           </Route>
